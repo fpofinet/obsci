@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  class="h-100">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -13,7 +13,33 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="d-flex flex-column h-100">
+        <header class="bg-primary">
+            <div class="container-fluid ">
+                <p class="display-1 text-center"> Observatoire citoyen des élections</p>
+            </div>
+        </header>
+        <div class="container-fluid bg-secondary py-2">
+            <ul class="nav justify-content-center" style="height:50px;">
+                <li class="nav-item">
+                    <a class="nav-link text-white btn btn-secondary" href="{{path("app_home")}}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white btn btn-secondary" href="{{path("app_resultat")}}">Resultats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white btn btn-secondary" href="{{path("app_espaceCi")}}">Espace Citoyen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white btn btn-secondary" href="{{path("app_apropos")}}">A propos</a>
+                </li>
+            </ul>
+        </div>
         {% block body %}{% endblock %}
+        <footer class="footer mt-auto py-3 bg-dark">
+            <div class="container">
+                <span class="text-light">Place sticky footer content here.</span>
+            </div>
+        </footer>
     </body>
 </html>

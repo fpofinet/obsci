@@ -1,4 +1,21 @@
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 {% extends "base.html.twig" %}
 {% block body %}
-    <h1 class="display-1">ESPACE CITOYEN</h1>
+<div class="container my-3">
+    <div>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro quae autem cupiditate, quam iusto ea rem quaerat impedit provident. Voluptates consequuntur, cumque illum ab quod inventore id voluptatem itaque nemo.
+        Nemo assumenda cupiditate eos ab blanditiis, iure ad eaque consectetur quia itaque reiciendis nisi laboriosam ex numquam provident doloremque. Dolore possimus consequuntur impedit! Facilis harum iste molestias hic, commodi maiores?</p>
+    </div>
+    <div class="col-lg-6 col-md-10  col-12 mx-auto">
+        <div class="border px-3 py-1 rounded-top rounded-top-3">
+            <p class="text-center h3 fw-bold">Lorem ipsum dolor sit</p>
+        </div>
+        <div class="border p-3 rounded-bottom rounded-bottom-3">
+            {{form_start(form)}}
+                {{form_widget(form)}}         
+            {{form_end(form)}}
+        </div>
+       
+    </div>
+</div>
 {% endblock %}

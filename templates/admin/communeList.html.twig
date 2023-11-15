@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="float-start shadow p-2 rounded-3">
+        <span class="h3 fw-bold">Johnny Joker</span>
+        <a href="#" class="btn btn-danger">Deconnexion</a>
+    </div>
+</div>
+<div class="container my-3">
+    <p class="text-center h2 fw-bold text-decoration-underline mt-3 mb-5">Liste des communes</p>
+    <table class="table table-striped" id="clTable">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Province</th>
+                <th>Departement</th>
+                <th>Commune</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+             <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 2</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+             <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+             <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Province 1</td>
+                <td>Departement 1</td>
+                <td>Commune 1</td>
+                <td><a href="{{path("add_resultat")}}" class="btn btn-info">Ajouter</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+    <script>
+        let table = new DataTable('#clTable', {
+        // config options...
+        }); 
+        // show div
+        const showLabelDiv = document.querySelector(".dataTables_length");
+        var showLabel = showLabelDiv.querySelector("label");
+        var select = showLabelDiv.querySelector("select");
+        select.classList.add("mx-2");
+        select.style.width = '75px';
+        showLabel.classList.add("d-flex");
+        showLabelDiv.parentNode.classList.add("my-4");
+        // filter div
+        const FilterDiv = document.querySelector(".dataTables_filter");
+        var filterLabel = FilterDiv.querySelector("label");
+        var input = FilterDiv.querySelector("input");
+        filterLabel.classList.add("d-flex");
+        input.classList.add("mx-1");
+    </script>
+{% endblock %}

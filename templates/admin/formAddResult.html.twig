@@ -1,0 +1,23 @@
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% extends "base.html.twig" %}
+{% block body %}
+<div class="container-fluid">
+    <div class="float-start shadow p-2 rounded-3">
+        <span class="h3 fw-bold">Johnny Joker</span>
+        <a href="#" class="btn btn-danger">Deconnexion</a>
+    </div>
+</div>
+<div class="container my-3">
+    <div class="col-lg-6 col-md-10  col-12 mx-auto">
+        <div class="border px-3 py-1 rounded-top rounded-top-3">
+            <p class="text-center h3 fw-bold">Formulaire d'ajout de resultat</p>
+        </div>
+        <div class="border p-3 rounded-bottom rounded-bottom-3">
+            {{form_start(form)}}
+                {{form_widget(form)}}         
+            {{form_end(form)}}
+        </div>
+       
+    </div>
+</div>
+{% endblock %}

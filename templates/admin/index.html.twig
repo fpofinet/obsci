@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="float-start shadow p-2 rounded-3">
+        <span class="h3 fw-bold">Johnny Joker</span>
+        <a href="#" class="btn btn-danger">Deconnexion</a>
+    </div>
+</div>
+<div class="container my-3">
+    <div class="col-md-6 col-sm-8 col-10 mx-auto mt-5">
+        <div class="mx-auto">
+            <a href="{{path("communeList")}}" class="btn btn-primary">Ajouter  un resultat</a>
+            <a href="{{path("app_soumission")}}" class="btn btn-success">Voir les soumissions</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

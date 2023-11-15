@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="float-start shadow p-2 rounded-3">
+        <span class="h3 fw-bold">Johnny Joker</span>
+        <a href="#" class="btn btn-danger">Deconnexion</a>
+    </div>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-lg-6 col-12">
+            <div class="card border-danger border-3">
+                <div class="card-header">
+                    <p class="fw-bold h2 text-center">Soumission</p>
+                </div>
+                <div class="card-body">
+                    <p class="">
+                        Commune : Commune 1
+                    </p>
+                    <hr>
+                    <p class="">
+                        Bureau de vote : 15
+                    </p>
+                    <hr>
+                    <p class="">
+                        Nombre de votant : 150
+                    </p>
+                    <hr>
+                    <p>
+                        Suffrage Exprimé : 100
+                    </p>
+                    <hr>
+                    <p>
+                        Suffrage Null : 20
+                    </p>
+                    <hr>
+                    <p>
+                    Vote Oui : 30
+                    </p>
+                    <hr>
+                    <p>
+                        Vote non : 50
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-12">
+            <div class="card border-success border-3">
+                <div class="card-header">
+                    <p class="fw-bold h2 text-center">Resultat Confirmé</p>
+                </div>
+                <div class="card-body">
+                    <p class="">
+                        Commune : Commune 1
+                    </p>
+                    <hr>
+                    <p class="">
+                        Bureau de vote : 15
+                    </p>
+                    <hr>
+                    <p class="">
+                        Nombre de votant : 150
+                    </p>
+                    <hr>
+                    <p>
+                        Suffrage Exprimé : 100
+                    </p>
+                    <hr>
+                    <p>
+                        Suffrage Null : 20
+                    </p>
+                    <hr>
+                    <p>
+                    Vote Oui : 30
+                    </p>
+                    <hr>
+                    <p>
+                        Vote non : 50
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-1 d-flex justify-content-center pt-3">
+            <a href="" class="btn btn-lg btn-danger mx-1">Invalider</a>
+            <a href="" class="btn btn-lg btn-success mx-1">Valider</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

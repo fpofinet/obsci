@@ -11,12 +11,13 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+            <script src="{{asset("DataTables/datatables.js")}}"></script>
         {% endblock %}
     </head>
     <body class="d-flex flex-column h-100">
         <header class="bg-primary">
             <div class="container-fluid ">
-                <p class="display-1 text-center"> Observatoire citoyen des élections</p>
+                <p class="display-1 text-center fw-bold"> Observatoire citoyen des élections</p>
             </div>
         </header>
         <div class="container-fluid bg-secondary py-2">

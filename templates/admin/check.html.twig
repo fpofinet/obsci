@@ -11,7 +11,7 @@
 </div>
 <div class="container my-3">
     <div class="row">
-        <div class="col-lg-6 col-12">
+        <div class="col-lg-6 col-12 mb-3">
             <div class="card border-danger border-3">
                 <div class="card-header">
                     <p class="fw-bold h2 text-center">Soumission</p>
@@ -45,9 +45,10 @@
                         Vote non : 50
                     </p>
                 </div>
+                <img src="{{asset("/images/faker450x300.png")}}" alt="#">
             </div>
         </div>
-        <div class="col-lg-6 col-12">
+        <div class="col-lg-6 col-12 mb-3">
             <div class="card border-success border-3">
                 <div class="card-header">
                     <p class="fw-bold h2 text-center">Resultat Confirmé</p>
@@ -81,12 +82,37 @@
                         Vote non : 50
                     </p>
                 </div>
+                <img src="{{asset("/images/faker450x300.png")}}" alt="#">
             </div>
         </div>
         <div class="col-12 mt-1 d-flex justify-content-center pt-3">
             <a href="" class="btn btn-lg btn-danger mx-1">Invalider</a>
-            <a href="" class="btn btn-lg btn-success mx-1">Valider</a>
+            {#<a href="" class="btn btn-lg btn-success mx-1">Valider</a> {#}
+            <button type="button" class="btn btn-lg btn-success mx-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Valider
+            </button>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Choisir une action</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            En cliquant sur changer vous modifierez les anciennes informations de ce bureau de vote par celle-ci.... <br>
+            En cliquant sur archiver vous ajouterez ce PV comme source...
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-secondary" >Archiver</a>
+            <a href="#" class="btn btn-primary">Changer</a>
+        </div>
+        </div>
+    </div>
+    </div>
+
 </div>
 {% endblock %}

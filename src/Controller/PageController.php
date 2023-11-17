@@ -17,11 +17,11 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/espace-citoyen', name: 'app_espaceCi')]
+    #[Route('/reporting', name: 'app_reporting')]
     public function espaceCitoyen(): Response
     {
         $form=$this->createForm(CitoyenType::class);
-        return $this->render('page/espaceCitoyen.html.twig', [
+        return $this->render('page/reporting.html.twig', [
             'form'=>$form->createView(),
         ]);
     }
@@ -30,6 +30,14 @@ class PageController extends AbstractController
     public function apropos(): Response
     {
         return $this->render('page/apropos.html.twig', [
+            
+        ]);
+    }
+
+    #[Route('/contact', name: 'app_contact')]
+    public function contact(): Response
+    {
+        return $this->render('page/contact.html.twig', [
             
         ]);
     }

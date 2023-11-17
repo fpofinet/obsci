@@ -13,7 +13,7 @@ class AdminController extends AbstractController
     public function index(): Response
     {
         return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
+            
         ]);
     }
 
@@ -23,6 +23,26 @@ class AdminController extends AbstractController
         return $this->render('admin/soumissionView.html.twig', [
             
         ]);
+    }
+
+    #[Route('/admin/resultats', name:'resultats')]
+    public function resultats(): Response{
+        return $this->render('admin/resultat.html.twig', []);
+    }
+
+    #[Route('/admin/resultats/province', name:'resultat_province')]
+    public function resultatProvince(): Response{
+        return $this->render('admin/tableProvince.html.twig', []);
+    }
+
+    #[Route('/admin/resultats/province/departement', name:'resultat_dept')]
+    public function resultatDept(): Response{
+        return $this->render('admin/tableDepartement.html.twig', []);
+    }
+
+    #[Route('/admin/resultats/province/departement/commune', name:'resultat_commune')]
+    public function resultatCommune(): Response{
+        return $this->render('admin/tableCommune.html.twig', []);
     }
 
     #[Route('/admin/resultat/ajouter/', name: 'communeList')]

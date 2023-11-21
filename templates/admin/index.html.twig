@@ -1,191 +1,196 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Admin{% endblock %}
 
 {% block body %}
-<section class="container-fluid">
-    <div class="float-start shadow p-2 rounded-3">
-        <span class="h3 fw-bold">Johnny Joker</span>
-        <a href="#" class="btn btn-danger">Deconnexion</a>
-    </div>
-</section>
-<section class="container my-3">
-    
-    <div class="row">
-        <div class="col-lg-2 col-md-4 col-12 py-md-5">
-            <a href="{{path("resultats")}}" class="btn btn-primary">Resultats</a>
-            <a href="#" class="btn btn-success">Rafraîchir</a>
-        </div>
-        <div class="col-lg-10 col-md-8 col-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>IDPV</th>
-                        <th>IDUSER</th>
-                        <th>DATE</th>
-                        <th>CODE COMMUNE</th>
-                        <th>CODE BV</th>
-                        <th>VOTANT</th>
-                        <th>SUFFRAGE EXP</th>
-                        <th>NULL</th>
-                        <th>OUI</th>
-                        <th>NON</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="{{path("check")}}" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>10125</td>
-                        <td>01/01/2023 16:55</td>
-                        <td>Commune 1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td><a href="#" class="btn btn-success">Verifier</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    {#<div class="col-md-6 col-sm-8 col-10 mx-auto mt-5">
-        <div class="mx-auto">
-            <a href="{{path("communeList")}}" class="btn btn-primary">Ajouter  un resultat</a>
-            <a href="{{path("app_soumission")}}" class="btn btn-success">Voir les soumissions</a>
-        </div>
-    </div>{#}
+
+<section class="container  m-md-5">
+    <div class="align-content-center table-responsive-sm ">
+        <p class="text-center text-decoration-underline h3 fw-bold mb-3">Données soumis par les observateurs</p>
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>IDPV</th>
+                    <th>IDUSER</th>
+                    <th>DATE</th>
+                    <th>CODE COMMUNE</th>
+                    <th>CODE BV</th>
+                    <th>VOTANT</th>
+                    <th>SUFFRAGE EXP</th>
+                    <th>NULL</th>
+                    <th>OUI</th>
+                    <th>NON</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="{{path("check")}}" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10125</td>
+                    <td>01/01/2023 16:55</td>
+                    <td>Commune 1</td>
+                    <td>BV0001</td>
+                    <td>1000</td>
+                    <td>8000</td>
+                    <td>100</td>
+                    <td>400</td>
+                    <td>300</td>
+                    <td>
+                        <a href="#" class="btn btn-success">Verifier</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>  
 </section>
 {% endblock %}

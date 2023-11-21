@@ -1,0 +1,24 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+<section class="container mt-5 px-lg-5">
+    <div class="card col-6 mx-auto">
+        <div class="card-header">
+            <p class="h3 text-center">Info Utilisateur</p>
+        </div>
+        <div class="card-body">
+            <p>
+                <span>NOM : </span>
+                <span> {{nom}}</span>
+            </p>
+            <hr>
+            <p>
+                <span>MOT DE PASSE : </span>
+                <span>{{mp}}</span>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

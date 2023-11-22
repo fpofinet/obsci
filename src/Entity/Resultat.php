@@ -37,6 +37,9 @@ class Resultat
     #[ORM\ManyToOne(inversedBy: 'resultats')]
     private ?BureauVote $bureauVote = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $procesVerbal = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -134,6 +137,18 @@ class Resultat
     public function setBureauVote(?BureauVote $bureauVote): static
     {
         $this->bureauVote = $bureauVote;
+
+        return $this;
+    }
+
+    public function getProcesVerbal(): ?string
+    {
+        return $this->procesVerbal;
+    }
+
+    public function setProcesVerbal(string $procesVerbal): static
+    {
+        $this->procesVerbal = $procesVerbal;
 
         return $this;
     }

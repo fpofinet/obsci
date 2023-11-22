@@ -14,27 +14,27 @@
                     
                         <p class="my-0">
                             <span class="">Nombre de votant : </span>
-                            <span class="mx-2">{{"  10000"}}</span>
+                            <span class="mx-2">{{pv.nombreVotant}}</span>
                         </p>
                         <hr>
                         <p class="my-0">
                             <span class="">Suffrage exprimé : </span>
-                            <span class="mx-2">{{"  8000"}}</span>
+                            <span class="mx-2">{{pv.suffrageExprime}}</span>
                         </p>
                         <hr>
                         <p class="my-0">
                             <span class="">Bulletin nul : </span>
-                            <span class="mx-2">{{"  1000"}}</span>
+                            <span class="mx-2">{{pv.bulletinNuls}}</span>
                         </p>
                         <hr>
                         <p class="my-0">
                             <span class="">Vote oui : </span>
-                            <span class="mx-2">{{"  4000"}}</span>
+                            <span class="mx-2">{{pv.voteOui}}</span>
                         </p>
                         <hr>
                         <p class="my-0">
                             <span class="">Vote non : </span>
-                            <span class="mx-2">{{"  3000"}}</span>
+                            <span class="mx-2">{{pv.voteNon}}</span>
                         </p>
                         <hr>
                    
@@ -45,7 +45,7 @@
             </div>
             <div class="card-footer d-flex justify-content-center">
                 <a href="#" class="btn btn-lg btn-danger mx-2">Invalider</a>
-                <a href="#" class="btn btn-lg btn-success mx-2">Valider</a>
+                <a href="{{path("valider",{'id': pv.id})}}" class="btn btn-lg btn-success mx-2">Valider</a>
             </div>
         </div>
         <hr class="border-3">
@@ -54,8 +54,8 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>IDPV</th>
-                        <th>CODE BV</th>
+                        <th>CODE</th>
+                        <th>CODE BUREAU DE VOTE</th>
                         <th>VOTANT</th>
                         <th>SUFFRAGE EXP</th>
                         <th>NULL</th>
@@ -65,78 +65,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td>
-                            <a href="#" class="btn btn-success">Voir</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td>
-                            <a href="#" class="btn btn-success">Voir</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td>
-                            <a href="#" class="btn btn-success">Voir</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td>
-                            <a href="#" class="btn btn-success">Voir</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td>
-                            <a href="#" class="btn btn-success">Voir</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>BV0001</td>
-                        <td>1000</td>
-                        <td>8000</td>
-                        <td>100</td>
-                        <td>400</td>
-                        <td>300</td>
-                        <td>
-                            <a href="#" class="btn btn-success">Voir</a>
-                        </td>
-                    </tr>
+                    {% if others != null %}
+                        {% for item in others %}
+                            <tr>
+                                <td>{{item.code}}</td>
+                                <td>{{item.bureauVote.code}}</td>
+                                <td>{{item.votant}}</td>
+                                <td>{{item.suffrageExprime}}</td>
+                                <td>{{item.suffrageNul}}</td>
+                                <td>{{item.voteOui}}</td>
+                                <td>{{item.voteNon}}</td>
+                                <td>
+                                    <a href="#" class="btn btn-success">Voir</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8"><p class="text-center">Aucune données disponible</p></td>
+                        </tr>
+                    {% endif %}
+                    
                 </tbody>
             </table>
         </div>

@@ -12,7 +12,7 @@ class ResultatController extends AbstractController
     public function index(): Response
     {
         return $this->render('resultat/index.html.twig', [
-            'controller_name' => 'ResultatController',
+
         ]);
     }
 
@@ -20,7 +20,7 @@ class ResultatController extends AbstractController
     public function detailsProvince(): Response
     {
         return $this->render('resultat/detailsProvince.html.twig', [
-            'controller_name' => 'ResultatController',
+           
         ]);
     }
 
@@ -28,7 +28,7 @@ class ResultatController extends AbstractController
     public function detailsDepartement(): Response
     {
         return $this->render('resultat/detailsDepartement.html.twig', [
-            'controller_name' => 'ResultatController',
+            
         ]);
     }
 
@@ -36,7 +36,7 @@ class ResultatController extends AbstractController
     public function detailsCommune(): Response
     {
         return $this->render('resultat/detailsCommune.html.twig', [
-            'controller_name' => 'ResultatController',
+            
         ]);
     }
 }

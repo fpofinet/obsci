@@ -9,23 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response
-    {
-        return $this->render('page/index.html.twig', [
-            
-        ]);
-    }
-
-    #[Route('/reporting', name: 'app_reporting')]
-    public function espaceCitoyen(): Response
-    {
-        $form=$this->createForm(CitoyenType::class);
-        return $this->render('page/reporting.html.twig', [
-            'form'=>$form->createView(),
-        ]);
-    }
-
     #[Route('/apropos', name: 'app_apropos')]
     public function apropos(): Response
     {

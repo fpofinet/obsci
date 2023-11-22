@@ -19,9 +19,7 @@ class UserPasswordType extends AbstractType
             ->add('newPass', PasswordType::class,[
                 'label'=> 'Nouveau mot de passe',
             ])
-            ->add('valider', SubmitType::class,[
-                'label'=> 'Valider',
-            ])
+            
         ;
     }
 

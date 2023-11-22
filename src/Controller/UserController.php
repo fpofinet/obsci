@@ -31,7 +31,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-          // dd($form['roles']->getData());
             $pass=$this->generatePassword();
             $hash= $encoder->hashPassword($user,$pass);
             $user->setUsername($form['username']->getData());
@@ -65,7 +64,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute("app_admin");
         }
         return $this->render('user/passwordForm.html.twig', [
-
+            'form'=> $form->createView(),
         ]);
     }
 

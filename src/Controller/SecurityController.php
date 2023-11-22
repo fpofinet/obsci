@@ -9,12 +9,25 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+
+        if ($this->getUser()) {
+            if (in_array('ROLE_MANAGER',$this->getUser()->getRoles())) {
+                return $this->redirectToRoute('app_admin');
+            } else if (in_array('ROLE_SUPERVISOR', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('app_home');
+            }
+            else if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('app_home');
+            }
+            else if (in_array('ROLE_VIEWER', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('app_home');
+            } else{
+                return $this->redirectToRoute('app_logout');
+            }
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

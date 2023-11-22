@@ -10,430 +10,514 @@
     <div class="row g-3">
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card">
-                <div class="card-header h3 text-center">departement 1</div>
+                <div class="card-header h3 text-center">
+                    <p class="text-center h3 fw-bold">Resultat Departement 1</p>
+                </div>
                 <div class="card-body  p-3">
-                    <div class="d-flex">
-                        <div class="flex-fill">Nombre de votant :
-                        </div>
-                        <div class="flex-fill">{{"10000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Suffrage exprimé :
-                        </div>
-                        <div class="flex-fill">{{"8000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Bulletin nul :
-                        </div>
-                        <div class="flex-fill">{{"1000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote oui :
-                        </div>
-                        <div class="flex-fill">{{"4000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote non :
-                        </div>
-                        <div class="flex-fill">{{"3000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Pourcentage :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                    <div class="border border-2 rounded rounded-2 mb-2 p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">Resultat : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">% depouillement : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress m-0" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Depouillement :
+                    <div class="d-flex flex-column p-3">
+                        <p class="my-0">
+                            <span class="">Nombre de votant :
+                            </span>
+                            <span class="mx-2">{{"  10000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Suffrage exprimé :
+                            </span>
+                            <span class="mx-2">{{"  8000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Bulletin nul :
+                            </span>
+                            <span class="mx-2">{{"  1000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote oui :
+                            </span>
+                            <span class="mx-2">{{"  4000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote non :
+                            </span>
+                            <span class="mx-2">{{"  3000"}}</span>
+                        </p>
+                        <hr>
+                        <div class="mx-auto my-2 "> 
+                            <a href="{{path("departement")}}" class="btn btn-success">Voir plus</a>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center mb-2">
-                        <a href="{{path("departement")}}" class="btn btn-success">Voir plus</a>
                     </div>
                 </div>
-           </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+           <div class="card">
+                <div class="card-header h3 text-center">
+                    <p class="text-center h3 fw-bold">Resultat Departement 1</p>
+                </div>
+                <div class="card-body  p-3">
+                    <div class="border border-2 rounded rounded-2 mb-2 p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">Resultat : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">% depouillement : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress m-0" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column  p-3">
+                        <p class="my-0">
+                            <span class="">Nombre de votant :
+                            </span>
+                            <span class="mx-2">{{"  10000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Suffrage exprimé :
+                            </span>
+                            <span class="mx-2">{{"  8000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Bulletin nul :
+                            </span>
+                            <span class="mx-2">{{"  1000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote oui :
+                            </span>
+                            <span class="mx-2">{{"  4000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote non :
+                            </span>
+                            <span class="mx-2">{{"  3000"}}</span>
+                        </p>
+                        <hr>
+                        <div class="mx-auto my-2 "> 
+                            <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card">
-                <div class="card-header h3 text-center">departement 1</div>
+                <div class="card-header h3 text-center">
+                    <p class="text-center h3 fw-bold">Resultat Departement 1</p>
+                </div>
                 <div class="card-body  p-3">
-                    <div class="d-flex">
-                        <div class="flex-fill">Nombre de votant :
-                        </div>
-                        <div class="flex-fill">{{"10000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Suffrage exprimé :
-                        </div>
-                        <div class="flex-fill">{{"8000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Bulletin nul :
-                        </div>
-                        <div class="flex-fill">{{"1000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote oui :
-                        </div>
-                        <div class="flex-fill">{{"4000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote non :
-                        </div>
-                        <div class="flex-fill">{{"3000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Pourcentage :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                    <div class="border border-2 rounded rounded-2 mb-2 p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">Resultat : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">% depouillement : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress m-0" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Depouillement :
+                    <div class="d-flex flex-column p-3">
+                        <p class="my-0">
+                            <span class="">Nombre de votant :
+                            </span>
+                            <span class="mx-2">{{"  10000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Suffrage exprimé :
+                            </span>
+                            <span class="mx-2">{{"  8000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Bulletin nul :
+                            </span>
+                            <span class="mx-2">{{"  1000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote oui :
+                            </span>
+                            <span class="mx-2">{{"  4000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote non :
+                            </span>
+                            <span class="mx-2">{{"  3000"}}</span>
+                        </p>
+                        <hr>
+                        <div class="mx-auto my-2 "> 
+                            <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center mb-2">
-                        <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                     </div>
                 </div>
-           </div>
+            </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card">
-                <div class="card-header h3 text-center">departement 1</div>
+                <div class="card-header h3 text-center">
+                    <p class="text-center h3 fw-bold">Resultat Departement 1</p>
+                </div>
                 <div class="card-body  p-3">
-                    <div class="d-flex">
-                        <div class="flex-fill">Nombre de votant :
-                        </div>
-                        <div class="flex-fill">{{"10000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Suffrage exprimé :
-                        </div>
-                        <div class="flex-fill">{{"8000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Bulletin nul :
-                        </div>
-                        <div class="flex-fill">{{"1000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote oui :
-                        </div>
-                        <div class="flex-fill">{{"4000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote non :
-                        </div>
-                        <div class="flex-fill">{{"3000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Pourcentage :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                    <div class="border border-2 rounded rounded-2 mb-2 p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">Resultat : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">% depouillement : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress m-0" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Depouillement :
+                    <div class="d-flex flex-column  p-3">
+                        <p class="my-0">
+                            <span class="">Nombre de votant :
+                            </span>
+                            <span class="mx-2">{{"  10000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Suffrage exprimé :
+                            </span>
+                            <span class="mx-2">{{"  8000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Bulletin nul :
+                            </span>
+                            <span class="mx-2">{{"  1000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote oui :
+                            </span>
+                            <span class="mx-2">{{"  4000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote non :
+                            </span>
+                            <span class="mx-2">{{"  3000"}}</span>
+                        </p>
+                        <hr>
+                        <div class="mx-auto my-2 "> 
+                            <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center mb-2">
-                        <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                     </div>
                 </div>
-           </div>
+            </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card">
-                <div class="card-header h3 text-center">departement 1</div>
+                <div class="card-header h3 text-center">
+                    <p class="text-center h3 fw-bold">Resultat Departement 1</p>
+                </div>
                 <div class="card-body  p-3">
-                    <div class="d-flex">
-                        <div class="flex-fill">Nombre de votant :
-                        </div>
-                        <div class="flex-fill">{{"10000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Suffrage exprimé :
-                        </div>
-                        <div class="flex-fill">{{"8000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Bulletin nul :
-                        </div>
-                        <div class="flex-fill">{{"1000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote oui :
-                        </div>
-                        <div class="flex-fill">{{"4000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote non :
-                        </div>
-                        <div class="flex-fill">{{"3000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Pourcentage :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                    <div class="border border-2 rounded rounded-2 mb-2 p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">Resultat : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">% depouillement : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress m-0" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Depouillement :
+                    <div class="d-flex flex-column  p-3">
+                        <p class="my-0">
+                            <span class="">Nombre de votant :
+                            </span>
+                            <span class="mx-2">{{"  10000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Suffrage exprimé :
+                            </span>
+                            <span class="mx-2">{{"  8000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Bulletin nul :
+                            </span>
+                            <span class="mx-2">{{"  1000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote oui :
+                            </span>
+                            <span class="mx-2">{{"  4000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote non :
+                            </span>
+                            <span class="mx-2">{{"  3000"}}</span>
+                        </p>
+                        <hr>
+                        <div class="mx-auto my-2 "> 
+                            <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center mb-2">
-                        <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                     </div>
                 </div>
-           </div>
+            </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card">
-                <div class="card-header h3 text-center">departement 1</div>
+                <div class="card-header h3 text-center">
+                    <p class="text-center h3 fw-bold">Resultat Departement 1</p>
+                </div>
                 <div class="card-body  p-3">
-                    <div class="d-flex">
-                        <div class="flex-fill">Nombre de votant :
-                        </div>
-                        <div class="flex-fill">{{"10000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Suffrage exprimé :
-                        </div>
-                        <div class="flex-fill">{{"8000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Bulletin nul :
-                        </div>
-                        <div class="flex-fill">{{"1000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote oui :
-                        </div>
-                        <div class="flex-fill">{{"4000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote non :
-                        </div>
-                        <div class="flex-fill">{{"3000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Pourcentage :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                    <div class="border border-2 rounded rounded-2 mb-2 p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">Resultat : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">% depouillement : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress m-0" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Depouillement :
+                    <div class="d-flex flex-column  p-3">
+                        <p class="my-0">
+                            <span class="">Nombre de votant :
+                            </span>
+                            <span class="mx-2">{{"  10000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Suffrage exprimé :
+                            </span>
+                            <span class="mx-2">{{"  8000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Bulletin nul :
+                            </span>
+                            <span class="mx-2">{{"  1000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote oui :
+                            </span>
+                            <span class="mx-2">{{"  4000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote non :
+                            </span>
+                            <span class="mx-2">{{"  3000"}}</span>
+                        </p>
+                        <hr>
+                        <div class="mx-auto my-2 "> 
+                            <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center mb-2">
-                        <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                     </div>
                 </div>
-           </div>
+            </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card">
-                <div class="card-header h3 text-center">departement 1</div>
+                <div class="card-header h3 text-center">
+                    <p class="text-center h3 fw-bold">Resultat Departement 1</p>
+                </div>
                 <div class="card-body  p-3">
-                    <div class="d-flex">
-                        <div class="flex-fill">Nombre de votant :
-                        </div>
-                        <div class="flex-fill">{{"10000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Suffrage exprimé :
-                        </div>
-                        <div class="flex-fill">{{"8000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Bulletin nul :
-                        </div>
-                        <div class="flex-fill">{{"1000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote oui :
-                        </div>
-                        <div class="flex-fill">{{"4000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote non :
-                        </div>
-                        <div class="flex-fill">{{"3000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Pourcentage :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                    <div class="border border-2 rounded rounded-2 mb-2 p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">Resultat : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex my-1">
+                                    <div class="px-1">
+                                        <span class="fw-bold">% depouillement : </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="progress m-0" style="height : 40px">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Depouillement :
+                    <div class="d-flex flex-column p-3">
+                        <p class="my-0">
+                            <span class="">Nombre de votant :
+                            </span>
+                            <span class="mx-2">{{"  10000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Suffrage exprimé :
+                            </span>
+                            <span class="mx-2">{{"  8000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Bulletin nul :
+                            </span>
+                            <span class="mx-2">{{"  1000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote oui :
+                            </span>
+                            <span class="mx-2">{{"  4000"}}</span>
+                        </p>
+                        <hr>
+                        <p class="my-0">
+                            <span class="">Vote non :
+                            </span>
+                            <span class="mx-2">{{"  3000"}}</span>
+                        </p>
+                        <hr>
+                        <div class="mx-auto my-2 "> 
+                            <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center mb-2">
-                        <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
                     </div>
                 </div>
-           </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card">
-                <div class="card-header h3 text-center">departement 1</div>
-                <div class="card-body  p-3">
-                    <div class="d-flex">
-                        <div class="flex-fill">Nombre de votant :
-                        </div>
-                        <div class="flex-fill">{{"10000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Suffrage exprimé :
-                        </div>
-                        <div class="flex-fill">{{"8000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Bulletin nul :
-                        </div>
-                        <div class="flex-fill">{{"1000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote oui :
-                        </div>
-                        <div class="flex-fill">{{"4000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="flex-fill">Vote non :
-                        </div>
-                        <div class="flex-fill">{{"3000"}}</div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Pourcentage :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">oui=55%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">non=45%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex">
-                        <div class="">Depouillement :
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="progress" style="height : 40px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">55%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center mb-2">
-                        <a href="{{path("province")}}" class="btn btn-success">Voir plus</a>
-                    </div>
-                </div>
-           </div>
+            </div>
         </div>
     </div>
 </div>

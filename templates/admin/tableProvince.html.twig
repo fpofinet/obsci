@@ -1,197 +1,54 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
-{% block title %}Resultat{% endblock %}
+{% block title %}Province{% endblock %}
 
 {% block body %}
-<div class="container-fluid my-3">
-    <p class="text-center h3 fw-bold text-decoration-underline">Résultat Province du mandoul</p>
+<div class="container mt-3">
+    <div class="table-responsive mx-auto">
+        <a href="{{path("add_province")}}" class="btn btn-primary btn-lg">Ajouter</a>
+        <p class="text-center h3 fw-bold text-decoration-underline">liste des provinces</p>
+        <table class="table table-striped" id="provTable">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>libelle</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set i = 1 %}
+                {% for province in provinces %}
+                    <tr>
+                        <td>{{i}}</td>
+                        <td>{{province.libelle}}</td>
+                        
+                        <td><a href="{{path("update_province",{'id':province.id})}}" class="btn btn-warning">modifier</a></td>
+                        <td><a href="{{path("del_province",{'id':province.id})}}" class="btn btn-danger">Supprimer</a></td>
+                    </tr>
+                    {% set i = i + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-<div class="container">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Code</th>
-                <th>Departement</th>
-                <th>Votant</th>
-                <th>Suffrage Exprimé</th>
-                <th>Suffrage null</th>
-                <th>Vote Oui</th>
-                <th>Vote Non</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="{{path("resultat_dept")}}" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-            <tr>
-                <td>PVMAND</td>
-                <td>departement 1</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>3850</td>
-                <td>3150</td>
-                <td><a href="#" class="btn btn-primary">Voir plus</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<script>
+        let table = new DataTable('#provTable', {
+        // config options...
+        }); 
+        // show div
+        const showLabelDiv = document.querySelector(".dataTables_length");
+        var showLabel = showLabelDiv.querySelector("label");
+        var select = showLabelDiv.querySelector("select");
+        select.classList.add("mx-2");
+        select.style.width = '75px';
+        showLabel.classList.add("d-flex");
+        showLabelDiv.parentNode.classList.add("my-4");
+        // filter div
+        const FilterDiv = document.querySelector(".dataTables_filter");
+        var filterLabel = FilterDiv.querySelector("label");
+        var input = FilterDiv.querySelector("input");
+        filterLabel.classList.add("d-flex");
+        input.classList.add("mx-1");
+</script>
 {% endblock %}

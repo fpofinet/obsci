@@ -1,0 +1,45 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Resultat{% endblock %}
+
+{% block body %}
+<div class="container-fluid my-3">
+    <div class="mx-auto table-responsive">
+        <p class="text-center h3 text-decoration-underline">Resultat validés</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>CODE</th>
+                    <th>BUREAU DE VOTE</th>
+                    <th>COMMUNE</th>
+                    <th>VOTANT</th>
+                    <th>Suffrage Exprimé</th>
+                    <th>Suffrage null</th>
+                    <th>Vote Oui</th>
+                    <th>Vote Non</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set i = 1 %}
+                {% for pv in pvs %}
+                    <tr>
+                        <td>{{i}}</td>
+                        <td>{{pv.code}}</td>
+                        <td>{{pv.bureauVote.code}}</td>
+                        <td>{{pv.bureauVote.commune.libelle}}</td>
+                        <td>{{pv.votant}}</td>
+                        <td>{{pv.suffrageExprime}}</td>
+                        <td>{{pv.suffrageNul}}</td>
+                        <td>{{pv.voteOui}}</td>
+                        <td>{{pv.voteNon}}</td>
+                        <td><a href="#" class="btn btn-primary">Details</a></td>
+                    </tr>
+                    {% set i = i + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

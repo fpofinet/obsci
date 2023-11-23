@@ -1,0 +1,57 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+<section class="container mt-5">
+    <div class="row gy-4">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-3 py-4 bg-secondary" style="height: 125px">
+                <p class="h2 text-center">PROVINCE ({{"27"}})</p>
+                <a href="{{path("app_province")}}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
+                <p class="h2 text-center">DEPARTEMENT ({{"27"}})</p>
+                <a href="{{path("app_dept")}}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
+                <p class="h2 text-center">COMMUNE ({{"27"}})</p>
+                <a href="{{path("app_comm")}}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
+                <p class="h2  text-center">BUREAU DE VOTE ({{"27"}})</p>
+                <a href="{{path("app_bv")}}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
+                <p class="h2 text-center">PV SOUMIS ({{"27"}})</p>
+                <a href="{{path("pvSoumis")}}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
+                <p class="h2 text-center">PV VALIDER ({{"27"}})</p>
+                <a href="{{path("pvValide")}}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card p-3" style="height: 125px">
+                <p class="h2">REINITIALISER</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
+                <p class="h2 text-center">UTILISATEURS ({{"27"}})</p>
+                <a href="{{path("app_user")}}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

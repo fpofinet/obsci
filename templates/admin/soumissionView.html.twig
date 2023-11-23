@@ -1,230 +1,69 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}Admin{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="float-start shadow p-2 rounded-3">
-        <span class="h3 fw-bold">Johnny Joker</span>
-        <a href="#" class="btn btn-danger">Deconnexion</a>
-    </div>
-</div>
-<div class="container my-3">
-    <p class="text-center h2 fw-bold text-decoration-underline mt-3 mb-5">Liste des soumissions citoyennes</p>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>N°</th>
-                <th>Commune</th>
-                <th>Bureau de vote</th>
-                <th>Votant</th>
-                <th>Suffrage Exp</th>
-                <th>Suffrage null</th>
-                <th>Vote oui</th>
-                <th>Vote non</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="{{path("check")}}" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Commune 1</td>
-                <td>14</td>
-                <td>10000</td>
-                <td>8000</td>
-                <td>1000</td>
-                <td>5000</td>
-                <td>2000</td>
-                <td><a href="#" class="btn btn-info">Verfier</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+<section class="container">
+    <div class="align-content-center table-responsive-sm ">
+        <p class="text-center text-decoration-underline h3 fw-bold mb-5">Données soumis par les observateurs</p>
+        <table class="table table-striped" id="tableRaw">
+            <thead>
+                <tr>
+                    <th>IDPV</th>
+                    <th>PROVINCE</th>
+                    <th>DEPARTEMENT</th>
+                    <th>COMMUNE</th>
+                    <th>CODE BV</th>
+                    <th>VOTANT</th>
+                    <th>SUFFRAGE EXP</th>
+                    <th>NULL</th>
+                    <th>OUI</th>
+                    <th>NON</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pv in pvs %}
+                    <tr>
+                        <td>{{pv.codeKobo}}</td>
+                        <td>{{pv.province}}</td>
+                        <td>{{pv.departement}}</td>
+                        <td>{{pv.commune}}</td>
+                        <td>{{pv.bureauVote}}</td>
+                        <td>{{pv.nombreVotant}}</td>
+                        <td>{{pv.suffrageExprime}}</td>
+                        <td>{{pv.bulletinNuls}}</td>
+                        <td>{{pv.voteOui}}</td>
+                        <td>{{pv.voteNon}}</td>
+                        <td>
+                            <a href="#" class="btn btn-success">Verifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>  
+</section>
+<script>
+	let table = new DataTable('#tableRaw', {
+    // config options...
+    });
+    // show div
+    const showLabelDiv = document.querySelector(".dataTables_length");
+    var showLabel = showLabelDiv.querySelector("label");
+    var select = showLabelDiv.querySelector("select");
+    select.classList.add("mx-2");
+    select.style.width = '75px';
+    showLabel.classList.add("d-flex");
+    showLabelDiv.parentNode.classList.add("my-4");
+    // filter div
+    const FilterDiv = document.querySelector(".dataTables_filter");
+    var filterLabel = FilterDiv.querySelector("label");
+    var input = FilterDiv.querySelector("input");
+    filterLabel.classList.add("d-flex");
+    input.classList.add("mx-1");
+</script>
+
+
 {% endblock %}

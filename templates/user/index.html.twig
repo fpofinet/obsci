@@ -12,6 +12,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>N°</th>
                     <th>Nom d'utilisateur</th>
                     <th>Role</th>
                     <th></th>
@@ -19,8 +20,10 @@
                 </tr>
             </thead>
             <tbody>
+                {% set i = 1 %}
                 {% for user in users %}
                     <tr>
+                        <td>{{i}}</td>
                         <td>{{user.username}}</td>
                         <td>    
                             {{user.roles[0]}}
@@ -28,6 +31,7 @@
                         <td><a href="{{path("reset_password",{'id':user.id})}}" class="btn btn-warning">Reset mot de passe</a></td>
                         <td><a href="{{path("bloquer_user",{'id':user.id})}}" class="btn btn-danger">Bloquer</a></td>
                     </tr>
+                    {% set i = i + 1 %}
                 {% endfor %}
             </tbody>
         </table>

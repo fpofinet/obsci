@@ -1,33 +1,31 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}Commune{% endblock %}
+{% block title %}Bureau de vote{% endblock %}
 
 {% block body %}
 <div class="container mt-3">
     <div class="table-responsive mx-auto">
-        <a href="{{path("add_comm")}}" class="btn btn-primary btn-lg">Ajouter</a>
-        <p class="text-center h3 fw-bold text-decoration-underline">liste des communes</p>
-        <table class="table table-striped" id="commTable">
+        <a href="{{path("add_bv")}}" class="btn btn-primary btn-lg">Ajouter</a>
+        <p class="text-center h3 fw-bold text-decoration-underline">liste des bureau de vote</p>
+        <table class="table table-striped" id="bvTable">
             <thead>
                 <tr>
                     <th>N°</th>
                     <th>CODE</th>
-                    <th>libelle</th>
-                    <th>departement</th>
+                    <th>COMMUNE</th>
                     <th></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% set i = 1 %}
-                {% for comm in comms %}
+                {% for bv in bvs %}
                     <tr>
                         <td>{{i}}</td>
-                        <td>{{comm.code}}</td>
-                        <td>{{comm.libelle}}</td>
-                        <td>{{comm.departement.libelle}}</td>
-                        <td><a href="{{path("update_comm",{'id':comm.id})}}" class="btn btn-warning">modifier</a></td>
-                        <td><a href="{{path("del_comm",{'id':comm.id})}}" class="btn btn-danger">Supprimer</a></td>
+                        <td>{{bv.code}}</td>
+                        <td>{{bv.commune.libelle}}</td>
+                        <td><a href="{{path("update_bv",{'id':bv.id})}}" class="btn btn-warning">modifier</a></td>
+                        <td><a href="{{path("del_bv",{'id':bv.id})}}" class="btn btn-danger">Supprimer</a></td>
                     </tr>
                     {% set i = i + 1 %}
                 {% endfor %}
@@ -36,7 +34,7 @@
     </div>
 </div>
 <script>
-        let table = new DataTable('#commTable', {
+        let table = new DataTable('#bvTable', {
         // config options...
         }); 
         // show div
@@ -55,4 +53,3 @@
         input.classList.add("mx-1");
 </script>
 {% endblock %}
-

@@ -1,0 +1,30 @@
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% extends "admin.html.twig" %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="mx-auto col-lg-6 col-md-8 col-12">
+            <div class="border px-3 py-1 rounded-top rounded-top-3">
+                <p class="text-center h3 fw-bold">
+                    {% if editState %}
+                        Ajouter Departement
+                    {% else %}
+                        Modifier Departement
+                    {% endif %} 
+                </p>
+            </div>
+            <div class="border p-3 rounded-bottom rounded-bottom-3">
+                {{form_start(form)}}
+                    {{form_widget(form)}}  
+                    <hr>
+                    <button class="btn btn-primary">
+                        {% if editState %}
+                            ENREGISTRER
+                        {% else %}
+                            MODIFIER
+                        {% endif %}  
+                    </button>       
+                {{form_end(form)}}
+            </div>
+        </div>
+    </div>
+{% endblock %}

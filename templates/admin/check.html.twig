@@ -1,95 +1,22 @@
+{% form_theme form 'bootstrap_5_layout.html.twig' %}    
 {% extends 'admin.html.twig' %}
 
-{% block title %}Admin{% endblock %}
+{% block title %}Manager{% endblock %}
 
 {% block body %}
 <div class="container my-3">
-    <div class="">
-        <div class="card mx-auto">
-            <div class="card-header">
-                <p class="fw-bold h2 text-center">Vérification</p>
-            </div>
-            <div class="card-body d-flex flex-column flex-sm-row">
-                <div class="flex-fill px-3">
-                    
-                        <p class="my-0">
-                            <span class="">Nombre de votant : </span>
-                            <span class="mx-2">{{pv.nombreVotant}}</span>
-                        </p>
-                        <hr>
-                        <p class="my-0">
-                            <span class="">Suffrage exprimé : </span>
-                            <span class="mx-2">{{pv.suffrageExprime}}</span>
-                        </p>
-                        <hr>
-                        <p class="my-0">
-                            <span class="">Bulletin nul : </span>
-                            <span class="mx-2">{{pv.bulletinNuls}}</span>
-                        </p>
-                        <hr>
-                        <p class="my-0">
-                            <span class="">Vote oui : </span>
-                            <span class="mx-2">{{pv.voteOui}}</span>
-                        </p>
-                        <hr>
-                        <p class="my-0">
-                            <span class="">Vote non : </span>
-                            <span class="mx-2">{{pv.voteNon}}</span>
-                        </p>
-                        <hr>
-                   
-                </div>
-                <div class="flex-fill px-3">
-                    <img src="{{asset("/images/faker450x300.png")}}" alt="#" class="" style="img-fluid ">
-                </div>
-            </div>
-            <div class="card-footer d-flex justify-content-center">
-                <a href="#" class="btn btn-lg btn-danger mx-2">Invalider</a>
-                <a href="{{path("valider",{'id': pv.id})}}" class="btn btn-lg btn-success mx-2">Valider</a>
-            </div>
+    <div class="row">
+        <div class="col-md-6 col-12 border border-2 p-0">
+            <img src="{{asset("/fichier/"~ pv.procesVerbal)}}" alt="faker" class="img-fluid w-100 h-100">
         </div>
-        <hr class="border-3">
-        <div class="table-responsive mx-auto mt-3">
-            <p class="text-center text-decoration-underline h3 mb-3">Autres Données</p>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>CODE</th>
-                        <th>CODE BUREAU DE VOTE</th>
-                        <th>VOTANT</th>
-                        <th>SUFFRAGE EXP</th>
-                        <th>NULL</th>
-                        <th>OUI</th>
-                        <th>NON</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if others != null %}
-                        {% for item in others %}
-                            <tr>
-                                <td>{{item.code}}</td>
-                                <td>{{item.bureauVote.code}}</td>
-                                <td>{{item.votant}}</td>
-                                <td>{{item.suffrageExprime}}</td>
-                                <td>{{item.suffrageNul}}</td>
-                                <td>{{item.voteOui}}</td>
-                                <td>{{item.voteNon}}</td>
-                                <td>
-                                    <a href="#" class="btn btn-success">Voir</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="8"><p class="text-center">Aucune données disponible</p></td>
-                        </tr>
-                    {% endif %}
-                    
-                </tbody>
-            </table>
+        <div class="col-md-6 col-12 border border-2 p-3">
+            <div class="m-0 text-decoration-underline p-0 text-center">
+                ID : <span class="fw-bold">{{pv.codeKobo}}</span>
+            </div>
+            {{form_start(form)}}
+                {{form_widget(form)}}        
+            {{form_end(form)}}
         </div>
-
     </div>
 </div>
 {% endblock %}

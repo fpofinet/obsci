@@ -1,0 +1,50 @@
+{% extends "admin.html.twig" %}
+{% block title %}Resultat{% endblock %}
+
+{% block body %}
+<div class="table-responsive mt-3">
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="#" class="btn btn-lg btn-success">Exporter</a>
+    {% endif %}
+    <p class="text-center text-decoration-underline h3">Resultat des elections</p>
+    <table class="table table-striped" id="myResult">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>PROVINCE</th>
+                <th>DEPARTEMENT</th>
+                <th>COMMUNE</th>
+                <th>BUREAUVOTE</th>
+                <th>VOTANT</th>
+                <th>SUFFRAGEEXPRIME</th>
+                <th>SUFFRAGENUL</th>
+                <th>VOTEOUI</th>
+                <th>VOTENON</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+    </table>   
+</div>
+
+<script>
+    let table = new DataTable('#myResult', {
+        // config options...
+        }); 
+        // show div
+        const showLabelDiv = document.querySelector(".dataTables_length");
+        var showLabel = showLabelDiv.querySelector("label");
+        var select = showLabelDiv.querySelector("select");
+        select.classList.add("mx-2");
+        select.style.width = '75px';
+        showLabel.classList.add("d-flex");
+        showLabelDiv.parentNode.classList.add("my-4");
+        // filter div
+        const FilterDiv = document.querySelector(".dataTables_filter");
+        var filterLabel = FilterDiv.querySelector("label");
+        var input = FilterDiv.querySelector("input");
+        filterLabel.classList.add("d-flex");
+        input.classList.add("mx-1");
+</script>
+{% endblock %}

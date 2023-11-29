@@ -26,20 +26,6 @@ class TempResultat
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bureauVote = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $nombreVotant = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $bulletinNuls = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $suffrageExprime = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $voteOui = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $voteNon = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $procesVerbal = null;
@@ -105,66 +91,6 @@ class TempResultat
     public function setBureauVote(?string $bureauVote): static
     {
         $this->bureauVote = $bureauVote;
-
-        return $this;
-    }
-
-    public function getNombreVotant(): ?int
-    {
-        return $this->nombreVotant;
-    }
-
-    public function setNombreVotant(?int $nombreVotant): static
-    {
-        $this->nombreVotant = $nombreVotant;
-
-        return $this;
-    }
-
-    public function getBulletinNuls(): ?int
-    {
-        return $this->bulletinNuls;
-    }
-
-    public function setBulletinNuls(?int $bulletinNuls): static
-    {
-        $this->bulletinNuls = $bulletinNuls;
-
-        return $this;
-    }
-
-    public function getSuffrageExprime(): ?int
-    {
-        return $this->suffrageExprime;
-    }
-
-    public function setSuffrageExprime(?int $suffrageExprime): static
-    {
-        $this->suffrageExprime = $suffrageExprime;
-
-        return $this;
-    }
-
-    public function getVoteOui(): ?int
-    {
-        return $this->voteOui;
-    }
-
-    public function setVoteOui(?int $voteOui): static
-    {
-        $this->voteOui = $voteOui;
-
-        return $this;
-    }
-
-    public function getVoteNon(): ?int
-    {
-        return $this->voteNon;
-    }
-
-    public function setVoteNon(?int $voteNon): static
-    {
-        $this->voteNon = $voteNon;
 
         return $this;
     }

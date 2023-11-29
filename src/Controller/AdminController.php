@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use GuzzleHttp\Client;
 use App\Entity\Commune;
 use App\Entity\Province;
 use App\Entity\Resultat;
-use App\Form\CitoyenType;
 use App\Form\CommuneType;
 use App\Entity\BureauVote;
 use App\Form\ProvinceType;
@@ -13,42 +13,49 @@ use App\Entity\Departement;
 use App\Controller\MockData;
 use App\Entity\TempResultat;
 use App\Form\BureauVoteType;
+use App\Form\UploadFileType;
 use App\Form\DepartementType;
+use App\Controller\ExcelConnector;
+use App\Form\ManagerType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class AdminController extends AbstractController
 {
-    #[Route('/admin', name: 'app_admin')]
+    #[Route('/manager', name: 'app_manager')]
     public function index(ManagerRegistry $manager): Response
     {
         $datas=$manager->getRepository(TempResultat::class)->findBy(["etat"=>0]);
-        return $this->render('admin/index.html.twig', [
+        return $this->render('admin/manager.html.twig', [
             'datas'=>$datas,
         ]);
     }
 
-   
+    #[Route('/admin/resultat', name:'resultat_admin')]
+    public function resultatAdmin(ManagerRegistry $manager): Response{
 
-    #[Route('/admin/resultats/province', name:'resultat_province')]
-    public function resultatProvince(): Response{
-        return $this->render('admin/tableProvince.html.twig', []);
+        return $this->render('resultat/table.html.twig', [
+            'resultat'=>null,
+        ]);
     }
 
-    #[Route('/admin/resultats/province/departement', name:'resultat_dept')]
+    #[Route('/admin/provinces/', name:'resultat_dept')]
     public function resultatDept(): Response{
         return $this->render('admin/tableDepartement.html.twig', []);
     }
 
-    #[Route('/admin/resultats/province/departement/commune', name:'resultat_commune')]
+    #[Route('/admin/departements/', name:'resultat_commune')]
     public function resultatCommune(): Response{
         return $this->render('admin/tableCommune.html.twig', []);
     }
 
-    #[Route('/admin/resultat/ajouter/', name: 'communeList')]
+    #[Route('/admin/communes/', name: 'communeList')]
     public function communeList(): Response
     {
         return $this->render('admin/communeList.html.twig', [
@@ -59,7 +66,7 @@ class AdminController extends AbstractController
     #[Route('/admin/resultat/ajouter/form', name: 'add_resultat')]
     public function addResult(): Response
     {
-        $form=$this->createForm(CitoyenType::class);
+        $form=$this->createForm(ManagerType::class);
         return $this->render('admin/formAddResult.html.twig', [
             'form'=>$form->createView(),
         ]);
@@ -67,19 +74,38 @@ class AdminController extends AbstractController
 
     //verification
 
-    #[Route('/admin/resultat/{id}/verification', name: 'check')]
-    public function verification(?int $id,ManagerRegistry $manager): Response
-    { 
-        $pv= $manager->getRepository(TempResultat::class)->findOneBy(["id"=>$id]);
-        $others=$manager->getRepository(Resultat::class)->findBy(["bureauVote"=>$manager->getRepository(BureauVote::class)->findOneBy(["code"=>$pv->getBureauVote()])]);
-        if($pv!=null){
+    #[Route('/manager/pv/{id}/soumission', name: 'check')]
+    public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
+    {
+        $pv= $manager->getRepository(TempResultat::class)->findOneBy(["id"=> $id]);
+        $form=$this->createForm(ManagerType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $resultat = new Resultat();
+            $resultat->setCode($pv->getCodeKobo());
+            $resultat->setVotant($form["votant"]->getData());
+            $resultat->setSuffrageExprime($form["suffrageExp"]->getData());
+            $resultat->setSuffrageNul($form["suffrageNul"]->getData());
+            $resultat->setVoteOui($form["voteOui"]->getData());
+            $resultat->setVoteNon($form["voteNon"]->getData());
+            $resultat->setProcesVerbal($pv->getProcesVerbal());
+
+            $bv=$manager->getRepository(BureauVote::class)->findOneBy(["code"=> $form["bureauVote"]->getData()]);
+            if($bv != null){
+                $resultat->setBureauVote($bv);
+                $resultat->setEtat(3);
+            } else{
+                $resultat->setEtat(2);
+            }
             $pv->setEtat(1);
+            $manager->getManager()->persist($resultat);
             $manager->getManager()->persist($pv);
             $manager->getManager()->flush();
+            return $this->redirectToRoute("app_manager");
         }
         return $this->render('admin/check.html.twig', [
-           "pv"=> $pv,
-           "others"=> $others,
+           'form'=> $form->createView(),
+           'pv'=> $pv,
         ]);
     }
 
@@ -100,14 +126,33 @@ class AdminController extends AbstractController
             $resultat->setEtat(2);
             $manager->getManager()->persist($resultat);
             $manager->getManager()->flush();
-            return $this->redirectToRoute("app_admin");
+            return $this->redirectToRoute("app_manager");
         }
 
         return $this->render('admin/check.html.twig', []);
     }
 
 
-    //consolidation
+    //synchro
+
+    #[Route('/admin/sync', name:'synchro')]
+    public function synchro(ManagerRegistry $manager): Response{
+
+        $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
+        $myData= $kobo->findAll("https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json");
+        foreach($myData["results"] as $d){
+            $temp = new TempResultat();
+            $temp->setCodeKobo($d["_id"]);
+            $temp->setProvince($d["champ1"]);
+            $temp->setDepartement($d["champ2"]);
+            $temp->setProcesVerbal($kobo->downloadImg($d["_attachments"][0]["download_url"]));
+            $temp->setDate(new \DateTime($d["_submission_time"]));
+            $temp->setEtat(0);
+            $manager->getManager()->persist($temp);
+            $manager->getManager()->flush();
+        }
+        return $this->redirectToRoute("app_manager");
+    }
 
     #[Route('/admin/consolidation', name:'consolidation')]
     public function resultats(ManagerRegistry $manager): Response{
@@ -117,7 +162,7 @@ class AdminController extends AbstractController
         $output=array();
 
         foreach($bvs as $b) {
-           foreach($b->getResultat() as $r){
+           foreach($b->getResultats() as $r){
             //if($r->getSuffrageExprime()
            }
 
@@ -313,10 +358,61 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_bv');
     }
 
+    // importation de donnee
+    #[Route('/admin/import', name:'import')]
+    public function import(Request $request, ManagerRegistry $manager): Response
+    {
+        $form = $this->createForm(UploadFileType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){  
+            
+            $fichier = $form->get('fichier')->getData();
+            $originalFilename = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = $originalFilename . '.' . $fichier->guessExtension();
+            try {
+                $fichier->move(
+                    $this->getParameter('fichier_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+            $mfile = new File($this->getParameter('fichier_directory') . '/' . $newFilename);
+            if($form->get('choice')->getData() == "province"){
+                ExcelConnector::ImportProvince($mfile, $manager);
+            }
+            if ($form->get('choice')->getData() == "commune") {
+               // ExcelConnector::ImportResultat($mfile, $manager);
+            }
+            if ($form->get('choice')->getData() == "bv") {
+                //ExcelConnector::ImportResultat($mfile, $manager);
+            }
+            if ($form->get('choice')->getData() == "departement") {
+               // ExcelConnector::ImportResultat($mfile, $manager);
+            }
+            if ($form->get('choice')->getData() == "resultat") {
+                ExcelConnector::ImportResultat($mfile, $manager);
+            }
+        }
+        
 
+        return $this->render('admin/upload.html.twig',[
+            'form'=> $form->createView(),
+        ]);
+    }
+
+    //test boum
+    #[Route('/test', name:'test')]
+    public function test(Request $request, ManagerRegistry $manager)
+    {
+        
+        dd("done");
+    }
+
+    
     //faker 
-    #[Route('/admin/faker', name:'faker')]
-    public function verificationList(ManagerRegistry $manager): Response
+   // #[Route('/admin/faker', name:'faker')]
+   /* public function verificationList(ManagerRegistry $manager): Response
     {
         /*$myMock= MockData::$data1;
 
@@ -340,7 +436,7 @@ class AdminController extends AbstractController
             $manager->getManager()->flush();
             
         }
-        dd("end");*/
+        dd("end");
         return $this->render('', [  ]);
-    }
+    }*/
 }

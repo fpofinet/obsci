@@ -1,0 +1,65 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+
+<section class="container">
+    <div class="align-content-center table-responsive-sm ">
+        <p class="text-center text-decoration-underline h3 fw-bold mb-5">Données soumis par les observateurs</p>
+        <table class="table table-striped" id="tableRaw">
+            <thead>
+                <tr>
+                    <th>IDPV</th>
+                    <th>PROVINCE</th>
+                    <th>DEPARTEMENT</th>
+                    <th>COMMUNE</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in datas %}
+                    <tr>
+                        <td>
+                            {% if data.codeKobo == null %}
+                                {{"null"}}
+                            {% else  %}
+                                {{data.codeKobo}}
+                            {% endif %}
+                        </td>
+                        <td>{{data.province}}</td>
+                        <td>{{data.departement}}</td>
+                        <td>{{data.commune}}</td>
+                        <td>{{data.date | date("d-m-Y h:i:s")}}</td> 
+                        <td>
+                            <a href="{{path("check",{'id':data.id})}}" class="btn btn-success">Verifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>  
+</section>
+<script>
+	let table = new DataTable('#tableRaw', {
+    // config options...
+    });
+    // show div
+    const showLabelDiv = document.querySelector(".dataTables_length");
+    var showLabel = showLabelDiv.querySelector("label");
+    var select = showLabelDiv.querySelector("select");
+    select.classList.add("mx-2");
+    select.style.width = '75px';
+    showLabel.classList.add("d-flex");
+    showLabelDiv.parentNode.classList.add("my-4");
+    // filter div
+    const FilterDiv = document.querySelector(".dataTables_filter");
+    var filterLabel = FilterDiv.querySelector("label");
+    var input = FilterDiv.querySelector("input");
+    filterLabel.classList.add("d-flex");
+    input.classList.add("mx-1");
+</script>
+
+
+{% endblock %}

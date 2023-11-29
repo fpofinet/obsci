@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}Admin{% endblock %}
+{% block title %}Manager{% endblock %}
 
 {% block body %}
 
@@ -12,7 +12,6 @@
                 <tr>
                     <th>IDPV</th>
                     <th>PROVINCE</th>
-                    <th>DEPARTEMENT</th>
                     <th>COMMUNE</th>
                     <th>Date</th>
                     <th></th>
@@ -29,7 +28,6 @@
                             {% endif %}
                         </td>
                         <td>{{data.province}}</td>
-                        <td>{{data.departement}}</td>
                         <td>{{data.commune}}</td>
                         <td>{{data.date | date("d-m-Y h:i:s")}}</td> 
                         <td>

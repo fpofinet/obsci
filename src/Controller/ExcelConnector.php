@@ -13,15 +13,17 @@ class ExcelConnector{
     public static function ImportProvince($file,$manager){
         $rows = SimpleExcelReader::create($file)->getRows();
         $headers =SimpleExcelReader::create($file)->getHeaders();
-        foreach ($headers as $h){
-            if(strtolower($h) == "province" || strtolower($h) == "provinces"){
-                foreach ($rows as $r){
-                    $province = new Province();
+        foreach ($rows as $r){
+            $province = new Province();
+            foreach ($headers as $h){
+                if(strtolower($h) == "libelle"){
                     $province->setLibelle($r[$h]);
-                    $manager->getManager()->persist($province);
-                    $manager->getManager()->flush();
+                } else if(strtolower($h) == "code"){
+                    $province->setCode($r[$h]);
                 }
             }
+            $manager->getManager()->persist($province);
+            $manager->getManager()->flush();
         }
     }
 
@@ -32,12 +34,34 @@ class ExcelConnector{
             $dep = new Departement();
             foreach ($headers as $h){
                 if(strtolower($h) == "province"){
-                    $dep->setProvince($manager->getRepository(Province::class)->findOneBy(["libelle"=> $r[$h]]));
-                }
-                if(strtolower($h) == "departement"){
+                    $pro = $manager->getRepository(Province::class)->findOneBy(["code"=> $r[$h]]);
+                    $dep->setProvince($pro);
+                    $dep->setCode($pro->getCode()."D".$r["code"]);
+                } else if(strtolower($h) == "libelle"){
                     $dep->setLibelle($r[$h]);
                 }
             }
+            $manager->getManager()->persist($dep);
+            $manager->getManager()->flush();
+        }
+    }
+
+    public static function ImportCommune($file,$manager){
+        $rows = SimpleExcelReader::create($file)->getRows();
+        $headers =SimpleExcelReader::create($file)->getHeaders();
+        foreach ($rows as $r){
+            $com = new Commune();
+            foreach ($headers as $h){
+                if(strtolower($h) == "departement"){
+                    $dep = $manager->getRepository(Departement::class)->findOneBy(["code"=> $r[$h]]);
+                    $com->setDepartement($dep);
+                    $com->setCode($dep->getCode()."C".$r["code"]);
+                } else if(strtolower($h) == "libelle"){
+                    $com->setLibelle($r[$h]);
+                }
+            }
+            $manager->getManager()->persist($com);
+            $manager->getManager()->flush();
         }
     }
 

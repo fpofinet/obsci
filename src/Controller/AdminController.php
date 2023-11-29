@@ -16,6 +16,7 @@ use App\Form\BureauVoteType;
 use App\Form\UploadFileType;
 use App\Form\DepartementType;
 use App\Controller\ExcelConnector;
+use App\Entity\User;
 use App\Form\ManagerType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -136,21 +137,32 @@ class AdminController extends AbstractController
     //synchro
 
     #[Route('/admin/sync', name:'synchro')]
-    public function synchro(ManagerRegistry $manager): Response{
-
+    public function synchro(ManagerRegistry $manager): Response
+    {
+        $inDBdata=$manager->getRepository(TempResultat::class)->findAll();
         $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
-        $myData= $kobo->findAll("https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json");
+        $myData= $kobo->findAll('https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json');
+        
         foreach($myData["results"] as $d){
-            $temp = new TempResultat();
-            $temp->setCodeKobo($d["_id"]);
-            $temp->setProvince($d["champ1"]);
-            $temp->setDepartement($d["champ2"]);
-            $temp->setProcesVerbal($kobo->downloadImg($d["_attachments"][0]["download_url"]));
-            $temp->setDate(new \DateTime($d["_submission_time"]));
-            $temp->setEtat(0);
-            $manager->getManager()->persist($temp);
-            $manager->getManager()->flush();
+            $k=1;
+            foreach($inDBdata as $dbdata){
+                if($dbdata->getCodeKobo() == $d["_id"]){
+                    $k=0;
+                }
+            }
+            if($k==1){
+                $temp = new TempResultat();
+                $temp->setCodeKobo($d["_id"]);
+                $temp->setProvince($d["province"]);
+                $temp->setCommune($d["commune"]);
+                $temp->setProcesVerbal($kobo->downloadImg($d["_attachments"][0]["download_url"]));
+                $temp->setDate(new \DateTime($d["_submission_time"]));
+                $temp->setEtat(0);
+                $manager->getManager()->persist($temp);
+                $manager->getManager()->flush();
+            }
         }
+        //dd($myData);
         return $this->redirectToRoute("app_manager");
     }
 
@@ -182,10 +194,15 @@ class AdminController extends AbstractController
     //administration
 
     #[Route('/admin/administration', name:'administration')]
-    public function admin(): Response
+    public function admin(ManagerRegistry $manager ): Response
     {
         return $this->render('admin/admin.html.twig',[
-
+            'province' =>count($manager->getRepository(Province::class)->findAll()),
+            'dep'=>count($manager->getRepository(Departement::class)->findAll()),
+            'com'=>count($manager->getRepository(Commune::class)->findAll()),
+            'user' => count($manager->getRepository(User::class)->findAll()),
+            'bv' =>count($manager->getRepository(BureauVote::class)->findAll()),
+            'pvs' =>count($manager->getRepository(TempResultat::class)->findAll()),
         ]);
     }
 
@@ -358,7 +375,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_bv');
     }
 
-    // importation de donnee
+    // importation de data
     #[Route('/admin/import', name:'import')]
     public function import(Request $request, ManagerRegistry $manager): Response
     {
@@ -382,13 +399,13 @@ class AdminController extends AbstractController
                 ExcelConnector::ImportProvince($mfile, $manager);
             }
             if ($form->get('choice')->getData() == "commune") {
-               // ExcelConnector::ImportResultat($mfile, $manager);
+                ExcelConnector::ImportCommune($mfile, $manager);
             }
             if ($form->get('choice')->getData() == "bv") {
                 //ExcelConnector::ImportResultat($mfile, $manager);
             }
             if ($form->get('choice')->getData() == "departement") {
-               // ExcelConnector::ImportResultat($mfile, $manager);
+                ExcelConnector::ImportDepartement($mfile, $manager);
             }
             if ($form->get('choice')->getData() == "resultat") {
                 ExcelConnector::ImportResultat($mfile, $manager);
@@ -408,35 +425,4 @@ class AdminController extends AbstractController
         
         dd("done");
     }
-
-    
-    //faker 
-   // #[Route('/admin/faker', name:'faker')]
-   /* public function verificationList(ManagerRegistry $manager): Response
-    {
-        /*$myMock= MockData::$data1;
-
-        foreach($myMock as $m){
-            $temp=new TempResultat();
-            $temp->setProvince($m['province']);
-            $temp->setDepartement($m['departement']);
-            $temp->setCommune($m['commune']);
-            $temp->setBureauVote($m['bureauVote']);
-            $temp->setNombreVotant($m['votant']);
-            $temp->setSuffrageExprime($m['suffrageExp']);
-            $temp->setBulletinNuls($m['bulletinNuls']);
-            $temp->setVoteOui($m['voteOui']);
-            $temp->setVoteNon($m['voteNon']);
-            $temp->setDate(new \DateTime("10-10-2023"));
-            $temp->setIdSubmitter($m['idSubmitter']);
-            $temp->setCodeKobo($m['codePV']);
-            $temp->setEtat(0);
-
-            $manager->getManager()->persist($temp);
-            $manager->getManager()->flush();
-            
-        }
-        dd("end");
-        return $this->render('', [  ]);
-    }*/
 }

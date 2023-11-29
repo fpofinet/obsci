@@ -21,6 +21,9 @@ class Province
     #[ORM\OneToMany(mappedBy: 'province', targetEntity: Departement::class)]
     private Collection $departements;
 
+    #[ORM\Column(length: 255)]
+    private ?string $code = null;
+
     public function __construct()
     {
         $this->departements = new ArrayCollection();
@@ -69,6 +72,18 @@ class Province
                 $departement->setProvince(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): static
+    {
+        $this->code = $code;
 
         return $this;
     }

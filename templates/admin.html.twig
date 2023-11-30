@@ -34,16 +34,19 @@
                     {% endif %}
                     {% if is_granted("ROLE_SUPERVISOR") %}
                         <li class="nav-item">
-                            <a class="btn btn-dark w-100 my-2" href="{{path("consolidation")}}">Accueil</a>
+                            <a class="btn btn-dark w-100 my-2" href="{{path("app_superviseur")}}">Accueil</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2" href="{{path("consolidation")}}">Consolider</a>
-                        </li>
+                       {#} <li class="nav-item">
+                            <a class="btn btn-dark w-100  my-2" href="{{path("app_superviseur")}}">Consolider</a>
+                        </li> {#}
                     {% endif %}
                     {% if is_granted("ROLE_ADMIN") %}
+                        <li class="nav-item">
+                            <a class="btn btn-dark w-100  my-2 " href="{{path("administration")}}">Accueil</a>
+                        </li>
                         <li class="nav-item">
                             <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
                         </li>
@@ -51,10 +54,7 @@
                             <a class="btn btn-dark w-100  my-2" href="#">Synchroniser</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2" href="{{path("consolidation")}}">Consolider</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2 " href="{{path("administration")}}">Admin</a>
+                            <a class="btn btn-dark w-100  my-2" href="{{path("app_superviseur")}}">Consolider</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-dark w-100  my-2 " href="{{path("import")}}">Importer données</a>

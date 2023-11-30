@@ -23,7 +23,20 @@
             </tr>
         </thead>
         <tbody>
-        
+            {% for r in resultat %}
+                <tr>
+                    <td>{{r.code}}</td>
+                    <td>{{r.bureauVote.commune.departement.province.libelle}}</td>
+                    <td>{{r.bureauVote.commune.departement.libelle}}</td>
+                    <td>{{r.bureauVote.commune.libelle}}</td>
+                    <td>{{r.bureauVote.code}}</td>
+                    <td>{{r.votant}}</td>
+                    <td>{{r.suffrageExprime}}</td>
+                    <td>{{r.suffrageNul}}</td>
+                    <td>{{r.voteOui}}</td>
+                    <td>{{r.voteNon}}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>   
 </div>

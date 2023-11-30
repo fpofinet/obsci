@@ -39,10 +39,10 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/resultat', name:'resultat_admin')]
-    public function resultatAdmin(ManagerRegistry $manager): Response{
-
+    public function resultatAdmin(ManagerRegistry $manager): Response
+    {
         return $this->render('resultat/table.html.twig', [
-            'resultat'=>null,
+            'resultat'=>$manager->getRepository(Resultat::class)->findBy(["etat" =>5]),
         ]);
     }
 
@@ -166,29 +166,56 @@ class AdminController extends AbstractController
         return $this->redirectToRoute("app_manager");
     }
 
-    #[Route('/admin/consolidation', name:'consolidation')]
-    public function resultats(ManagerRegistry $manager): Response{
-        $bvs=$manager->getRepository(BureauVote::class)->findAll();
-        $identiques =0;
-        $discordantes = 0;
-        $output=array();
-
-        foreach($bvs as $b) {
-           foreach($b->getResultats() as $r){
-            //if($r->getSuffrageExprime()
-           }
-
-        }
-
-
-        return $this->render('admin/consolider.html.twig', []);
+    // app superviseur
+    #[Route('/superviseur', name:'app_superviseur')]
+    public function index_superviseur(ManagerRegistry $manager): Response{
+        return $this->render('admin/superviseur.html.twig', [
+            'bvs'=> $manager->getRepository(BureauVote::class)->findAll(),
+        ]);
     }
 
-    #[Route('/admin/consolidation/{id}/consolider', name:'consolider')]
-    public function consolider(ManagerRegistry $manager):Response{
+    #[Route('/superviseur/bureau-vote/{id}', name:'detailsBV')]
+    public function consolider(?int $id,ManagerRegistry $manager):Response{
+        $bvs=$manager->getRepository(Resultat::class)->findBy(["bureauVote" =>$manager->getRepository(BureauVote::class)->findOneBy(["id"=>$id])]);
+        $filtred = array();
+        $output=array();
+        for($i=0;$i<count($bvs);$i++){
+            $temp=array();
+            for($j=0;$j<count($bvs);$j++){
+                if(Utils::comparerResultat($bvs[$i],$bvs[$j])){
+                    $temp[]=$bvs[$j];
+                }
+            }
+            $filtred[]=$temp;
+        }
+        foreach(array_unique($filtred,SORT_REGULAR) as $f){
+            $output[]=["total"=>count($f),"element"=>$f[0]]; 
+        }
+        return $this->render('admin/consol.html.twig',[
+            'datas' => $output,
+        ]);
+    }
 
+    #[Route('/superviseur/{id}/consolider', name:'consolider')]
+    public function consol(?int $id,ManagerRegistry $manager):Response
+    {
+        $bv=$manager->getRepository(Resultat::class)->findOneBy(["id"=>$id]);
+        $all=$manager->getRepository(Resultat::class)->findBy(["bureauVote"=>$bv->getBureauVote()]);
+        if($bv){
+            $bv->setEtat(5);
+            foreach($all as $a){
+                if($a->getId() !=$bv->getId()){
+                    $a->setEtat(4);
+                    $manager->getManager()->persist($a);
+                    $manager->getManager()->flush();
+                }
+            }
+            $manager->getManager()->persist($bv);
+            $manager->getManager()->flush();
+            return $this->redirectToRoute("app_superviseur");
+        }
 
-        return $this->render('');
+       return $this->redirectToRoute("app_superviseur");
     }
 
     //administration

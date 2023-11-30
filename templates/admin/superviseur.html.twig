@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}Admin{% endblock %}
+{% block title %}Superviseur{% endblock %}
 
 {% block body %}
 <section class="container mt-3">
@@ -9,23 +9,29 @@
         <table class="table table-striped" id="myConso">
             <thead>
                 <tr>
+                    <th>CODE BUREAUV VOTE</th>
                     <th>COMMUNE</th>
-                    <th>BUREAU DE VOTE</th>
-                    <th>DONNEES DISPONIBLE</th>
-                    <th>DONNEES IDENTIQUES</th>
-                    <th>DONNEES DISCORDANTES</th>
+                    <th>DONNEES DISPONIBLES</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                {% for bv in bvs %}
+                    <tr>
+                        <td>{{bv.code}}</td>
+                        <td>{{bv.commune.libelle}}</td>
+                        <td>{{bv.resultats | length}}</td>
+                        <td><a href="{{path("detailsBV",{'id': bv.id })}}" class="btn btn-success">consolider</a></td>
+                    </tr>
+                {% endfor %}
+                {#<tr>
                     <td>pala</td>
                     <td>pal001</td>
                     <td>10</td>
                     <td>7</td>
                     <td><a href="#">3</a></td>
                     <td><a href="#" class="btn btn-success">consolider</a></td>
-                </tr>
+                </tr>{#}
             </tbody>
         </table>
     </div>

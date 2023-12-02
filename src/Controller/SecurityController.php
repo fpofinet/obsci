@@ -13,19 +13,25 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
 
+
         if ($this->getUser()) {
-            if (in_array('ROLE_MANAGER',$this->getUser()->getRoles())) {
-                return $this->redirectToRoute('app_manager');
-            } else if (in_array('ROLE_SUPERVISOR', $this->getUser()->getRoles())) {
-                return $this->redirectToRoute('app_superviseur');
-            }
-            else if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
-                return $this->redirectToRoute('administration');
-            }
-            else if (in_array('ROLE_VIEWER', $this->getUser()->getRoles())) {
-                return $this->redirectToRoute('app_resultat');
-            } else{
+            if($this->getUser()->getStatus() == 0){
                 return $this->redirectToRoute('app_logout');
+            }
+            if($this->getUser()->getStatus() == 1){
+                if (in_array('ROLE_MANAGER',$this->getUser()->getRoles())) {
+                    return $this->redirectToRoute('app_manager');
+                } else if (in_array('ROLE_SUPERVISOR', $this->getUser()->getRoles())) {
+                    return $this->redirectToRoute('app_superviseur');
+                }
+                else if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+                    return $this->redirectToRoute('administration');
+                }
+                else if (in_array('ROLE_VIEWER', $this->getUser()->getRoles())) {
+                    return $this->redirectToRoute('app_resultat');
+                } else{
+                    return $this->redirectToRoute('app_logout');
+                }
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,17 +45,24 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $user=$token->getUser();
-
-        if (in_array('ROLE_MANAGER', $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_manager'));
-        } else if (in_array('ROLE_SUPERVISOR', $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_superviseur'));
-        } else if (in_array('ROLE_ADMIN', $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('administration'));
-        } else if (in_array('ROLE_VIEWER', $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_resultat'));
+        $user = $token->getUser();
+        //@intelephense-ignore-line
+        if($user->getStatus()==0){
+            return new RedirectResponse($this->urlGenerator->generate('create_password',['id'=>$user->getId()]));
+        } else if( $user->getStatus()==1){
+            if (in_array('ROLE_MANAGER', $user->getRoles())) {
+                return new RedirectResponse($this->urlGenerator->generate('app_manager'));
+            } else if (in_array('ROLE_SUPERVISOR', $user->getRoles())) {
+                return new RedirectResponse($this->urlGenerator->generate('app_superviseur'));
+            } else if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                return new RedirectResponse($this->urlGenerator->generate('administration'));
+            } else if (in_array('ROLE_VIEWER', $user->getRoles())) {
+                return new RedirectResponse($this->urlGenerator->generate('app_resultat'));
+            }
+        } else if($user->getStatus()==2){
+            return new RedirectResponse($this->urlGenerator->generate('app_bloqued'));
         }
+       
        
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {

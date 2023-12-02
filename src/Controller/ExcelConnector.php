@@ -10,21 +10,46 @@ use App\Entity\Departement;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
 class ExcelConnector{
-    public static function ImportProvince($file,$manager){
+    public static function ImportGeoData($file,$manager){
         $rows = SimpleExcelReader::create($file)->getRows();
         $headers =SimpleExcelReader::create($file)->getHeaders();
+        $provinces=array();
+        $depts=array();
+        $coms=array();
+       // dd($rows[0]);
         foreach ($rows as $r){
-            $province = new Province();
-            foreach ($headers as $h){
-                if(strtolower($h) == "libelle"){
-                    $province->setLibelle($r[$h]);
-                } else if(strtolower($h) == "code"){
-                    $province->setCode($r[$h]);
-                }
+            if(strtolower($r["type"])=="province"){
+                $provinces[]=$r;
+            } else if(strtolower($r["type"])=="departement"){
+                $depts[]=$r;
+            } else if(strtolower($r["type"])=="commune"){
+                $coms[]=$r;
             }
-            $manager->getManager()->persist($province);
+        }
+        foreach($provinces as $p){
+            $prov= new Province();
+            $prov->setCode($p["code"]);
+            $prov->setLibelle($p["libelle"]);
+            $manager->getManager()->persist($prov);
             $manager->getManager()->flush();
         }
+        foreach($depts as $d){
+            $dep= new Departement();
+            $dep->setCode($d["code"]);
+            $dep->setLibelle($d["libelle"]);
+            $dep->setProvince($manager->getRepository(Province::class)->findOneBy(["code" => $d["code_parent"]]));
+            $manager->getManager()->persist($dep);
+            $manager->getManager()->flush();
+        }
+        foreach($coms as $c){
+            $com= new Commune();
+            $com->setCode($c["code"]);
+            $com->setLibelle($c["libelle"]);
+            $com->setDepartement($manager->getRepository(Departement::class)->findOneBy(["code" => $c["code_parent"]]));
+            $manager->getManager()->persist($com);
+            $manager->getManager()->flush();
+        }
+        //dd($depts[0]["code_parent"]);
     }
 
     public static function ImportDepartement($file,$manager){

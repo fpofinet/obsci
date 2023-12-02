@@ -15,60 +15,62 @@
         {% endblock %}
     </head>
     <body class="d-flex flex-column h-100">
-        <header class="d-flex justify-content-center bg-white" >
-            <img src="{{asset("/images/logo.png")}}" alt="logo" class="img-fluid" style="width:800px;height:150px">
+        <header class="d-flex justify-content-center" style="background-color : #0F3170">
+           
+            <img src="{{asset("/images/logo.png")}}" alt="logo" class="img-fluid" style="width:800px;height:150px"> 
         </header>
         <div class="row">
             <div class="bg-secondary col-lg-2 col-md-3 col-sm-4 col-12 pt-4 min-vh-100">
                 <ul class="nav flex-column px-3">
-                    {% if is_granted("ROLE_MANAGER") %}
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100 my-2" href="{{path("app_manager")}}">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2" href="{{path("synchro")}}">Synchroniser</a>
+                    {% if app.user.status == 1 %}
+                        {% if is_granted("ROLE_MANAGER") %}
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100 my-2" href="{{path("app_manager")}}">Accueil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100  my-2" href="{{path("synchro")}}">Synchroniser</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted("ROLE_SUPERVISOR") %}
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100 my-2" href="{{path("app_superviseur")}}">Accueil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
+                            </li>
+                        {#} <li class="nav-item">
+                                <a class="btn btn-dark w-100  my-2" href="{{path("app_superviseur")}}">Consolider</a>
+                            </li> {#}
+                        {% endif %}
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100  my-2 " href="{{path("administration")}}">Accueil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100  my-2" href="{{path("synchro")}}">Synchroniser</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100  my-2" href="{{path("app_superviseur")}}">Consolider</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark w-100  my-2 " href="{{path("import")}}">Importer données</a>
+                            </li>
+                        {% endif %}
+                        <li class="p-2">
+                            <div class="m-0 rounded-3 border shadow p-2">
+                               {#} {% if app.user %}{#}
+                                    <span class="h4 fw-bold d-block text-center">{{app.user.username}}</span>
+                                    <a href="{{path("app_logout")}}" class="btn btn-danger my-1 w-100">Deconnexion</a>
+                               {#} {% endif %}   {#}
+                            </div>
                         </li>
                     {% endif %}
-                    {% if is_granted("ROLE_SUPERVISOR") %}
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100 my-2" href="{{path("app_superviseur")}}">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
-                        </li>
-                       {#} <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2" href="{{path("app_superviseur")}}">Consolider</a>
-                        </li> {#}
-                    {% endif %}
-                    {% if is_granted("ROLE_ADMIN") %}
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2 " href="{{path("administration")}}">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2" href="#">Synchroniser</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2" href="{{path("app_superviseur")}}">Consolider</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-dark w-100  my-2 " href="{{path("import")}}">Importer données</a>
-                        </li>
-                    {% endif %}
-                    <li class="p-2">
-                        <div class="m-0 rounded-3 border shadow p-2">
-                            {% if app.user %}
-                                <span class="h4 fw-bold d-block text-center">{{app.user.username}}</span>
-                                <a href="{{path("update_password",{'id':app.user.id})}}" class="btn btn-primary my-1 w-100">Changer MDP</a>
-                            {% endif %} 
-                            <a href="{{path("app_logout")}}" class="btn btn-danger my-1 w-100">Deconnexion</a>
-                        </div>
-                    </li>
                 </ul>
             </div>
             <div class="col-lg-10 col-md-9 col-sm-8  col-12">

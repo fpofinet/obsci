@@ -36,9 +36,9 @@
                 <li class="nav-item">
                     <a class="nav-link text-white btn btn-secondary" href="{{path("app_apropos")}}">A propos</a>
                 </li>
-                <li class="nav-item">
+                {#<li class="nav-item">
                     <a class="nav-link text-white btn btn-secondary" href="{{path("app_contact")}}">Nous contacter</a>
-                </li>
+                </li>{#}
                  {% if is_granted("ROLE_VIEWER") %}
                     <li class="nav-item">
                         <a class="nav-link text-white btn btn-danger" href="{{path("app_logout")}}">Deconnexion</a>

@@ -13,9 +13,6 @@ class UserPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('oldPass', PasswordType::class,[
-                'label'=> 'Ancien mot de passe',
-            ])
             ->add('newPass', PasswordType::class,[
                 'label'=> 'Nouveau mot de passe',
             ])

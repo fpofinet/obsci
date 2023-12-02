@@ -17,11 +17,8 @@ class UploadFileType extends AbstractType
             ->add('choice',ChoiceType::class,[
                 'label'=>'Type de donnée importée',
                 'choices'=>[
-                    'Province'=> 'province',
-                    'Departement'=> 'departement',
-                    'Commune'=>'commune',
-                    'Bureau de vote'=> 'bv',
-                    'Resultat'=> 'resultat',
+                    'Localités'=> 'localite',
+                    'Resultats'=> 'resultat',
                     ],
             ] )
             ->add('fichier', FileType::class, [

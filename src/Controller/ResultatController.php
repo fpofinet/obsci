@@ -29,11 +29,13 @@ class ResultatController extends AbstractController
                         if(count($b->getResultats())> 0){
                             $bvd = $bvd + 1;
                             foreach($b->getResultats() as $r){
-                                $votant= $votant + $r->getVotant();
-                                $sf= $sf + $r->getSuffrageExprime();
-                                $sn= $sn + $r->getSuffrageNul();
-                                $vo= $vo + $r->getVoteOui();
-                                $vn= $vn + $r->getVoteNon();
+                                if($r->getEtat()==5){
+                                    $votant= $votant + $r->getVotant();
+                                    $sf= $sf + $r->getSuffrageExprime();
+                                    $sn= $sn + $r->getSuffrageNul();
+                                    $vo= $vo + $r->getVoteOui();
+                                    $vn= $vn + $r->getVoteNon();
+                                }
                             }
                         }
                     }
@@ -79,11 +81,13 @@ class ResultatController extends AbstractController
                     if (count($b->getResultats()) > 0) {
                         $bvd = $bvd + 1;
                         foreach ($b->getResultats() as $r) {
-                            $votant = $votant + $r->getVotant();
-                            $sf = $sf + $r->getSuffrageExprime();
-                            $sn = $sn + $r->getSuffrageNul();
-                            $vo = $vo + $r->getVoteOui();
-                            $vn = $vn + $r->getVoteNon();
+                            if($r->getEtat()==5){
+                                $votant = $votant + $r->getVotant();
+                                $sf = $sf + $r->getSuffrageExprime();
+                                $sn = $sn + $r->getSuffrageNul();
+                                $vo = $vo + $r->getVoteOui();
+                                $vn = $vn + $r->getVoteNon();
+                            }
                         }
                     } 
                 }
@@ -116,11 +120,13 @@ class ResultatController extends AbstractController
                 if (count($b->getResultats()) > 0) {
                     $bvd = $bvd + 1;
                     foreach ($b->getResultats() as $r) {
-                        $votant = $votant + $r->getVotant();
-                        $sf = $sf + $r->getSuffrageExprime();
-                        $sn = $sn + $r->getSuffrageNul();
-                        $vo = $vo + $r->getVoteOui();
-                        $vn = $vn + $r->getVoteNon();
+                        if($r->getEtat()==5){
+                            $votant = $votant + $r->getVotant();
+                            $sf = $sf + $r->getSuffrageExprime();
+                            $sn = $sn + $r->getSuffrageNul();
+                            $vo = $vo + $r->getVoteOui();
+                            $vn = $vn + $r->getVoteNon();
+                        }
                     }
                 }
             }
@@ -147,11 +153,13 @@ class ResultatController extends AbstractController
             $sn = 0;
             if (count($b->getResultats()) > 0) {
                 foreach ($b->getResultats() as $r) {
-                    $votant = $votant + $r->getVotant();
-                    $sf = $sf + $r->getSuffrageExprime();
-                    $sn = $sn + $r->getSuffrageNul();
-                    $vo = $vo + $r->getVoteOui();
-                    $vn = $vn + $r->getVoteNon();
+                    if($r->getEtat()==5){
+                        $votant = $votant + $r->getVotant();
+                        $sf = $sf + $r->getSuffrageExprime();
+                        $sn = $sn + $r->getSuffrageNul();
+                        $vo = $vo + $r->getVoteOui();
+                        $vn = $vn + $r->getVoteNon();
+                    }
                 }
             }
             $dep = ["id" => $bvs->getId(), "libelle" => $b->getCode(), "votant" => $votant, "suffrageExprime" => $sf, "suffrageNul" => $sn, "voteOui" => $vo, "voteNon" => $vn ,"bv" =>count($bvs->getBureauVote())];
@@ -165,7 +173,7 @@ class ResultatController extends AbstractController
 
     #[Route('/conso', name:'conso')]
     public function consolider(ManagerRegistry $manager){
-        $t= $manager->getRepository(Resultat::class)->findBy(['bureauVote'=> $manager->getRepository(BureauVote::class)->findOneBy(['code'=> 'pal002'])]);
+        $t= $manager->getRepository(Resultat::class)->findBy(['bureauVote'=> $manager->getRepository(BureauVote::class)->findOneBy(['code'=> 'PAL001'])]);
         $tab=$this->conso($t);
 
         $tableauUnique = array_unique($tab,SORT_REGULAR);

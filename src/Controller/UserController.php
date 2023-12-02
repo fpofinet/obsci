@@ -21,6 +21,14 @@ class UserController extends AbstractController
             'users' => $manager->getRepository(User::class)->findAll(),
         ]);
     }
+
+    #[Route('/bloqued', name: 'app_bloqued')]
+    public function bloqued(): Response
+    {
+        return $this->render('user/bloqued.html.twig', [
+           
+        ]);
+    }
    
     #[Route('/admin/user/new', name:'add_user')]
     public function createUser(ManagerRegistry $manager,Request $request,UserPasswordHasherInterface $encoder): Response
@@ -36,7 +44,7 @@ class UserController extends AbstractController
             $user->setUsername($form['username']->getData());
             $user->setRoles([$form['roles']->getData()]);
             $user->setPassword($hash);
-
+            $user->setStatus(0);
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
             return $this->render('user/info.html.twig', [
@@ -49,7 +57,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('admin/user/{id}/password/update', name:'update_password')]
+    #[Route('admin/user/{id}/password/update', name:'create_password')]
     public function updateUserPassword(?int $id,ManagerRegistry $manager,UserPasswordHasherInterface $encoder, Request $request): Response
     {
         $user = $manager->getRepository(User::class)->findOneBy(["id"=>$id]);
@@ -59,9 +67,22 @@ class UserController extends AbstractController
             $pass=$form["newPass"]->getData();
             $hash= $encoder->hashPassword($user,$pass);
             $user->setPassword($hash);
+            $user->setStatus(1);
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
-            return $this->redirectToRoute("app_admin");
+           // dd("done");
+            if (in_array('ROLE_MANAGER',$user->getRoles())) {
+                return $this->redirectToRoute('app_manager');
+            } else if (in_array('ROLE_SUPERVISOR', $user->getRoles())) {
+                return $this->redirectToRoute('app_superviseur');
+            }
+            else if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                return $this->redirectToRoute('administration');
+            }
+            else if (in_array('ROLE_VIEWER', $user->getRoles())) {
+                return $this->redirectToRoute('app_resultat');
+            }
+            //return $this->redirectToRoute("app_admin");
         }
         return $this->render('user/passwordForm.html.twig', [
             'form'=> $form->createView(),
@@ -75,6 +96,7 @@ class UserController extends AbstractController
         if ($user != null) {
             $hash= $encoder->hashPassword($user,"123456");
             $user->setPassword($hash);
+            $user->setStatus(0);
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
             return $this->redirectToRoute("app_user");
@@ -89,7 +111,7 @@ class UserController extends AbstractController
     {
         $user = $manager->getRepository(User::class)->findOneBy(["id"=>$id]);
         if ($user != null) {
-            $user->setStatus(0);
+            $user->setStatus(2);
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
             return $this->redirectToRoute("app_user");

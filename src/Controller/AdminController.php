@@ -230,6 +230,7 @@ class AdminController extends AbstractController
             'user' => count($manager->getRepository(User::class)->findAll()),
             'bv' =>count($manager->getRepository(BureauVote::class)->findAll()),
             'pvs' =>count($manager->getRepository(TempResultat::class)->findAll()),
+            'pvv'=>count($manager->getRepository(Resultat::class)->findAll()),
         ]);
     }
 
@@ -422,24 +423,14 @@ class AdminController extends AbstractController
                 // ... handle exception if something happens during file upload
             }
             $mfile = new File($this->getParameter('fichier_directory') . '/' . $newFilename);
-            if($form->get('choice')->getData() == "province"){
-                ExcelConnector::ImportProvince($mfile, $manager);
-            }
-            if ($form->get('choice')->getData() == "commune") {
-                ExcelConnector::ImportCommune($mfile, $manager);
-            }
-            if ($form->get('choice')->getData() == "bv") {
-                //ExcelConnector::ImportResultat($mfile, $manager);
-            }
-            if ($form->get('choice')->getData() == "departement") {
-                ExcelConnector::ImportDepartement($mfile, $manager);
+            if($form->get('choice')->getData() == "localite"){
+                ExcelConnector::ImportGeoData($mfile, $manager);
             }
             if ($form->get('choice')->getData() == "resultat") {
                 ExcelConnector::ImportResultat($mfile, $manager);
             }
         }
         
-
         return $this->render('admin/upload.html.twig',[
             'form'=> $form->createView(),
         ]);

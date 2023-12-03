@@ -18,6 +18,7 @@ class UploadFileType extends AbstractType
                 'label'=>'Type de donnée importée',
                 'choices'=>[
                     'Localités'=> 'localite',
+                    'Utilisateurs'=> 'user',
                     'Resultats'=> 'resultat',
                     ],
             ] )

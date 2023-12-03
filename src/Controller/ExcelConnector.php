@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Controller;
-
-use App\Entity\BureauVote;
+use App\Entity\User;
 use App\Entity\Commune;
 use App\Entity\Province;
-use App\Entity\Resultat;
 use App\Entity\Departement;
 use Spatie\SimpleExcel\SimpleExcelReader;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ExcelConnector{
     public static function ImportGeoData($file,$manager){
@@ -52,51 +51,28 @@ class ExcelConnector{
         //dd($depts[0]["code_parent"]);
     }
 
-    public static function ImportDepartement($file,$manager){
+    
+
+    public static function ImportUser($file,$manager,UserPasswordHasherInterface $encoder){
         $rows = SimpleExcelReader::create($file)->getRows();
-        $headers =SimpleExcelReader::create($file)->getHeaders();
         foreach ($rows as $r){
-            $dep = new Departement();
-            foreach ($headers as $h){
-                if(strtolower($h) == "province"){
-                    $pro = $manager->getRepository(Province::class)->findOneBy(["code"=> $r[$h]]);
-                    $dep->setProvince($pro);
-                    $dep->setCode($pro->getCode()."D".$r["code"]);
-                } else if(strtolower($h) == "libelle"){
-                    $dep->setLibelle($r[$h]);
-                }
-            }
-            $manager->getManager()->persist($dep);
+            $user= new User();
+            $user->setUsername($r["login"]);
+            $user->setRoles(["ROLE_MANAGER"]);
+            $user->getPassword();
+            $user->setStatus(0);
+            $hash= $encoder->hashPassword($user,"123ocel");
+            $user->setPassword($hash);
+            $manager->getManager()->persist($user);
             $manager->getManager()->flush();
         }
     }
 
-    public static function ImportCommune($file,$manager){
-        $rows = SimpleExcelReader::create($file)->getRows();
-        $headers =SimpleExcelReader::create($file)->getHeaders();
-        foreach ($rows as $r){
-            $com = new Commune();
-            foreach ($headers as $h){
-                if(strtolower($h) == "departement"){
-                    $dep = $manager->getRepository(Departement::class)->findOneBy(["code"=> $r[$h]]);
-                    $com->setDepartement($dep);
-                    $com->setCode($dep->getCode()."C".$r["code"]);
-                } else if(strtolower($h) == "libelle"){
-                    $com->setLibelle($r[$h]);
-                }
-            }
-            $manager->getManager()->persist($com);
-            $manager->getManager()->flush();
-        }
-    }
-
-    public static function ImportResultat($file,$manager){
+   /* public static function ImportResultat($file,$manager){
         $rows = SimpleExcelReader::create($file)->getRows();
         $headers =SimpleExcelReader::create($file)->getHeaders();
 
-        /*if (array_key_exists("nom", $rows->toArray())) {
-
-        }*/
+      
         $i=1;
         $code="res".$i;
         foreach ($rows as $r){
@@ -130,6 +106,6 @@ class ExcelConnector{
             $manager->getManager()->persist($res);
             $manager->getManager()->flush();
         }
-    } 
+    }*/
 }
 ?>

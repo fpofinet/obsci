@@ -2,20 +2,18 @@
 
 namespace App\Controller;
 
-use GuzzleHttp\Client;
 use App\Entity\Commune;
 use App\Entity\Province;
-use App\Entity\Resultat;
+use App\Entity\ResultatSuperviseur;
 use App\Form\CommuneType;
-use App\Entity\BureauVote;
 use App\Form\ProvinceType;
 use App\Entity\Departement;
-use App\Controller\MockData;
-use App\Entity\TempResultat;
-use App\Form\BureauVoteType;
 use App\Form\UploadFileType;
 use App\Form\DepartementType;
 use App\Controller\ExcelConnector;
+use App\Entity\Resultat;
+use App\Entity\ResultatKobo;
+use App\Entity\ResultatOperateur;
 use App\Entity\User;
 use App\Form\ManagerType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -32,7 +30,7 @@ class AdminController extends AbstractController
     #[Route('/manager', name: 'app_manager')]
     public function index(ManagerRegistry $manager): Response
     {
-        $datas=$manager->getRepository(TempResultat::class)->findBy(["etat"=>0]);
+        $datas=$manager->getRepository(ResultatKobo::class)->findBy(["etat"=>0]);
         return $this->render('admin/manager.html.twig', [
             'datas'=>$datas,
         ]);
@@ -42,7 +40,7 @@ class AdminController extends AbstractController
     public function resultatAdmin(ManagerRegistry $manager): Response
     {
         return $this->render('resultat/table.html.twig', [
-            'resultat'=>$manager->getRepository(Resultat::class)->findBy(["etat" =>5]),
+           // 'resultat'=>$manager->getRepository(Resultat::class)->findBy(["etat" =>5]),
         ]);
     }
 
@@ -78,26 +76,23 @@ class AdminController extends AbstractController
     #[Route('/manager/pv/{id}/soumission', name: 'check')]
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
-        $pv= $manager->getRepository(TempResultat::class)->findOneBy(["id"=> $id]);
+       $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
         $form=$this->createForm(ManagerType::class);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $resultat = new Resultat();
+       if ($form->isSubmitted() && $form->isValid()) {
+          // dd($form["commune"]->getData()->getId());
+            $resultat = new ResultatOperateur();
             $resultat->setCode($pv->getCodeKobo());
+            $resultat->setCodeBureau($form["bureauVote"]->getData());
             $resultat->setVotant($form["votant"]->getData());
             $resultat->setSuffrageExprime($form["suffrageExp"]->getData());
             $resultat->setSuffrageNul($form["suffrageNul"]->getData());
             $resultat->setVoteOui($form["voteOui"]->getData());
             $resultat->setVoteNon($form["voteNon"]->getData());
-            $resultat->setProcesVerbal($pv->getProcesVerbal());
-
-            $bv=$manager->getRepository(BureauVote::class)->findOneBy(["code"=> $form["bureauVote"]->getData()]);
-            if($bv != null){
-                $resultat->setBureauVote($bv);
-                $resultat->setEtat(3);
-            } else{
-                $resultat->setEtat(2);
-            }
+            $resultat->setImagePv($pv->getImagePv());
+            $resultat->setCommune( $manager->getRepository(Commune::class)->findOneBy(["id"=> $form["commune"]->getData()->getId()]));
+            $resultat->setEtat(0);
+            $resultat->setCreatedAt(new \DateTimeImmutable);
             $pv->setEtat(1);
             $manager->getManager()->persist($resultat);
             $manager->getManager()->persist($pv);
@@ -113,7 +108,7 @@ class AdminController extends AbstractController
     #[Route('/admin/resultat/{id}/valider', name: 'valider')]
     public function validation(?int $id,ManagerRegistry $manager): Response
     {
-        $pv= $manager->getRepository(TempResultat::class)->findOneBy(["id"=>$id]);
+       /* $pv= $manager->getRepository(TempResultat::class)->findOneBy(["id"=>$id]);
         if($pv !=null){
             $resultat = new Resultat();
             $resultat->setCode($pv->getCodeKobo());
@@ -128,7 +123,7 @@ class AdminController extends AbstractController
             $manager->getManager()->persist($resultat);
             $manager->getManager()->flush();
             return $this->redirectToRoute("app_manager");
-        }
+        }*/
 
         return $this->render('admin/check.html.twig', []);
     }
@@ -139,7 +134,7 @@ class AdminController extends AbstractController
     #[Route('/admin/sync', name:'synchro')]
     public function synchro(ManagerRegistry $manager): Response
     {
-        $inDBdata=$manager->getRepository(TempResultat::class)->findAll();
+        $inDBdata=$manager->getRepository(ResultatKobo::class)->findAll();
         $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
         $myData= $kobo->findAll('https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json');
         
@@ -151,12 +146,10 @@ class AdminController extends AbstractController
                 }
             }
             if($k==1){
-                $temp = new TempResultat();
+                $temp = new ResultatKobo();
                 $temp->setCodeKobo($d["_id"]);
-                $temp->setProvince($d["province"]);
-                $temp->setCommune($d["commune"]);
-                $temp->setProcesVerbal($kobo->downloadImg($d["_attachments"][0]["download_url"]));
-                $temp->setDate(new \DateTime($d["_submission_time"]));
+                $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_url"]));
+                $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
                 $temp->setEtat(0);
                 $manager->getManager()->persist($temp);
                 $manager->getManager()->flush();
@@ -170,52 +163,120 @@ class AdminController extends AbstractController
     #[Route('/superviseur', name:'app_superviseur')]
     public function index_superviseur(ManagerRegistry $manager): Response{
         return $this->render('admin/superviseur.html.twig', [
-            'bvs'=> $manager->getRepository(BureauVote::class)->findAll(),
+           'bvs'=> $manager->getRepository(ResultatOperateur::class)->findAll(),
         ]);
     }
 
-    #[Route('/superviseur/bureau-vote/{id}', name:'detailsBV')]
-    public function consolider(?int $id,ManagerRegistry $manager):Response{
-        $bvs=$manager->getRepository(Resultat::class)->findBy(["bureauVote" =>$manager->getRepository(BureauVote::class)->findOneBy(["id"=>$id])]);
-        $filtred = array();
-        $output=array();
-        for($i=0;$i<count($bvs);$i++){
-            $temp=array();
-            for($j=0;$j<count($bvs);$j++){
-                if(Utils::comparerResultat($bvs[$i],$bvs[$j])){
-                    $temp[]=$bvs[$j];
-                }
-            }
-            $filtred[]=$temp;
-        }
-        foreach(array_unique($filtred,SORT_REGULAR) as $f){
-            $output[]=["total"=>count($f),"element"=>$f[0]]; 
-        }
-        return $this->render('admin/consol.html.twig',[
-            'datas' => $output,
+    #[Route('/superviseur/pv/{id}', name:'detailsPV')]
+    public function verifier(?int $id,ManagerRegistry $manager):Response{
+        return $this->render('admin/detailsPv.html.twig',[
+           'pv' => $manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$id,"etat"=>0]),
         ]);
     }
 
-    #[Route('/superviseur/{id}/consolider', name:'consolider')]
-    public function consol(?int $id,ManagerRegistry $manager):Response
-    {
-        $bv=$manager->getRepository(Resultat::class)->findOneBy(["id"=>$id]);
-        $all=$manager->getRepository(Resultat::class)->findBy(["bureauVote"=>$bv->getBureauVote()]);
-        if($bv){
-            $bv->setEtat(5);
-            foreach($all as $a){
-                if($a->getId() !=$bv->getId()){
-                    $a->setEtat(4);
-                    $manager->getManager()->persist($a);
-                    $manager->getManager()->flush();
-                }
-            }
-            $manager->getManager()->persist($bv);
+    #[Route('/superviseur/pv/{id}/valider', name:'validerPV')]
+    public function valider(?int $id,ManagerRegistry $manager):Response{
+
+        $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$id]);
+        if($pv){
+            $resultat = new ResultatSuperviseur();
+            $resultat->setCode($pv->getCode());
+            $resultat->setCodeBureau($pv->getCodeBureau());
+            $resultat->setSuffrageExprime($pv->getSuffrageExprime());
+            $resultat->setSuffrageNul($pv->getSuffrageNul());
+            $resultat->setVotant($pv->getVotant());
+            $resultat->setVoteOui($pv->getVoteOui());
+            $resultat->setVoteNon($pv->getVoteNon());
+            $resultat->setImagePv($pv->getImagePv());
+            $resultat->setCommune($pv->getCommune());
+            $resultat->setEtat(0);
+            $manager->getManager()->persist($resultat);
+            $manager->getManager()->flush();
+
+            $existant=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$pv->getCodeBureau()]);
+           // dd($existant);
+            if($existant != null){
+                return $this->redirectToRoute("checkSup",["code"=>$existant->getCodeBureau()]);
+            } else{
+              // $r= $manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$pv->getCode()]);
+                $rdef= new Resultat();
+                $rdef->setCode($pv->getCode());
+                $rdef->setCodeBureau($pv->getCodeBureau());
+                $rdef->setSuffrageExprime($pv->getSuffrageExprime());
+                $rdef->setSuffrageNul($pv->getSuffrageNul());
+                $rdef->setVotant($pv->getVotant());
+                $rdef->setVoteOui($pv->getVoteOui());
+                $rdef->setVoteNon($pv->getVoteNon());
+                $rdef->setImagePv($pv->getImagePv());
+                $rdef->setCommune($pv->getCommune());
+                $rdef->setEtat(0);
+                $manager->getManager()->persist($rdef);
+                $manager->getManager()->flush();
+                return $this->redirectToRoute("app_superviseur");
+            }   
+           // return $this->redirectToRoute("app_superviseur");
+        }
+        return $this->redirectToRoute("app_superviseur");
+    }
+
+    #[Route('/superviseur/pv/{id}/invalider', name:'invaliderPV')]
+    public function invalider(?int $id,ManagerRegistry $manager):Response{
+
+        $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$id]);
+        if($pv){
+            $pv->setEtat(2);
+            $manager->getManager()->persist($pv);
             $manager->getManager()->flush();
             return $this->redirectToRoute("app_superviseur");
         }
+        return $this->redirectToRoute("app_superviseur");
+    }
 
-       return $this->redirectToRoute("app_superviseur");
+
+
+    #[Route('/superviseur/{code}/consolidation', name:'checkSup')]
+    public function consol(?string $code,ManagerRegistry $manager):Response
+    {
+        $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$code]);
+        $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>0]);
+        $other=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>1]);
+        return $this->render('admin/checkSup.html.twig',[
+            'actuel'=>$actuel,
+            'new'=>$new,
+            'other'=>$other,
+         ]);
+    }
+
+    #[Route('/superviseur/{id}/consolider', name:'consolider')]
+    public function consolider(?int $id,ManagerRegistry $manager):Response
+    {
+        $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["id"=>$id]);
+        if($new){
+            $new->setEtat(1);
+            $manager->getManager()->persist($new);
+            $manager->getManager()->flush();
+            return $this->redirectToRoute("app_superviseur");
+        }
+        return $this->redirectToRoute("app_superviseur");
+    }
+
+    #[Route('/superviseur/{id}/changer', name:'changerResultat')]
+    public function changerResultat(?int $id,ManagerRegistry $manager):Response
+    {
+        $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["id"=>$id]);
+        $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$new->getCodeBureau()]);
+        if($actuel){
+            $actuel->setSuffrageExprime($new->getSuffrageExprime());
+            $actuel->setSuffrageNul($new->getSuffrageNul());
+            $actuel->setVotant($new->getVotant());
+            $actuel->setVoteOui($new->getVoteOui());
+            $actuel->setVoteNon($new->getVoteNon());
+            $actuel->setImagePv($new->getImagePv());
+            $manager->getManager()->persist($actuel);
+            $manager->getManager()->flush();
+            return $this->redirectToRoute("app_superviseur");
+        }
+        return $this->redirectToRoute("app_superviseur");
     }
 
     //administration
@@ -228,9 +289,9 @@ class AdminController extends AbstractController
             'dep'=>count($manager->getRepository(Departement::class)->findAll()),
             'com'=>count($manager->getRepository(Commune::class)->findAll()),
             'user' => count($manager->getRepository(User::class)->findAll()),
-            'bv' =>count($manager->getRepository(BureauVote::class)->findAll()),
-            'pvs' =>count($manager->getRepository(TempResultat::class)->findAll()),
-            'pvv'=>count($manager->getRepository(Resultat::class)->findAll()),
+           'bv' =>0,
+            'pvs' =>0,
+            'pvv'=>0,
         ]);
     }
 
@@ -238,7 +299,7 @@ class AdminController extends AbstractController
     public function pvValider(ManagerRegistry $manager): Response
     {
         return $this->render('admin/pv.html.twig',[
-            'pvs'=> $manager->getRepository(Resultat::class)->findAll(),
+           // 'pvs'=> $manager->getRepository(Resultat::class)->findAll(),
         ]);
     }
 
@@ -246,7 +307,7 @@ class AdminController extends AbstractController
     public function pvSoumis(ManagerRegistry $manager): Response
     {
         return $this->render('admin/soumissionView.html.twig',[
-            'pvs'=> $manager->getRepository(TempResultat::class)->findAll(),
+           // 'pvs'=> $manager->getRepository(TempResultat::class)->findAll(),
         ]);
     }
 
@@ -370,13 +431,13 @@ class AdminController extends AbstractController
     #[Route('/admin/bureau-vote', name:'app_bv')]
     public function listBv(ManagerRegistry $manager): Response{
         return $this->render('admin/tableBureauVote.html.twig',[
-            'bvs'=> $manager->getRepository(BureauVote::class)->findAll(),
+           // 'bvs'=> $manager->getRepository(BureauVote::class)->findAll(),
         ]);
     }
     #[Route('/admin/bureau-vote/new', name:'add_bv')]
     #[Route('/admin/bureau-vote/{id}/update', name:'update_bv')]
     public function addOrUpdateBV(?int $id,ManagerRegistry $manager,Request $request): Response{
-        $bv = new BureauVote();
+      /*  $bv = new BureauVote();
         if($id != null){
             $bv =$manager->getRepository(BureauVote::class)->findOneBy(['id'=> $id]);
         }
@@ -386,20 +447,20 @@ class AdminController extends AbstractController
             $manager->getManager()->persist($bv);
             $manager->getManager()->flush();
             return $this->redirectToRoute('app_bv');
-        }
+        }*/
         return $this->render('admin/formBv.html.twig',[
-            'form'=> $form->createView(),
-            'editState'=> $bv->getId()===null,
+            //'form'=> $form->createView(),
+            //'editState'=> $bv->getId()===null,
         ]);
     }
     #[Route('/admin/bureau-vote/{id}/delete', name:'del_bv')]
     public function deleteBv(?int $id, ManagerRegistry $manager): Response{
-        if($id !=null){
+      /*  if($id !=null){
             $bv=$manager->getRepository(BureauVote::class)->findOneBy(['id'=> $id]);
             $manager->getManager()->remove($bv);
             $manager->getManager()->flush();
             return $this->redirectToRoute('app_bv');
-        }
+        }*/
         return $this->redirectToRoute('app_bv');
     }
 
@@ -426,8 +487,11 @@ class AdminController extends AbstractController
             if($form->get('choice')->getData() == "localite"){
                 ExcelConnector::ImportGeoData($mfile, $manager);
             }
+            if ($form->get('choice')->getData() == "user") {
+                //  ExcelConnector::ImportResultat($mfile, $manager);
+              }
             if ($form->get('choice')->getData() == "resultat") {
-                ExcelConnector::ImportResultat($mfile, $manager);
+              //  ExcelConnector::ImportResultat($mfile, $manager);
             }
         }
         

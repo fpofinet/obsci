@@ -4,40 +4,36 @@
 
 {% block body %}
 
-<section class="container">
-    <div class="align-content-center table-responsive-sm ">
-        <p class="text-center text-decoration-underline h3 fw-bold mb-5">Données soumis par les observateurs</p>
-        <table class="table table-striped" id="tableRaw">
-            <thead>
+<section class="container shadow rounded">
+    <p class="text-center text-decoration-underline h3 fw-bold">SAISIE DES PROCES VERBAUX</p>
+    <table class="table table-striped mx-auto" id="tableRaw">
+        <thead>
+            <tr>
+                <th>CODE</th>
+                <th>DATE</th>
+                <th>SOUMIS PAR</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in datas %}
                 <tr>
-                    <th>IDPV</th>
-                    <th>PROVINCE</th>
-                    <th>COMMUNE</th>
-                    <th>Date</th>
-                    <th></th>
+                    <td>
+                        {% if data.codeKobo == null %}
+                            {{"null"}}
+                        {% else  %}
+                            {{data.codeKobo}}
+                        {% endif %}
+                    </td>
+                    <td>{{data.dateSubmit | date("d-m-Y")}}</td>
+                    <td></td>
+                    <td>
+                        <a href="{{path("check",{'id':data.id})}}" class="btn btn-success">Détails</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for data in datas %}
-                    <tr>
-                        <td>
-                            {% if data.codeKobo == null %}
-                                {{"null"}}
-                            {% else  %}
-                                {{data.codeKobo}}
-                            {% endif %}
-                        </td>
-                        <td>{{data.province}}</td>
-                        <td>{{data.commune}}</td>
-                        <td>{{data.date | date("d-m-Y h:i:s")}}</td> 
-                        <td>
-                            <a href="{{path("check",{'id':data.id})}}" class="btn btn-success">Verifier</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>  
+            {% endfor %}
+        </tbody>
+    </table>
 </section>
 <script>
 	let table = new DataTable('#tableRaw', {
@@ -50,9 +46,10 @@
     select.classList.add("mx-2");
     select.style.width = '75px';
     showLabel.classList.add("d-flex");
-    showLabelDiv.parentNode.classList.add("my-4");
+    showLabelDiv.parentNode.classList.add("my-2");
     // filter div
     const FilterDiv = document.querySelector(".dataTables_filter");
+    FilterDiv.classList.add("d-none");
     var filterLabel = FilterDiv.querySelector("label");
     var input = FilterDiv.querySelector("input");
     filterLabel.classList.add("d-flex");

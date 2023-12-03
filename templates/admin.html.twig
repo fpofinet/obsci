@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  class="h-100">
+<html>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -14,18 +14,30 @@
             <script src="{{asset("DataTables/datatables.js")}}"></script>
         {% endblock %}
     </head>
-    <body class="d-flex flex-column h-100">
-        <header class="d-flex justify-content-center" style="background-color : #0F3170">
-           
-            <img src="{{asset("/images/logo.png")}}" alt="logo" class="img-fluid" style="width:800px;height:150px"> 
+    <body class="d-flex flex-column">
+        <header class="d-flex justify-content-center bg-white" style="">
+            <img src="{{asset("/images/logo.png")}}" alt="logo" class="img-fluid" style="width:650px;height:125px"> 
         </header>
-        <div class="row">
-            <div class="bg-secondary col-lg-2 col-md-3 col-sm-4 col-12 pt-4 min-vh-100">
+        <div class="w-100" style="background-color : #0F3170;height: 25px">
+            <a class="" href="{{path("app_superviseur")}}">Accueil</a>
+        </div>
+        <div class="container-fluid mt-1 mb-0">
+            {% if app.user %}
+                <p class="float-start">
+                    Connecter en tant que: <span class="fw-bold">{{app.user.username}} mahamat abderamane</span>
+                </p>
+                <p class="float-end">
+                    <a href="{{path("app_logout")}}" class="btn btn-danger">Deconnexion</a>
+                </p>
+            {% endif %}
+        </div>
+        {#<div class="row">
+            <div class="bg-secondary col-lg-2 col-md-3 col-sm-4 col-12 pt-4">
                 <ul class="nav flex-column px-3">
                     {% if app.user.status == 1 %}
                         {% if is_granted("ROLE_MANAGER") %}
                             <li class="nav-item">
-                                <a class="btn btn-dark w-100 my-2" href="{{path("app_manager")}}">Accueil</a>
+                                
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
@@ -41,9 +53,9 @@
                             <li class="nav-item">
                                 <a class="btn btn-dark w-100 my-2" href="{{path("resultat_admin")}}">Resultats</a>
                             </li>
-                        {#} <li class="nav-item">
+                        <li class="nav-item">
                                 <a class="btn btn-dark w-100  my-2" href="{{path("app_superviseur")}}">Consolider</a>
-                            </li> {#}
+                            </li> 
                         {% endif %}
                         {% if is_granted("ROLE_ADMIN") %}
                             <li class="nav-item">
@@ -64,23 +76,17 @@
                         {% endif %}
                         <li class="p-2">
                             <div class="m-0 rounded-3 border shadow p-2">
-                               {#} {% if app.user %}{#}
+                              {% if app.user %}
                                     <span class="h4 fw-bold d-block text-center">{{app.user.username}}</span>
                                     <a href="{{path("app_logout")}}" class="btn btn-danger my-1 w-100">Deconnexion</a>
-                               {#} {% endif %}   {#}
+                                {% endif %}   
                             </div>
                         </li>
                     {% endif %}
                 </ul>
-            </div>
-            <div class="col-lg-10 col-md-9 col-sm-8  col-12">
-                {% block body %}{% endblock %}
-            </div>
-        </div>
-        <footer class="footer mt-auto py-3 bg-dark">
-            <div class="container">
-                <span class="text-light">Place sticky footer content here.</span>
-            </div>
-        </footer>
+            </div>{#}
+           <!-- <div class="col-lg-10 col-md-9 col-sm-8  col-12"> </div> -->
+            {% block body %}{% endblock %}
+           
     </body>
 </html>

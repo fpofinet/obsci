@@ -1,0 +1,49 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Superviseur{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+   <div class="row" style="">
+        <div class="col-md-6 col-12 px-4" style="">
+            <img src="{{asset("/fichier/" ~ pv.imagePv )}}" alt="faker" class="img-fluid rounded" style="height:500px; width: 100%">
+        </div>
+        <div class="col-md-6 col-12 ">
+            <div class="pt-4 border rounded shadow-lg p-3"  style="height:500px;">
+                <div class="row my-0">
+                    <div class="col-6">Nombre de votant :
+                    </div>
+                    <div class="col-6">{{pv.votant}}</div>
+                </div>
+                <hr>
+                <div class="row my-0">
+                    <div class="col-6">Suffrage exprimé :</div>
+                    <div class="col-6">{{pv.suffrageExprime}}</div>
+                </div>
+                <hr>
+                <div class="row my-0">
+                    <div class="col-6">Bulletin nul :
+                    </div>
+                    <div class="col-6">{{pv.suffrageNul}}</div>
+                </div>
+                <hr>
+                <div class="row my-0">
+                    <div class="col-6">Vote oui :
+                    </div>
+                    <div class="col-6">{{pv.voteOui}}</div>
+                </div>
+                <hr>
+                <div class="row my-0">
+                    <div class="col-6">Vote non :</div>
+                    <div class="col-6">{{pv.voteNon}}</div>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-center">
+                    <a href="{{path("invaliderPV",{'id':pv.id})}}" class="btn btn-lg btn-danger mx-3">Rejeter</a>
+                    <a href="{{path("validerPV",{'id':pv.id})}}" class="btn btn-lg btn-primary mx-3">Valider</a>
+                </div>
+            </div>
+        </div>
+   </div>
+</div>
+{% endblock %}

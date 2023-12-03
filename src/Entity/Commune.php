@@ -24,12 +24,21 @@ class Commune
     #[ORM\ManyToOne(inversedBy: 'communes')]
     private ?Departement $departement = null;
 
-    #[ORM\OneToMany(mappedBy: 'commune', targetEntity: BureauVote::class)]
-    private Collection $bureauVote;
+    #[ORM\OneToMany(mappedBy: 'commune', targetEntity: ResultatOperateur::class)]
+    private Collection $resultatOperateurs;
+
+    #[ORM\OneToMany(mappedBy: 'commune', targetEntity: ResultatSuperviseur::class)]
+    private Collection $resultatSuperviseurs;
+
+    #[ORM\OneToMany(mappedBy: 'commune', targetEntity: Resultat::class)]
+    private Collection $resultats;
+
 
     public function __construct()
     {
-        $this->bureauVote = new ArrayCollection();
+        $this->resultatOperateurs = new ArrayCollection();
+        $this->resultatSuperviseurs = new ArrayCollection();
+        $this->resultats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,29 +83,89 @@ class Commune
     }
 
     /**
-     * @return Collection<int, BureauVote>
+     * @return Collection<int, ResultatOperateur>
      */
-    public function getBureauVote(): Collection
+    public function getResultatOperateurs(): Collection
     {
-        return $this->bureauVote;
+        return $this->resultatOperateurs;
     }
 
-    public function addBureauVote(BureauVote $bureauVote): static
+    public function addResultatOperateur(ResultatOperateur $resultatOperateur): static
     {
-        if (!$this->bureauVote->contains($bureauVote)) {
-            $this->bureauVote->add($bureauVote);
-            $bureauVote->setCommune($this);
+        if (!$this->resultatOperateurs->contains($resultatOperateur)) {
+            $this->resultatOperateurs->add($resultatOperateur);
+            $resultatOperateur->setCommune($this);
         }
 
         return $this;
     }
 
-    public function removeBureauVote(BureauVote $bureauVote): static
+    public function removeResultatOperateur(ResultatOperateur $resultatOperateur): static
     {
-        if ($this->bureauVote->removeElement($bureauVote)) {
+        if ($this->resultatOperateurs->removeElement($resultatOperateur)) {
             // set the owning side to null (unless already changed)
-            if ($bureauVote->getCommune() === $this) {
-                $bureauVote->setCommune(null);
+            if ($resultatOperateur->getCommune() === $this) {
+                $resultatOperateur->setCommune(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResultatSuperviseur>
+     */
+    public function getResultatSuperviseurs(): Collection
+    {
+        return $this->resultatSuperviseurs;
+    }
+
+    public function addResultatSuperviseur(ResultatSuperviseur $resultatSuperviseur): static
+    {
+        if (!$this->resultatSuperviseurs->contains($resultatSuperviseur)) {
+            $this->resultatSuperviseurs->add($resultatSuperviseur);
+            $resultatSuperviseur->setCommune($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResultatSuperviseur(ResultatSuperviseur $resultatSuperviseur): static
+    {
+        if ($this->resultatSuperviseurs->removeElement($resultatSuperviseur)) {
+            // set the owning side to null (unless already changed)
+            if ($resultatSuperviseur->getCommune() === $this) {
+                $resultatSuperviseur->setCommune(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Resultat>
+     */
+    public function getResultats(): Collection
+    {
+        return $this->resultats;
+    }
+
+    public function addResultat(Resultat $resultat): static
+    {
+        if (!$this->resultats->contains($resultat)) {
+            $this->resultats->add($resultat);
+            $resultat->setCommune($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResultat(Resultat $resultat): static
+    {
+        if ($this->resultats->removeElement($resultat)) {
+            // set the owning side to null (unless already changed)
+            if ($resultat->getCommune() === $this) {
+                $resultat->setCommune(null);
             }
         }
 

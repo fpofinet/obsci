@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ResultatRepository;
+use App\Repository\ResultatSuperviseurRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ResultatRepository::class)]
-class Resultat
+#[ORM\Entity(repositoryClass: ResultatSuperviseurRepository::class)]
+class ResultatSuperviseur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,7 +16,7 @@ class Resultat
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $code = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255)]
     private ?string $codeBureau = null;
 
     #[ORM\Column(nullable: true)]
@@ -40,7 +40,7 @@ class Resultat
     #[ORM\Column(length: 255)]
     private ?string $imagePv = null;
 
-    #[ORM\ManyToOne(inversedBy: 'resultats')]
+    #[ORM\ManyToOne(inversedBy: 'resultatSuperviseurs')]
     private ?Commune $commune = null;
 
     public function getId(): ?int

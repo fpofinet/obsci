@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Commune;
 use App\Entity\Province;
-use App\Entity\Resultat;
-use App\Entity\BureauVote;
 use App\Entity\Departement;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
@@ -173,11 +171,11 @@ class ResultatController extends AbstractController
 
     #[Route('/conso', name:'conso')]
     public function consolider(ManagerRegistry $manager){
-        $t= $manager->getRepository(Resultat::class)->findBy(['bureauVote'=> $manager->getRepository(BureauVote::class)->findOneBy(['code'=> 'PAL001'])]);
-        $tab=$this->conso($t);
+     //   $t= $manager->getRepository(Resultat::class)->findBy(['bureauVote'=> $manager->getRepository(BureauVote::class)->findOneBy(['code'=> 'PAL001'])]);
+       // $tab=$this->conso($t);
 
-        $tableauUnique = array_unique($tab,SORT_REGULAR);
-        dd($tableauUnique);
+       /// $tableauUnique = array_unique($tab,SORT_REGULAR);
+      //  dd($tableauUnique);
     }
 
     private function conso($t)

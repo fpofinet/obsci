@@ -3,25 +3,32 @@
 {% block title %}Superviseur{% endblock %}
 
 {% block body %}
-<section class="container mt-3">
-    <div class="table-responsive">
-        <p class="text-center h3 text-decoration-underline mb-3"> Liste des resultats valider</p>
+<section class="container rounded shadow">
+        <p class="text-center h3 text-decoration-underline mb-3">VALIDATION DES RESULTATS</p>
         <table class="table table-striped" id="myConso">
             <thead>
                 <tr>
                     <th>CODE BUREAUV VOTE</th>
                     <th>COMMUNE</th>
-                    <th>DONNEES DISPONIBLES</th>
+                    <th>VOTANT</th>
+                    <th>SUFFRAGE EXPRIME</th>
+                    <th>BULLETIN NUL</th>
+                    <th>VOTE OUI</th>
+                    <th>VOTE NON</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for bv in bvs %}
                     <tr>
-                        <td>{{bv.code}}</td>
+                        <td>{{bv.codeBureau}}</td>
                         <td>{{bv.commune.libelle}}</td>
-                        <td>{{bv.resultats | length}}</td>
-                        <td><a href="{{path("detailsBV",{'id': bv.id })}}" class="btn btn-success">consolider</a></td>
+                        <td>{{bv.votant}}</td>
+                        <td>{{bv.suffrageExprime}}</td>
+                        <td>{{bv.suffrageNul}}</td>
+                        <td>{{bv.voteOui}}</td>
+                        <td>{{bv.voteNon}}</td>
+                        <td><a href="{{path("detailsPV",{'id': bv.id })}}" class="btn btn-success">Détails</a></td>
                     </tr>
                 {% endfor %}
                 {#<tr>
@@ -34,7 +41,6 @@
                 </tr>{#}
             </tbody>
         </table>
-    </div>
 </section>
     <script>
         let table = new DataTable('#myConso', {
@@ -50,6 +56,7 @@
         showLabelDiv.parentNode.classList.add("my-4");
         // filter div
         const FilterDiv = document.querySelector(".dataTables_filter");
+        FilterDiv.classList.add("d-none");
         var filterLabel = FilterDiv.querySelector("label");
         var input = FilterDiv.querySelector("input");
         filterLabel.classList.add("d-flex");

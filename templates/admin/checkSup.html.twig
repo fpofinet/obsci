@@ -1,0 +1,119 @@
+{% extends 'admin.html.twig' %}
+{% block title %}Superviseur{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row shadow rounded">
+        <div class="col-md-6 col-12 p-3">
+            <div class="card">
+                <div class="card-header text-center">
+                    <span>Resultat actuel</span>
+                </div>
+                <div class="card-body">
+                    <div class="row my-0">
+                        <div class="col-6">Nombre de votant :
+                        </div>
+                        <div class="col-6">{{actuel.votant}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Suffrage exprimé :</div>
+                        <div class="col-6">{{actuel.suffrageExprime}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Bulletin nul :
+                        </div>
+                        <div class="col-6">{{actuel.suffrageNul}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Vote oui :
+                        </div>
+                        <div class="col-6">{{actuel.voteOui}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Vote non :</div>
+                        <div class="col-6">{{actuel.voteNon}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12 p-3">
+            <div class="card">
+                <div class="card-header text-center">
+                    <span>Nouveau Resultat</span>
+                </div>
+                <div class="card-body">
+                    <div class="row my-0">
+                        <div class="col-6">Nombre de votant :
+                        </div>
+                        <div class="col-6">{{new.votant}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Suffrage exprimé :</div>
+                        <div class="col-6">{{new.suffrageExprime}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Bulletin nul :
+                        </div>
+                        <div class="col-6">{{new.suffrageNul}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Vote oui :
+                        </div>
+                        <div class="col-6">{{new.voteOui}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Vote non :</div>
+                        <div class="col-6">{{new.voteNon}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mb-3 d-flex justify-content-center">
+            <a href="{{path("changerResultat",{'id':new.id})}}" class="btn btn-danger btn-lg mx-3">Changer Resultat</a>
+            <a href="{{path("consolider",{'id':new.id})}}" class="btn btn-primary btn-lg mx-3">Garder Resultat</a>
+        </div>
+    </div>
+    <div class=" mt-3">
+            <p class="text-center text-decoration-underline h3">Données invalidées</p>
+            <table class="table table-striped" id="otherTable">
+                <thead>
+                    <tr>
+                        <th>Votant</th>
+                        <th>Suffrage Exprime</th>
+                        <th>Bulletin nul</th>
+                        <th>Vote Oui</th>
+                        <th>Vote Non</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if other != null %}
+                        {% for o in other %}
+                            <tr>
+                                <td>{{o.votant}}</td>
+                                <td>{{o.suffrageExprime}}</td>
+                                <td>{{o.suffrageNul}}</td>
+                                <td>{{o.voteOui}}</td>
+                                <td>{{o.voteNon}}</td>
+                                <td><a href="#" class="btn btn-success">Voir</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6">Aucune données</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+      
+    </div>
+</div>
+{% endblock %}

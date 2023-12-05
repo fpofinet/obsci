@@ -3,20 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\TestType;
 use App\Entity\Commune;
 use App\Entity\Province;
 use App\Entity\Resultat;
-use App\Form\CommuneType;
-use App\Form\ManagerType;
-use App\Form\ProvinceType;
 use App\Entity\Departement;
 use App\Entity\ResultatKobo;
 use App\Form\UploadFileType;
-use App\Form\DepartementType;
 use App\Entity\ResultatOperateur;
 use App\Controller\ExcelConnector;
 use App\Entity\ResultatSuperviseur;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +39,7 @@ class AdminController extends AbstractController
     public function resultatAdmin(ManagerRegistry $manager): Response
     {
         return $this->render('resultat/table.html.twig', [
-           // 'resultat'=>$manager->getRepository(Resultat::class)->findBy(["etat" =>5]),
+           'resultat'=>$manager->getRepository(Resultat::class)->findBy(["etat"=>0]),
         ]);
     }
 
@@ -83,14 +79,18 @@ class AdminController extends AbstractController
             $pv=$manager->getRepository(ResultatKobo::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
             $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
             $resultat = new ResultatOperateur();
-            $resultat->setCode($pv->getCodeKobo());
+            $resultat->setAgentSaisie($request->request->all()['agent']);
             $resultat->setCodeBureau($request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
             $resultat->setVoteOui($request->request->all()['voteOui']);
             $resultat->setVoteNon($request->request->all()['voteNon']);
+            $resultat->setCode($pv->getCodeKobo());
             $resultat->setImagePv($pv->getImagePv());
+            $resultat->setSubmitter($pv->getSubmitter());
+            $resultat->setSubmittedOn(DateTimeImmutable::createFromMutable($pv->getDateSubmit()));
+            //dd($resultat->getSubmittedOn());
             $resultat->setCommune( $commune);
             $resultat->setEtat(0);
             $resultat->setCreatedAt(new \DateTimeImmutable);
@@ -155,20 +155,24 @@ class AdminController extends AbstractController
             $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
             $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
             $resultat = new ResultatSuperviseur();
-            $resultat->setCode($pv->getCode());
             $resultat->setCodeBureau($request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
             $resultat->setVoteOui($request->request->all()['voteOui']);
             $resultat->setVoteNon($request->request->all()['voteNon']);
+            $resultat->setAgentValidation($request->request->all()['agent']);
+            $resultat->setAgentSaisie($pv->getAgentSaisie());
             $resultat->setImagePv($pv->getImagePv());
-            $resultat->setCommune($commune);
+            $resultat->setCode($pv->getCode());
+            $resultat->setSubmittedOn($pv->getSubmittedOn());
+            $resultat->setSubmitter($pv->getSubmitter());     
             $resultat->setAutor($pv->getAutor());
             $resultat->setCreatedAt($pv->getCreatedAt());
             $resultat->setValidator($manager->getRepository(User::class)->findOneBy(["id"=>$this->getUser()->getId()]));
-            $resultat->setEtat(0);
             $resultat->setValidedOn(new \DateTimeImmutable);
+            $resultat->setCommune($commune);
+            $resultat->setEtat(0);
             $pv->setEtat(1);
             $manager->getManager()->persist($resultat);
             $manager->getManager()->persist($pv);
@@ -186,6 +190,7 @@ class AdminController extends AbstractController
                 $resdef->setSuffrageNul($request->request->all()['suffrageNul']);
                 $resdef->setVoteOui($request->request->all()['voteOui']);
                 $resdef->setVoteNon($request->request->all()['voteNon']);
+                $resdef->setAgentValidation($request->request->all()['agent']);
                 $resdef->setImagePv($pv->getImagePv());
                 $resdef->setCommune($commune);
                 $resdef->setEtat(0);
@@ -193,6 +198,9 @@ class AdminController extends AbstractController
                 $resdef->setAutor($pv->getAutor());
                 $resdef->setValidator($resultat->getValidator());
                 $resdef->setValidedOn($resultat->getValidedOn());
+                $resdef->setAgentSaisie($pv->getAgentSaisie());
+                $resdef->setSubmitter($pv->getSubmitter());
+                $resdef->setSubmittedOn($pv->getSubmittedOn());
                 $resultat->setEtat(2);
                 $manager->getManager()->persist($resultat);
                 $manager->getManager()->persist($resdef);
@@ -272,13 +280,9 @@ class AdminController extends AbstractController
     public function admin(ManagerRegistry $manager ): Response
     {
         return $this->render('admin/admin.html.twig',[
-            'province' =>count($manager->getRepository(Province::class)->findAll()),
-            'dep'=>count($manager->getRepository(Departement::class)->findAll()),
-            'com'=>count($manager->getRepository(Commune::class)->findAll()),
+            
             'user' => count($manager->getRepository(User::class)->findAll()),
-           'bv' =>0,
-            'pvs' =>0,
-            'pvv'=>0,
+          
         ]);
     }
 

@@ -55,6 +55,18 @@ class ResultatSuperviseur
     #[ORM\Column]
     private ?\DateTimeImmutable $ValidedOn = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $agentValidation = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $submitter = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $submittedOn = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $agentSaisie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -224,6 +236,54 @@ class ResultatSuperviseur
     public function setValidedOn(\DateTimeImmutable $ValidedOn): static
     {
         $this->ValidedOn = $ValidedOn;
+
+        return $this;
+    }
+
+    public function getAgentValidation(): ?string
+    {
+        return $this->agentValidation;
+    }
+
+    public function setAgentValidation(string $agentValidation): static
+    {
+        $this->agentValidation = $agentValidation;
+
+        return $this;
+    }
+
+    public function getSubmitter(): ?string
+    {
+        return $this->submitter;
+    }
+
+    public function setSubmitter(string $submitter): static
+    {
+        $this->submitter = $submitter;
+
+        return $this;
+    }
+
+    public function getSubmittedOn(): ?\DateTimeImmutable
+    {
+        return $this->submittedOn;
+    }
+
+    public function setSubmittedOn(\DateTimeImmutable $submittedOn): static
+    {
+        $this->submittedOn = $submittedOn;
+
+        return $this;
+    }
+
+    public function getAgentSaisie(): ?string
+    {
+        return $this->agentSaisie;
+    }
+
+    public function setAgentSaisie(string $agentSaisie): static
+    {
+        $this->agentSaisie = $agentSaisie;
 
         return $this;
     }

@@ -4,55 +4,55 @@
 
 {% block body %}
 <section class="container mt-5">
-    <div class="row gy-4">
+    <div class="table-responsive">
+        <table class="table table-striped" id="myDatTable">
+            <thead>
+                <tr>
+                    <th>CODE</th>
+                    <th>DATE SOUMISSION</th>
+                    <th>HEURE AFFECTATION</th>
+                    <th>AFFECTER A</th>
+                    <th>TELEPHONE</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>298855221</td>
+                    <td>05-12-2023 15:25:30</td>
+                    <td>05-12-2023 15:29:50</td>
+                    <td>john Doe </td>
+                    <td>23566522555</td>
+                    <td><a href="#" class="btn">Détails</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {#<div class="row gy-4">
         <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="card px-3 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">PROVINCE ({{province}})</p>
-                <a href="{{path("app_province")}}" class="stretched-link"></a>
+                <p class="h2 text-center">SYNCHRONISER</p>
+                <a href="{{path("synchro")}}" class="stretched-link"></a>
             </div>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">DEPARTEMENT ({{dep}})</p>
-                <a href="{{path("app_dept")}}" class="stretched-link"></a>
+                <p class="h2 text-center">REINITIALISER</p>
+                <a href="" class="stretched-link"></a>
             </div>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">COMMUNE ({{com}})</p>
-                <a href="{{path("app_comm")}}" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2  text-center">BUREAU DE VOTE ({{bv}})</p>
-                <a href="{{path("app_bv")}}" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">PV SOUMIS ({{pvs}})</p>
-                <a href="{{path("pvSoumis")}}" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">PV VALIDER ({{pvv}})</p>
-                <a href="{{path("pvValide")}}" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2">REINITIALISER</p>
-                <a href="{{path("pvValide")}}" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">UTILISATEURS ({{user}})</p>
+                <p class="h2 text-center">UTILISATEURS</p>
                 <a href="{{path("app_user")}}" class="stretched-link"></a>
             </div>
         </div>
-    </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
+                <p class="h2 text-center">RESULTAT</p>
+                <a href="" class="stretched-link"></a>
+            </div>
+        </div>
+    </div> {#}
 </section>
 {% endblock %}

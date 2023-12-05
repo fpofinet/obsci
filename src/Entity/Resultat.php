@@ -55,6 +55,18 @@ class Resultat
     #[ORM\ManyToOne(inversedBy: 'resultats')]
     private ?User $validator = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $agentSaisie = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $agentValidation = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $submitter = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $submittedOn = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -224,6 +236,54 @@ class Resultat
     public function setValidator(?User $validator): static
     {
         $this->validator = $validator;
+
+        return $this;
+    }
+
+    public function getAgentSaisie(): ?string
+    {
+        return $this->agentSaisie;
+    }
+
+    public function setAgentSaisie(string $agentSaisie): static
+    {
+        $this->agentSaisie = $agentSaisie;
+
+        return $this;
+    }
+
+    public function getAgentValidation(): ?string
+    {
+        return $this->agentValidation;
+    }
+
+    public function setAgentValidation(string $agentValidation): static
+    {
+        $this->agentValidation = $agentValidation;
+
+        return $this;
+    }
+
+    public function getSubmitter(): ?string
+    {
+        return $this->submitter;
+    }
+
+    public function setSubmitter(string $submitter): static
+    {
+        $this->submitter = $submitter;
+
+        return $this;
+    }
+
+    public function getSubmittedOn(): ?\DateTimeImmutable
+    {
+        return $this->submittedOn;
+    }
+
+    public function setSubmittedOn(\DateTimeImmutable $submittedOn): static
+    {
+        $this->submittedOn = $submittedOn;
 
         return $this;
     }

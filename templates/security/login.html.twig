@@ -17,12 +17,12 @@
     <header class="d-flex justify-content-center bg-white position-top">
         <img src="{{asset("/images/logo.png")}}" alt="logo" class="img-fluid" style="width:800px;height:150px">
     </header>
-    <div class="w-100 " style="background-color : #0F3170;height: 25px"></div>
+    <div class="w-100 " style="background-color : #0F3170;height: 40px"></div>
     <div class="row mx-0"  style="background-image : url({{asset("/images/bg.png")}});background-repeat: no-repeat; background-size: cover;opacity: 1;min-height: 575px;width: 100vw;">
         <div class="col-lg-6 col-md-6"></div>
-        <div class="col-lg-6 col-md-6 col-12 px-5 float-end" style="">
-            <div class="px-5 mx-5 mt-5 border rounded rounded-3 shadow-lg py-3 bg-white opacity-100" style="">
-                <form method="post">
+        <div class="col-lg-6 col-md-6 col-12 px-5 float-end py-5 mt-5" style="">
+            <div class="px-5 mx-5 mt-5 border rounded rounded-3 shadow-lg py-3 opacity-100" style="background-color: #0F3170;">
+                <form method="post" class="">
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
@@ -31,14 +31,14 @@
                             Connecter en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
                         </div>
                     {% endif %}
-                    <p class="h3 mb-3 font-weight-normal text-center">Connexion</p>
+                    <p class="h3 mb-3 font-weight-normal text-center text-white">Connexion</p>
                     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" placeholder="nom d'utilisateur" class="form-control my-3" autocomplete="username" required autofocus>
                     <input type="password" name="password" id="inputPassword" placeholder="mot de passe" class="form-control my-3" autocomplete="current-password" required>
                     <input type="hidden" name="_csrf_token"
                         value="{{ csrf_token('authenticate') }}"
                     >
                     <hr>
-                    <button class="btn btn-lg text-white" style="background-color : #0F3170" type="submit">
+                    <button class="btn text-white" style="background-color : #FF6002" type="submit">
                         Connexion
                     </button>
                 </form>

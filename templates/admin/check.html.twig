@@ -1,15 +1,15 @@
   {% extends 'admin.html.twig' %}
 
-{% block title %}Manager{% endblock %}
+{% block title %}OPERATEUR{% endblock %}
 
 {% block body %}
-<div class="container-fluid mb-5">
+<div class="container-fluid my-3">
     <div class="row">
         <div class="col-md-6 col-12 px-3 ">
             <img src="{{asset("/fichier/"~ pv.imagePv)}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%">
         </div>
         <div class="col-md-6 col-12 px-3">
-            <div class="p-3 border rounded shadow-lg">
+            <div class="px-3 pt-4 pb-1 border rounded shadow-lg text-white" style="background-color : #0F3170;">
                 <form action="{{path("saisie")}}" method="POST">
                     <div class="row my-1">
                         <label for="province" class="col-sm-3 col-form-label">Province :
@@ -67,15 +67,19 @@
                             <input type="number" name="voteOui" class="form-control" id="voteOui" placeholder="vote oui">
                         </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row">
                         <label for="voteNon" class="col-sm-3 col-form-label">Vote non : </label>
                         <div class="col-sm-9">
                             <input type="number" name="voteNon" class="form-control" id="voteNon" placeholder="vote non">
                         </div>
                     </div>
                     <input type="hidden" name="idPv" value={{pv.id}}>
-                    <div class="d-flex justify-content-center"> 
-                        <input type="submit" name="submit" id="submit" value="Soumettre" class="btn text-white mt-3 mb-4" style="background-color : #0F3170">
+                    <input type="hidden" name="agent" id="agent">
+                    <div class="row mb-3"> 
+                        <label for="submit" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input type="submit" name="submit" id="submit" value="Soumettre" class="btn w-100 text-white mt-3 mb-4" style="background-color : #FF6002">
+                        </div>
                     </div> 
                 </form>
             </div>
@@ -102,6 +106,11 @@
             var $depSelect = $('#departement');
             $depSelect.empty();
             var jsonData = JSON.parse(data);
+            var option1 = $('<option>', {
+                value :"",
+                text : null
+            });
+            $depSelect.append(option1);
             for( let i = 0; i<jsonData.length;i++)
             {
                 var option = $('<option>', {
@@ -119,6 +128,11 @@
             var $comSelect = $('#commune');
             $comSelect.empty();
             var jsonData = JSON.parse(data);
+            var option1 = $('<option>', {
+                value :"",
+                text : null
+            });
+            $comSelect.append(option1);
             for( let i = 0; i<jsonData.length;i++)
             {
                 var option = $('<option>', {
@@ -144,7 +158,7 @@
             $('#commune').empty();
             chargerCommune(e.target.value); 
         });
-
+        $("#agent").val(navigator.userAgent);
     });
 </script>
 {% endblock %}

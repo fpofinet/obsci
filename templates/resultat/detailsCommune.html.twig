@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}Resultat{% endblock %}
 
@@ -12,7 +12,7 @@
              <div class="col-12 col-sm-6 col-lg-4">
                 <div class="card">
                     <div class="card-header h3 text-center">
-                        <p class="text-center h3 fw-bold">Resultat bureau de vote {{c.libelle}}</p>
+                        <p class="text-center h3 fw-bold">Resultat bureau de vote {{c.codeBureau}}</p>
                     </div>
                     <div class="card-body  p-3">
                         <div class="border border-2 rounded rounded-2 mb-2 p-3">
@@ -22,8 +22,8 @@
                                         <div class="flex-grow-1">
                                             <div class="progress" style="height : 40px">
                                                 {% if c.suffrageExprime != 0  %}
-                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ( c.voteOui / (c.suffrageExprime - c.suffrageNul) )  * 100 }}%" aria-valuenow="{{ ( c.voteOui / (c.suffrageExprime - c.suffrageNul) ) * 100 }}" aria-valuemin="0" aria-valuemax="100">oui={{ (( c.voteOui / (c.suffrageExprime - c.suffrageNul) )  * 100 ) | number_format}}%</div>
-                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ( c.voteNon / (c.suffrageExprime - c.suffrageNul) )  * 100 }}%" aria-valuenow="{{ ( c.voteNon / (c.suffrageExprime - c.suffrageNul) ) * 100 }}" aria-valuemin="0" aria-valuemax="100">non={{ (( c.voteNon / (c.suffrageExprime - c.suffrageNul))  * 100 ) | number_format}} % </div>
+                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ( c.voteOui / c.suffrageExprime )  * 100 }}%" aria-valuenow="{{ ( c.voteOui / c.suffrageExprime ) * 100 }}" aria-valuemin="0" aria-valuemax="100">oui={{ (( c.voteOui / c.suffrageExprime )  * 100 ) | number_format}}%</div>
+                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ( c.voteNon / c.suffrageExprime )  * 100 }}%" aria-valuenow="{{ ( c.voteNon / c.suffrageExprime ) * 100 }}" aria-valuemin="0" aria-valuemax="100">non={{ (( c.voteNon / c.suffrageExprime )  * 100 ) | number_format}} % </div>
                                                 {% else %}
                                                     <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">oui=0%</div>
                                                     <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">non=0%</div>

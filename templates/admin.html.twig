@@ -18,23 +18,58 @@
         <header class="d-flex justify-content-center bg-white" style="">
             <img src="{{asset("/images/logo.png")}}" alt="logo" class="img-fluid" style="width:650px;height:125px"> 
         </header>
-        <div class="w-100 py-2 d-flex justify-content-between" style="background-color : #0F3170">
-            <a class="ms-5 text-white" href="{{path("app_superviseur")}}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
-                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
-                </svg>
-            </a>
-            {% if app.user %}
-                <a href="{{path("app_logout")}}" class="btn btn-danger me-5">Deconnexion</a>
+        <div class="w-100 d-flex justify-content-between py-1" style="background-color : #0F3170;height:50px">
+            {% if is_granted("ROLE_ADMIN") %}
+                <a class="ms-5 text-white" href="{{path("administration")}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                    <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                    </svg>
+                </a>
             {% endif %}
-        </div>
-        <div class="container-fluid mt-1 mb-0">
+            {% if is_granted("ROLE_OPERATOR") %}
+                <a class="ms-5 text-white" href="{{path("app_manager")}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                    <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                    </svg>
+                </a>
+            {% endif %}
+            {% if is_granted("ROLE_VIEWER") %}
+                <a class="ms-5 text-white" href="{{path("app_resultat")}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                    <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                    </svg>
+                </a>
+            {% endif %}
+            {% if is_granted("ROLE_SUPERVISOR") %}
+                <a class="ms-5 text-white" href="{{path("app_superviseur")}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                    <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                    </svg>
+                </a>
+            {% endif %}
             {% if app.user %}
-                <p class="float-start">
+                <div class="m-0 d-flex py-2">
+                    {% if is_granted("ROLE_ADMIN") %}
+                            <a href="{{path("synchro")}}" class="mx-3 text-decoration-none text-white fw-bold mx-1 d-block" style="height:45px">SYNCHRONISATION</a>
+                            <a href="{{path("app_user")}}" class="mx-3 text-decoration-none text-white fw-bold mx-1 d-block" style="height:45px">GESTION DES UTILISATEURS</a>
+                        
+                    {% endif %}
+                    <a href="{{path("app_logout")}}" class="mx-3 me-5 text-decoration-none text-white fw-bold mx-1 d-block" style="hover{ color: #DC3545; } height:45px">DECONNEXION</a>
+                </div>
+            {% endif %}
+            
+           {#} {% if app.user %}
+                <p class="float-start text-white">
                    Vous êtes connecter en tant que: <span class="fw-bold">{{app.user.nom}}{{" "}}{{app.user.prenom}}</span>
                 </p>
-            {% endif %}
+            {% endif %} {#}
+            
+                
+           
         </div>
+       {#} <div class="container-fluid mt-1 mb-0">
+            
+        </div> {#}
         {% block body %}{% endblock %}
            
     </body>

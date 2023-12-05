@@ -3,13 +3,13 @@
 {% block title %}Superviseur{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
+<div class="container-fluid mt-3">
    <div class="row" style="">
         <div class="col-md-6 col-12 px-4" style="">
             <img src="{{asset("/fichier/" ~ pv.imagePv )}}" alt="faker" class="img-fluid rounded-3 shadow-lg" style="height:500px; width: 100%">
         </div>
-        <div class="col-md-6 col-12 ">
-            <div class="pt-4 border rounded shadow-lg p-3"  style="height:500px;">
+        <div class="col-md-6 col-12" style="">
+            <div class="pt-4 border rounded shadow-lg p-3  text-white"  style="height:500px;background-color : #0F3170;">
                 <form action="{{path("supValider")}}" method="POST" id="monForm">
                     <div class="row my-1">
                         <label for="province" class="col-sm-3 col-form-label">Province :
@@ -74,9 +74,13 @@
                         </div>
                     </div>
                     <input type="hidden" name="idPv" id="idPv" value={{pv.id}}>
-                    <div class="d-flex justify-content-center"> 
-                        <a href="{{path("invaliderPV",{'id':pv.id})}}" id="rejeter" class="btn btn-danger mx-3"> Rejeter </a>
-                        <input type="submit" name="submit" id="valider" value="Valider" class="btn text-white mx-3" style="background-color : #0F3170">
+                    <input type="hidden" name="agent" id="agent">
+                    <div class="d-flex ">
+                        <label for="submit" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9 d-flex"> 
+                            <a href="{{path("invaliderPV",{'id':pv.id})}}" id="rejeter" class="flex-fill btn btn-danger me-1"> Rejeter </a>
+                            <input type="submit" name="submit" id="valider" value="Valider" class="flex-fill btn btn-success text-white ms-1" style="">
+                        </div>
                     </div> 
                 </form>
             </div>
@@ -147,6 +151,7 @@
             $('#commune').empty();
             chargerCommune(e.target.value); 
         });
+        $("#agent").val(navigator.userAgent);
        /* $("#rejeter").click(function(e){
             var $dat=$("#idPv").val();
             $.post("/rejeter",{id:$dat},function(data){

@@ -7,7 +7,7 @@
     <div class="table-responsive"> 
         <a href="{{path("add_user")}}" class="btn btn-primary">AJOUTER</a>
         <p class="text-center text-decoration-underline h3">
-            Liste des utilisateurs
+            LISTE DES UTILISATEURS
         </p>
         <table class="table table-striped">
             <thead>
@@ -28,8 +28,8 @@
                         <td>    
                             {{user.roles[0]}}
                         </td>
-                        <td><a href="{{path("reset_password",{'id':user.id})}}" class="btn btn-warning">Reset mot de passe</a></td>
-                        <td><a href="{{path("bloquer_user",{'id':user.id})}}" class="btn btn-danger">Bloquer</a></td>
+                        <td><a href="{{path("reset_password",{'id':user.id})}}" class="btn btn-warning float-end">Reset mot de passe</a></td>
+                        <td><a href="{{path("bloquer_user",{'id':user.id})}}" class="btn btn-danger float-end">Bloquer</a></td>
                     </tr>
                     {% set i = i + 1 %}
                 {% endfor %}

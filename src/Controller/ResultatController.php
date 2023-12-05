@@ -19,43 +19,36 @@ class ResultatController extends AbstractController
         $provinces=array();
         $national=array();
         foreach($province as $p){
-            $prov=array(); $votant=0;$sf=0; $vo=0; $vn=0; $sn=0; $bvd=0; $bv=0;
+            $prov=array(); $votant=0;$sf=0; $vo=0; $vn=0; $sn=0;
             foreach($p->getDepartements() as $d){
-                foreach($d->getCommunes() as $c){    
-                    $bv= $bv + count($c->getBureauVote());
-                    foreach($c->getBureauVote() as $b){
-                        if(count($b->getResultats())> 0){
-                            $bvd = $bvd + 1;
-                            foreach($b->getResultats() as $r){
-                                if($r->getEtat()==5){
-                                    $votant= $votant + $r->getVotant();
-                                    $sf= $sf + $r->getSuffrageExprime();
-                                    $sn= $sn + $r->getSuffrageNul();
-                                    $vo= $vo + $r->getVoteOui();
-                                    $vn= $vn + $r->getVoteNon();
-                                }
-                            }
+                foreach($d->getCommunes() as $c){
+                    foreach ($c->getResultats() as $r) {
+                        if ($r->getEtat() == 0) {
+                            $votant = $votant + $r->getVotant();
+                            $sf = $sf + $r->getSuffrageExprime();
+                            $sn = $sn + $r->getSuffrageNul();
+                            $vo = $vo + $r->getVoteOui();
+                            $vn = $vn + $r->getVoteNon();
                         }
-                    }
+                    }     
                 }
             }
-            $prov=["id"=>$p->getId(),"libelle"=>$p->getLibelle(),"votant"=>$votant,"suffrageExprime"=>$sf,"suffrageNul"=>$sn,"voteOui"=>$vo,"voteNon"=>$vn,"bvd"=>$bvd,"bv"=> $bv];
+            $prov=["id"=>$p->getId(),"libelle"=>$p->getLibelle(),"votant"=>$votant,"suffrageExprime"=>$sf,"suffrageNul"=>$sn,"voteOui"=>$vo,"voteNon"=>$vn];
             $provinces[]=$prov; 
         }
-        $v=0;$se=0;$bn=0;$o=0;$n=0;$d=0;$b=0;
+        $v=0;$se=0;$bn=0;$o=0;$n=0;
         foreach($provinces as $p){
             $v= $v + $p["votant"];
             $se= $se + $p["suffrageExprime"];
             $bn= $bn + $p["suffrageNul"];
             $o= $o + $p["voteOui"];
             $n= $n + $p["voteNon"];
-            $d= $d + $p["bvd"];
-            $b= $b + $p["bv"];
+           
         }
-        $national=["votant"=>$v,"suffrageExprime"=>$se,"suffrageNul"=>$bn,"voteOui"=>$o,"voteNon"=>$n,"bvd"=>$d,"bv"=> $b];
+        $national=["votant"=>$v,"suffrageExprime"=>$se,"suffrageNul"=>$bn,"voteOui"=>$o,"voteNon"=>$n];
         return $this->render('resultat/index.html.twig', [
             'province' => $provinces,
-            'global' =>$national
+            'national' =>$national
         ]);
     }
 
@@ -74,21 +67,15 @@ class ResultatController extends AbstractController
             $bvd = 0;
             $bv = 0;
             foreach ($p->getCommunes() as $c) {
-                $bv = $bv + count($c->getBureauVote());
-                foreach ($c->getBureauVote() as $b) {
-                    if (count($b->getResultats()) > 0) {
-                        $bvd = $bvd + 1;
-                        foreach ($b->getResultats() as $r) {
-                            if($r->getEtat()==5){
-                                $votant = $votant + $r->getVotant();
-                                $sf = $sf + $r->getSuffrageExprime();
-                                $sn = $sn + $r->getSuffrageNul();
-                                $vo = $vo + $r->getVoteOui();
-                                $vn = $vn + $r->getVoteNon();
-                            }
-                        }
-                    } 
-                }
+                foreach ($c->getResultats() as $r) {
+                    if ($r->getEtat() == 0) {
+                        $votant = $votant + $r->getVotant();
+                        $sf = $sf + $r->getSuffrageExprime();
+                        $sn = $sn + $r->getSuffrageNul();
+                        $vo = $vo + $r->getVoteOui();
+                        $vn = $vn + $r->getVoteNon();
+                    }
+                }   
             }
             $dep = ["id" => $p->getId(), "libelle" => $p->getLibelle(), "votant" => $votant, "suffrageExprime" => $sf, "suffrageNul" => $sn, "voteOui" => $vo, "voteNon" => $vn, "bvd" => $bvd, "bv" => $bv];
             $depart[] = $dep;
@@ -111,24 +98,16 @@ class ResultatController extends AbstractController
             $vo = 0;
             $vn = 0;
             $sn = 0;
-            $bvd = 0;
-            $bv = 0;
-            $bv = $bv + count($c->getBureauVote());
-            foreach ($c->getBureauVote() as $b) {
-                if (count($b->getResultats()) > 0) {
-                    $bvd = $bvd + 1;
-                    foreach ($b->getResultats() as $r) {
-                        if($r->getEtat()==5){
-                            $votant = $votant + $r->getVotant();
-                            $sf = $sf + $r->getSuffrageExprime();
-                            $sn = $sn + $r->getSuffrageNul();
-                            $vo = $vo + $r->getVoteOui();
-                            $vn = $vn + $r->getVoteNon();
-                        }
-                    }
+            foreach ($c->getResultats() as $r) {
+                if ($r->getEtat() == 5) {
+                    $votant = $votant + $r->getVotant();
+                    $sf = $sf + $r->getSuffrageExprime();
+                    $sn = $sn + $r->getSuffrageNul();
+                    $vo = $vo + $r->getVoteOui();
+                    $vn = $vn + $r->getVoteNon();
                 }
             }
-            $dep = ["id" => $c->getId(), "libelle" => $c->getLibelle(), "votant" => $votant, "suffrageExprime" => $sf, "suffrageNul" => $sn, "voteOui" => $vo, "voteNon" => $vn, "bvd" => $bvd, "bv" => $bv];
+            $dep = ["id" => $c->getId(), "libelle" => $c->getLibelle(), "votant" => $votant, "suffrageExprime" => $sf, "suffrageNul" => $sn, "voteOui" => $vo, "voteNon" => $vn];
             $comm[] = $dep;
         }
         return $this->render('resultat/detailsDepartement.html.twig', [
@@ -141,30 +120,30 @@ class ResultatController extends AbstractController
     public function detailsCommune(?int $id,ManagerRegistry $manager): Response
     {
         $bvs = $manager->getRepository(Commune::class)->findOneBy(['id' => $id]);
-        $bureauV=array();
-        foreach ($bvs->getBureauVote() as $b) {
-            $dep = array();
-            $votant = 0;
-            $sf = 0;
-            $vo = 0;
-            $vn = 0;
-            $sn = 0;
-            if (count($b->getResultats()) > 0) {
-                foreach ($b->getResultats() as $r) {
-                    if($r->getEtat()==5){
-                        $votant = $votant + $r->getVotant();
-                        $sf = $sf + $r->getSuffrageExprime();
-                        $sn = $sn + $r->getSuffrageNul();
-                        $vo = $vo + $r->getVoteOui();
-                        $vn = $vn + $r->getVoteNon();
-                    }
-                }
+       /* $bureauV=array();
+
+        $dep = array();
+        $votant = 0;
+        $sf = 0;
+        $vo = 0;
+        $vn = 0;
+        $sn = 0;
+        foreach ($bvs->getResultats() as $r) {
+            if ($r->getEtat() == 5) {
+                $votant = $votant + $r->getVotant();
+                $sf = $sf + $r->getSuffrageExprime();
+                $sn = $sn + $r->getSuffrageNul();
+                $vo = $vo + $r->getVoteOui();
+                $vn = $vn + $r->getVoteNon();
+                $dep = ["id" => $bvs->getId(), "libelle" => $r->getCodeBureau(), "votant" => $votant, "suffrageExprime" => $sf, "suffrageNul" => $sn, "voteOui" => $vo, "voteNon" => $vn ,"bv" =>count($bvs->getBureauVote())];
             }
-            $dep = ["id" => $bvs->getId(), "libelle" => $b->getCode(), "votant" => $votant, "suffrageExprime" => $sf, "suffrageNul" => $sn, "voteOui" => $vo, "voteNon" => $vn ,"bv" =>count($bvs->getBureauVote())];
             $bureauV[] = $dep;
-        }
+        }*/
+            
+            
+        
         return $this->render('resultat/detailsCommune.html.twig', [
-            'datas' => $bureauV,
+            'datas' => $bvs->getResultats(),
             'label'=> $bvs->getLibelle(),
         ]);
     }

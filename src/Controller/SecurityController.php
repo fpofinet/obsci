@@ -19,7 +19,7 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('app_logout');
             }
             if($this->getUser()->getStatus() == 1){
-                if (in_array('ROLE_MANAGER',$this->getUser()->getRoles())) {
+                if (in_array('ROLE_OPERATOR',$this->getUser()->getRoles())) {
                     return $this->redirectToRoute('app_manager');
                 } else if (in_array('ROLE_SUPERVISOR', $this->getUser()->getRoles())) {
                     return $this->redirectToRoute('app_superviseur');

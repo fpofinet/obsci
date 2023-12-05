@@ -2,14 +2,15 @@
 {% block title %}Superviseur{% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container mt-3">
     <div class="row shadow rounded">
+        <p class="text-center m-0 text-danger fw-bold h4">Ce bureau de vote a deja été traité. Voulez-vous replacer les données existantes ou les conserver ?</p>
         <div class="col-md-6 col-12 p-3">
-            <div class="card overflow-scroll" style="height:500px;">
-                <div class="card-header text-center">
-                    <span>Nouveau Resultat</span>
+            <div class="card overflow-scroll bg-danger p-1" style="height:420px;">
+                <div class="text-center fw-bold h5 text-white" style="height:20px;">
+                    <span>Nouvelles données</span>
                 </div>
-                <img src="{{asset("/fichier/" ~ new.imagePv )}}" alt="faker" class="w-100 card-image-top" style="height:500px; width: 100%">
+                <img src="{{asset("/fichier/" ~ new.imagePv )}}" alt="faker" class="w-100 card-image-top" style="height:390px;">
                 <div class="card-body">
                     <div class="row my-0">
                         <div class="col-6">Province :
@@ -58,16 +59,16 @@
                     </div>
                 </div> 
             </div>
-            <div class="mt-2">
-                <a href="{{path("changerResultat",{'id':new.id})}}" class="btn btn-danger float-end">Changer Resultat</a>
+            <div class="pt-2">
+                <a href="{{path("changerResultat",{'id':new.id})}}" class="btn btn-danger w-100 h5 fw-bold">REMPLACER</a>
             </div>
         </div>
         <div class="col-md-6 col-12 p-3">
-            <div class="card overflow-scroll" style="height:500px;">
-                <div class="card-header text-center">
-                    <span>Resultat actuel</span>
+            <div class="card overflow-scroll bg-success p-1 " style="height:425px;">
+                <div class="text-center fw-bold h5 text-white" style="height:20px;">
+                    <span>Données  existantes</span>
                 </div>
-                <img src="{{asset("/fichier/" ~ new.imagePv )}}" alt="faker" class="card-image-top">
+                <img src="{{asset("/fichier/" ~ new.imagePv )}}" alt="faker" class="card-image-top" style="height:390px;">
                 <div class="card-body">
                     <div class="row my-0">
                         <div class="col-6">Province :
@@ -117,14 +118,14 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-2">
-                <a href="{{path("consolider",{'id':new.id})}}" class="btn btn-primary float-start text-white" style="background-color : #0F3170">Garder Resultat</a>
+            <div class="pt-2">
+                <a href="{{path("consolider",{'id':new.id})}}" class="btn btn-success w-100 text-white h5 fw-bold" style="">CONSERVER</a>
             </div>
         </div>
         
     </div>
     <div class="my-3">
-        <p class="text-center text-decoration-underline h3">Données invalidées</p>
+        <p class="text-center text-decoration-underline h3">ARCHIVE DES DONNEES</p>
         <table class="table table-striped" id="otherTable">
             <thead>
                 <tr>

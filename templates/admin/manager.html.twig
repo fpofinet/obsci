@@ -1,12 +1,12 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}Manager{% endblock %}
+{% block title %}OPERATEUR{% endblock %}
 
 {% block body %}
 
-<section class="container shadow rounded">
-    <p class="text-center text-decoration-underline h3 fw-bold">SAISIE DES PROCES VERBAUX</p>
-    <table class="table table-striped mx-auto" id="tableRaw">
+<section class="mx-2 shadow-lg rounded px-3 mt-3">
+    <p class="text-center text-decoration-underline h3 fw-bold">SAISIE DES DONNEES</p>
+    <table class="table table-sm table-striped mx-auto" id="tableRaw">
         <thead>
             <tr>
                 <th>CODE</th>
@@ -34,7 +34,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{path("check",{'id':data.id})}}" class="btn btn-success">Détails</a>
+                        <a href="{{path("check",{'id':data.id})}}" class=" text-decoration-none d-block rounded px-1 text-white float-end" style="background-color : #0F3170">Détails</a>
                     </td>
                 </tr>
             {% endfor %}

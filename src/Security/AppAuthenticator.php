@@ -50,7 +50,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         if($user->getStatus()==0){
             return new RedirectResponse($this->urlGenerator->generate('create_password',['id'=>$user->getId()]));
         } else if( $user->getStatus()==1){
-            if (in_array('ROLE_MANAGER', $user->getRoles())) {
+            if (in_array('ROLE_OPERATOR', $user->getRoles())) {
                 return new RedirectResponse($this->urlGenerator->generate('app_manager'));
             } else if (in_array('ROLE_SUPERVISOR', $user->getRoles())) {
                 return new RedirectResponse($this->urlGenerator->generate('app_superviseur'));

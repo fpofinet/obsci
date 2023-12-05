@@ -46,6 +46,9 @@ class ResultatOperateur
     #[ORM\Column(length: 255)]
     private ?string $codeBureau = null;
 
+    #[ORM\ManyToOne(inversedBy: 'resultatOperateurs')]
+    private ?User $autor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -179,6 +182,18 @@ class ResultatOperateur
     public function setCodeBureau(string $codeBureau): static
     {
         $this->codeBureau = $codeBureau;
+
+        return $this;
+    }
+
+    public function getAutor(): ?User
+    {
+        return $this->autor;
+    }
+
+    public function setAutor(?User $autor): static
+    {
+        $this->autor = $autor;
 
         return $this;
     }

@@ -55,14 +55,14 @@ class ManagerType extends AbstractType
                     'class' => 'input-group my-2',
                 ],
             ])
-            ->add('suffrageExp', IntegerType::class,[
-                'label'=> 'Suffrage exprimé',
+            ->add('suffrageNul', IntegerType::class,[
+                'label'=> 'Suffrage null',
                 'row_attr' => [
                     'class' => 'input-group my-2',
                 ],
             ])
-            ->add('suffrageNul', IntegerType::class,[
-                'label'=> 'Suffrage null',
+            ->add('suffrageExp', IntegerType::class,[
+                'label'=> 'Suffrage exprimé',
                 'row_attr' => [
                     'class' => 'input-group my-2',
                 ],

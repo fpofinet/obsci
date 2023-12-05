@@ -8,7 +8,7 @@
         <table class="table table-striped" id="myConso">
             <thead>
                 <tr>
-                    <th>CODE BUREAUV VOTE</th>
+                    <th>CODE BUREAU VOTE</th>
                     <th>COMMUNE</th>
                     <th>VOTANT</th>
                     <th>SUFFRAGE EXPRIME</th>
@@ -28,17 +28,9 @@
                         <td>{{bv.suffrageNul}}</td>
                         <td>{{bv.voteOui}}</td>
                         <td>{{bv.voteNon}}</td>
-                        <td><a href="{{path("detailsPV",{'id': bv.id })}}" class="btn btn-success">Détails</a></td>
+                        <td><a href="{{path("detailsPV",{'id': bv.id })}}" class="btn text-white" style="background-color : #0F3170">Détails</a></td>
                     </tr>
                 {% endfor %}
-                {#<tr>
-                    <td>pala</td>
-                    <td>pal001</td>
-                    <td>10</td>
-                    <td>7</td>
-                    <td><a href="#">3</a></td>
-                    <td><a href="#" class="btn btn-success">consolider</a></td>
-                </tr>{#}
             </tbody>
         </table>
 </section>

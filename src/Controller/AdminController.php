@@ -2,28 +2,31 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\TestType;
 use App\Entity\Commune;
 use App\Entity\Province;
-use App\Entity\ResultatSuperviseur;
+use App\Entity\Resultat;
 use App\Form\CommuneType;
+use App\Form\ManagerType;
 use App\Form\ProvinceType;
 use App\Entity\Departement;
+use App\Entity\ResultatKobo;
 use App\Form\UploadFileType;
 use App\Form\DepartementType;
-use App\Controller\ExcelConnector;
-use App\Entity\Resultat;
-use App\Entity\ResultatKobo;
 use App\Entity\ResultatOperateur;
-use App\Entity\User;
-use App\Form\ManagerType;
+use App\Controller\ExcelConnector;
+use App\Entity\ResultatSuperviseur;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
 
 class AdminController extends AbstractController
 {
@@ -62,72 +65,44 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/resultat/ajouter/form', name: 'add_resultat')]
-    public function addResult(): Response
-    {
-        $form=$this->createForm(ManagerType::class);
-        return $this->render('admin/formAddResult.html.twig', [
-            'form'=>$form->createView(),
-        ]);
-    }
-
     //verification
 
-    #[Route('/manager/pv/{id}/soumission', name: 'check')]
+   #[Route('/manager/pv/{id}/', name: 'check')]
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
        $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
-        $form=$this->createForm(ManagerType::class);
-        $form->handleRequest($request);
-       if ($form->isSubmitted() && $form->isValid()) {
-          // dd($form["commune"]->getData()->getId());
+        return $this->render('admin/check.html.twig', [
+           'pv'=> $pv,
+        ]);
+    }
+
+    #[Route('/manager/saisie', name:'saisie')]
+    public function saisieOperateur(Request $request, ManagerRegistry $manager)
+    {
+        if($request->isMethod("POST")){
+            $pv=$manager->getRepository(ResultatKobo::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
+            $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
             $resultat = new ResultatOperateur();
             $resultat->setCode($pv->getCodeKobo());
-            $resultat->setCodeBureau($form["bureauVote"]->getData());
-            $resultat->setVotant($form["votant"]->getData());
-            $resultat->setSuffrageExprime($form["suffrageExp"]->getData());
-            $resultat->setSuffrageNul($form["suffrageNul"]->getData());
-            $resultat->setVoteOui($form["voteOui"]->getData());
-            $resultat->setVoteNon($form["voteNon"]->getData());
+            $resultat->setCodeBureau($request->request->all()['codeBureau']);
+            $resultat->setVotant($request->request->all()['votant']);
+            $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
+            $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
+            $resultat->setVoteOui($request->request->all()['voteOui']);
+            $resultat->setVoteNon($request->request->all()['voteNon']);
             $resultat->setImagePv($pv->getImagePv());
-            $resultat->setCommune( $manager->getRepository(Commune::class)->findOneBy(["id"=> $form["commune"]->getData()->getId()]));
+            $resultat->setCommune( $commune);
             $resultat->setEtat(0);
             $resultat->setCreatedAt(new \DateTimeImmutable);
+            $resultat->setAutor($manager->getRepository(User::class)->findOneBy(["id"=>$this->getUser()->getId()]));
             $pv->setEtat(1);
             $manager->getManager()->persist($resultat);
             $manager->getManager()->persist($pv);
             $manager->getManager()->flush();
             return $this->redirectToRoute("app_manager");
-        }
-        return $this->render('admin/check.html.twig', [
-           'form'=> $form->createView(),
-           'pv'=> $pv,
-        ]);
+        } 
     }
-
-    #[Route('/admin/resultat/{id}/valider', name: 'valider')]
-    public function validation(?int $id,ManagerRegistry $manager): Response
-    {
-       /* $pv= $manager->getRepository(TempResultat::class)->findOneBy(["id"=>$id]);
-        if($pv !=null){
-            $resultat = new Resultat();
-            $resultat->setCode($pv->getCodeKobo());
-            $resultat->setVotant($pv->getNombreVotant());
-            $resultat->setSuffrageExprime($pv->getSuffrageExprime());
-            $resultat->setProcesVerbal("null");
-            $resultat->setVoteNon($pv->getVoteNon());
-            $resultat->setVoteOui($pv->getVoteOui());
-            $resultat->setSuffrageNul($pv->getBulletinNuls());
-            $resultat->setBureauVote($manager->getRepository(BureauVote::class)->findOneBy(["code"=>$pv->getBureauVote()]));
-            $resultat->setEtat(2);
-            $manager->getManager()->persist($resultat);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute("app_manager");
-        }*/
-
-        return $this->render('admin/check.html.twig', []);
-    }
-
+   
 
     //synchro
 
@@ -155,7 +130,6 @@ class AdminController extends AbstractController
                 $manager->getManager()->flush();
             }
         }
-        //dd($myData);
         return $this->redirectToRoute("app_manager");
     }
 
@@ -163,7 +137,7 @@ class AdminController extends AbstractController
     #[Route('/superviseur', name:'app_superviseur')]
     public function index_superviseur(ManagerRegistry $manager): Response{
         return $this->render('admin/superviseur.html.twig', [
-           'bvs'=> $manager->getRepository(ResultatOperateur::class)->findAll(),
+           'bvs'=> $manager->getRepository(ResultatOperateur::class)->findBy(["etat"=>0]),
         ]);
     }
 
@@ -174,54 +148,63 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/superviseur/pv/{id}/valider', name:'validerPV')]
-    public function valider(?int $id,ManagerRegistry $manager):Response{
-
-        $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$id]);
-        if($pv){
+    #[Route('/validation', name:'supValider')]
+    public function handleData(Request $request,ManagerRegistry $manager) :Response
+    {
+        if($request->isMethod("POST")){
+            $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
+            $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
             $resultat = new ResultatSuperviseur();
             $resultat->setCode($pv->getCode());
-            $resultat->setCodeBureau($pv->getCodeBureau());
-            $resultat->setSuffrageExprime($pv->getSuffrageExprime());
-            $resultat->setSuffrageNul($pv->getSuffrageNul());
-            $resultat->setVotant($pv->getVotant());
-            $resultat->setVoteOui($pv->getVoteOui());
-            $resultat->setVoteNon($pv->getVoteNon());
+            $resultat->setCodeBureau($request->request->all()['codeBureau']);
+            $resultat->setVotant($request->request->all()['votant']);
+            $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
+            $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
+            $resultat->setVoteOui($request->request->all()['voteOui']);
+            $resultat->setVoteNon($request->request->all()['voteNon']);
             $resultat->setImagePv($pv->getImagePv());
-            $resultat->setCommune($pv->getCommune());
+            $resultat->setCommune($commune);
+            $resultat->setAutor($pv->getAutor());
+            $resultat->setCreatedAt($pv->getCreatedAt());
+            $resultat->setValidator($manager->getRepository(User::class)->findOneBy(["id"=>$this->getUser()->getId()]));
             $resultat->setEtat(0);
+            $resultat->setValidedOn(new \DateTimeImmutable);
+            $pv->setEtat(1);
             $manager->getManager()->persist($resultat);
+            $manager->getManager()->persist($pv);
             $manager->getManager()->flush();
 
             $existant=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$pv->getCodeBureau()]);
-           // dd($existant);
             if($existant != null){
-                return $this->redirectToRoute("checkSup",["code"=>$existant->getCodeBureau()]);
+                return $this->redirectToRoute("checkSup",["code"=>$existant->getCodeBureau(),"com"=>$existant->getCommune()->getId()]);
             } else{
-              // $r= $manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$pv->getCode()]);
-                $rdef= new Resultat();
-                $rdef->setCode($pv->getCode());
-                $rdef->setCodeBureau($pv->getCodeBureau());
-                $rdef->setSuffrageExprime($pv->getSuffrageExprime());
-                $rdef->setSuffrageNul($pv->getSuffrageNul());
-                $rdef->setVotant($pv->getVotant());
-                $rdef->setVoteOui($pv->getVoteOui());
-                $rdef->setVoteNon($pv->getVoteNon());
-                $rdef->setImagePv($pv->getImagePv());
-                $rdef->setCommune($pv->getCommune());
-                $rdef->setEtat(0);
-                $manager->getManager()->persist($rdef);
+                $resdef = new Resultat();
+                $resdef->setCode($pv->getCode());
+                $resdef->setCodeBureau($request->request->all()['codeBureau']);
+                $resdef->setVotant($request->request->all()['votant']);
+                $resdef->setSuffrageExprime($request->request->all()['suffrageExprime']);
+                $resdef->setSuffrageNul($request->request->all()['suffrageNul']);
+                $resdef->setVoteOui($request->request->all()['voteOui']);
+                $resdef->setVoteNon($request->request->all()['voteNon']);
+                $resdef->setImagePv($pv->getImagePv());
+                $resdef->setCommune($commune);
+                $resdef->setEtat(0);
+                $resdef->setCreatedAt($pv->getCreatedAt());
+                $resdef->setAutor($pv->getAutor());
+                $resdef->setValidator($resultat->getValidator());
+                $resdef->setValidedOn($resultat->getValidedOn());
+                $resultat->setEtat(2);
+                $manager->getManager()->persist($resultat);
+                $manager->getManager()->persist($resdef);
                 $manager->getManager()->flush();
                 return $this->redirectToRoute("app_superviseur");
-            }   
-           // return $this->redirectToRoute("app_superviseur");
+            }
         }
         return $this->redirectToRoute("app_superviseur");
     }
 
     #[Route('/superviseur/pv/{id}/invalider', name:'invaliderPV')]
     public function invalider(?int $id,ManagerRegistry $manager):Response{
-
         $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$id]);
         if($pv){
             $pv->setEtat(2);
@@ -234,12 +217,14 @@ class AdminController extends AbstractController
 
 
 
-    #[Route('/superviseur/{code}/consolidation', name:'checkSup')]
-    public function consol(?string $code,ManagerRegistry $manager):Response
+    #[Route('/superviseur/{code}/{com}/consolidation', name:'checkSup')]
+    public function consol(?string $code,?int $com,ManagerRegistry $manager):Response
     {
-        $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$code]);
-        $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>0]);
-        $other=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>1]);
+        $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$com]);
+        $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$code,"commune"=>$commune]);
+        $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>0,"commune"=>$commune]);
+        $other=$manager->getRepository(ResultatSuperviseur::class)->findBy(["codeBureau"=>$code,"etat"=>1,"commune"=>$commune]);
+        //dd($other);
         return $this->render('admin/checkSup.html.twig',[
             'actuel'=>$actuel,
             'new'=>$new,
@@ -264,7 +249,7 @@ class AdminController extends AbstractController
     public function changerResultat(?int $id,ManagerRegistry $manager):Response
     {
         $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["id"=>$id]);
-        $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$new->getCodeBureau()]);
+        $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$new->getCodeBureau(),"commune"=>$new->getCommune()]);
         if($actuel){
             $actuel->setSuffrageExprime($new->getSuffrageExprime());
             $actuel->setSuffrageNul($new->getSuffrageNul());
@@ -272,8 +257,10 @@ class AdminController extends AbstractController
             $actuel->setVoteOui($new->getVoteOui());
             $actuel->setVoteNon($new->getVoteNon());
             $actuel->setImagePv($new->getImagePv());
+            $new->setEtat(2);
             $manager->getManager()->persist($actuel);
             $manager->getManager()->flush();
+            //possiblite de faire un save back ici
             return $this->redirectToRoute("app_superviseur");
         }
         return $this->redirectToRoute("app_superviseur");
@@ -311,159 +298,49 @@ class AdminController extends AbstractController
         ]);
     }
 
-    //administration province
-
-
-    #[Route('/admin/province', name:'app_province')]
+    //ajax provinces
+    #[Route('/provinces', name:'get_province')]
     public function listProvince(ManagerRegistry $manager): Response{
-        return $this->render('admin/tableProvince.html.twig',[
-            'provinces'=> $manager->getRepository(Province::class)->findAll(),
-        ]);
-    }
-    #[Route('/admin/province/new', name:'add_province')]
-    #[Route('/admin/province/{id}/update', name:'update_province')]
-    public function addOrUpdateProvince(?int $id,ManagerRegistry $manager,Request $request): Response{
-        $province = new Province();
-        if($id != null){
-            $province=$manager->getRepository(Province::class)->findOneBy(['id'=> $id]);
+        $raws =$manager->getRepository(Province::class)->findAll();
+        $data=array();
+        foreach($raws as $r){
+            $data[]=["id"=>$r->getId(),"libelle"=>$r->getLibelle()];
         }
-        $form= $this->createForm(ProvinceType::class, $province);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $manager->getManager()->persist($province);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_province');
-        }
-        return $this->render('admin/formProvince.html.twig',[
-            'form'=> $form->createView(),
-            'editState'=> $province->getId()===null,
-        ]);
-    }
-    #[Route('/admin/province/{id}/delete', name:'del_province')]
-    public function deleteProvince(?int $id, ManagerRegistry $manager): Response{
-        if($id !=null){
-            $province=$manager->getRepository(Province::class)->findOneBy(['id'=> $id]);
-            $manager->getManager()->remove($province);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_province');
-        }
-        return $this->redirectToRoute('app_province');
+        return new JsonResponse(json_encode($data));
     }
 
-    //administration departement
+   
+    //ajax departement
 
-    #[Route('/admin/departement', name:'app_dept')]
-    public function listDepartement(ManagerRegistry $manager): Response{
-        return $this->render('admin/tableDepartement.html.twig',[
-            'depts'=> $manager->getRepository(Departement::class)->findAll(),
-        ]);
-    }
-    #[Route('/admin/departement/new', name:'add_dept')]
-    #[Route('/admin/departement/{id}/update', name:'update_dept')]
-    public function addOrUpdateDept(?int $id,ManagerRegistry $manager,Request $request): Response{
-        $dept = new Departement();
-        if($id != null){
-            $dept =$manager->getRepository(Departement::class)->findOneBy(['id'=> $id]);
+    #[Route('/departements', name:'get_dept')]
+    public function listDepartement(ManagerRegistry $manager,Request $request): Response{
+        $data=array();
+        if($request->isXmlHttpRequest() && $request->isMethod("POST")){
+            $depts =$manager->getRepository(Departement::class)->findBy(["province"=>$request->request->all()['id']]);
+            foreach($depts as $d){
+                $data[]=["id"=>$d->getId(),"libelle"=>$d->getLibelle(),"parent"=>$d->getProvince()->getId()];
+            }
+            return new JsonResponse(json_encode($data));
         }
-        $form= $this->createForm(DepartementType::class, $dept);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $manager->getManager()->persist($dept);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_dept');
-        }
-        return $this->render('admin/formDepartement.html.twig',[
-            'form'=> $form->createView(),
-            'editState'=> $dept->getId()===null,
-        ]);
+        return new JsonResponse(json_encode($data));
     }
-    #[Route('/admin/departement/{id}/delete', name:'del_dept')]
-    public function deleteDept(?int $id, ManagerRegistry $manager): Response{
-        if($id !=null){
-            $dept=$manager->getRepository(Departement::class)->findOneBy(['id'=> $id]);
-            $manager->getManager()->remove($dept);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_dept');
+    
+    //ajax commune
+    #[Route('/communes', name:'get_com')]
+    public function listCommune(ManagerRegistry $manager,Request $request): Response{
+        $data=array();
+        if($request->isXmlHttpRequest() && $request->isMethod("POST")){
+            $comms= $manager->getRepository(Commune::class)->findBy(["departement"=>$request->request->all()['id']]);
+            foreach($comms as $d){
+                $data[]=["id"=>$d->getId(),"libelle"=>$d->getLibelle(),"parent"=>$d->getDepartement()->getId()];
+            }
+            return new JsonResponse(json_encode($data));
         }
-        return $this->redirectToRoute('app_dept');
+        return new JsonResponse(json_encode($data));
     }
+   
 
-    //administration commune
-
-    #[Route('/admin/commune', name:'app_comm')]
-    public function listCommune(ManagerRegistry $manager): Response{
-        return $this->render('admin/tableCommune.html.twig',[
-            'comms'=> $manager->getRepository(Commune::class)->findAll(),
-        ]);
-    }
-    #[Route('/admin/commune/new', name:'add_comm')]
-    #[Route('/admin/commune/{id}/update', name:'update_comm')]
-    public function addOrUpdateComm(?int $id,ManagerRegistry $manager,Request $request): Response{
-        $comm = new Commune();
-        if($id != null){
-            $comm =$manager->getRepository(Commune::class)->findOneBy(['id'=> $id]);
-        }
-        $form= $this->createForm(CommuneType::class, $comm);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $manager->getManager()->persist($comm);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_comm');
-        }
-        return $this->render('admin/formCommune.html.twig',[
-            'form'=> $form->createView(),
-            'editState'=> $comm->getId()===null,
-        ]);
-    }
-    #[Route('/admin/commune/{id}/delete', name:'del_comm')]
-    public function deleteCommune(?int $id, ManagerRegistry $manager): Response{
-        if($id !=null){
-            $comm=$manager->getRepository(Commune::class)->findOneBy(['id'=> $id]);
-            $manager->getManager()->remove($comm);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_comm');
-        }
-        return $this->redirectToRoute('app_comm');
-    }
-
-    //administration bureau Vote
-
-    #[Route('/admin/bureau-vote', name:'app_bv')]
-    public function listBv(ManagerRegistry $manager): Response{
-        return $this->render('admin/tableBureauVote.html.twig',[
-           // 'bvs'=> $manager->getRepository(BureauVote::class)->findAll(),
-        ]);
-    }
-    #[Route('/admin/bureau-vote/new', name:'add_bv')]
-    #[Route('/admin/bureau-vote/{id}/update', name:'update_bv')]
-    public function addOrUpdateBV(?int $id,ManagerRegistry $manager,Request $request): Response{
-      /*  $bv = new BureauVote();
-        if($id != null){
-            $bv =$manager->getRepository(BureauVote::class)->findOneBy(['id'=> $id]);
-        }
-        $form= $this->createForm(BureauVoteType::class, $bv);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $manager->getManager()->persist($bv);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_bv');
-        }*/
-        return $this->render('admin/formBv.html.twig',[
-            //'form'=> $form->createView(),
-            //'editState'=> $bv->getId()===null,
-        ]);
-    }
-    #[Route('/admin/bureau-vote/{id}/delete', name:'del_bv')]
-    public function deleteBv(?int $id, ManagerRegistry $manager): Response{
-      /*  if($id !=null){
-            $bv=$manager->getRepository(BureauVote::class)->findOneBy(['id'=> $id]);
-            $manager->getManager()->remove($bv);
-            $manager->getManager()->flush();
-            return $this->redirectToRoute('app_bv');
-        }*/
-        return $this->redirectToRoute('app_bv');
-    }
-
+   
     // importation de data
     #[Route('/admin/import', name:'import')]
     public function import(Request $request, ManagerRegistry $manager): Response
@@ -504,7 +381,29 @@ class AdminController extends AbstractController
     #[Route('/test', name:'test')]
     public function test(Request $request, ManagerRegistry $manager)
     {
+       // dd($request->request->all());
+       /* if($request->isMethod("POST")){
+            $pv=$manager->getRepository(ResultatKobo::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
+            $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
+            $resultat = new ResultatOperateur();
+            $resultat->setCode($pv->getCodeKobo());
+            $resultat->setCodeBureau($request->request->all()['codeBureau']);
+            $resultat->setVotant($request->request->all()['votant']);
+            $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
+            $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
+            $resultat->setVoteOui($request->request->all()['voteOui']);
+            $resultat->setVoteNon($request->request->all()['voteNon']);
+            $resultat->setImagePv($pv->getImagePv());
+            $resultat->setCommune( $commune);
+            $resultat->setEtat(0);
+            $resultat->setCreatedAt(new \DateTimeImmutable);
+            $resultat->setAutor($manager->getRepository(User::class)->findOneBy(["id"=>$this->getUser()->getId()]));
+            $pv->setEtat(1);
+            $manager->getManager()->persist($resultat);
+            $manager->getManager()->persist($pv);
+            $manager->getManager()->flush();
+            return $this->redirectToRoute("app_manager");
+        }*/
         
-        dd("done");
     }
 }

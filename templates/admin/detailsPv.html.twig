@@ -6,44 +6,155 @@
 <div class="container-fluid">
    <div class="row" style="">
         <div class="col-md-6 col-12 px-4" style="">
-            <img src="{{asset("/fichier/" ~ pv.imagePv )}}" alt="faker" class="img-fluid rounded" style="height:500px; width: 100%">
+            <img src="{{asset("/fichier/" ~ pv.imagePv )}}" alt="faker" class="img-fluid rounded-3 shadow-lg" style="height:500px; width: 100%">
         </div>
         <div class="col-md-6 col-12 ">
             <div class="pt-4 border rounded shadow-lg p-3"  style="height:500px;">
-                <div class="row my-0">
-                    <div class="col-6">Nombre de votant :
+                <form action="{{path("supValider")}}" method="POST" id="monForm">
+                    <div class="row my-1">
+                        <label for="province" class="col-sm-3 col-form-label">Province :
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="province" id="province">
+                                <option value="{{pv.commune.departement.province.id}}" selected> {{pv.commune.departement.province.libelle}}</option>
+                            </select>
+                        </div>
+
                     </div>
-                    <div class="col-6">{{pv.votant}}</div>
-                </div>
-                <hr>
-                <div class="row my-0">
-                    <div class="col-6">Suffrage exprimé :</div>
-                    <div class="col-6">{{pv.suffrageExprime}}</div>
-                </div>
-                <hr>
-                <div class="row my-0">
-                    <div class="col-6">Bulletin nul :
+                    <div class="row my-1">
+                        <label for="departement" class="col-sm-3 col-form-label">Departement : </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="departement" id="departement">
+                                <option value="{{pv.commune.departement.id}}" selected> {{pv.commune.departement.libelle}}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-6">{{pv.suffrageNul}}</div>
-                </div>
-                <hr>
-                <div class="row my-0">
-                    <div class="col-6">Vote oui :
+                    <div class="row my-1">
+                        <label for="commune" class="col-sm-3 col-form-label">Commune :</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="commune" id="commune">
+                                <option value="{{pv.commune.id}}" selected> {{pv.commune.libelle}}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-6">{{pv.voteOui}}</div>
-                </div>
-                <hr>
-                <div class="row my-0">
-                    <div class="col-6">Vote non :</div>
-                    <div class="col-6">{{pv.voteNon}}</div>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-center">
-                    <a href="{{path("invaliderPV",{'id':pv.id})}}" class="btn btn-lg btn-danger mx-3">Rejeter</a>
-                    <a href="{{path("validerPV",{'id':pv.id})}}" class="btn btn-lg btn-primary mx-3">Valider</a>
-                </div>
+                    <div class="row my-1">
+                        <label for="codeBureau" class="col-sm-3 col-form-label">Bureau de vote :</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" value="{{pv.codeBureau}}">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="votant" class="col-sm-3 col-form-label">Votant :</label>
+                        <div class="col-sm-9">
+                            <input type="number" name="votant" class="form-control" id="votant" value="{{pv.votant}}">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="suffrageNul" class="col-sm-3 col-form-label">Bulletins nuls :</label>
+                        <div class="col-sm-9">
+                            <input type="number" name="suffrageNul" class="form-control" id="suffrageNul"  value="{{pv.suffrageNul}}">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="suffrageExprime" class="col-sm-3 col-form-label">Suffrage exprimé : </label>
+                        <div class="col-sm-9">
+                            <input type="number" name="suffrageExprime" class="form-control" id="suffrageExprime" value="{{pv.suffrageExprime}}">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="voteOui" class="col-sm-3 col-form-label">Vote oui : </label>
+                        <div class="col-sm-9">  
+                            <input type="number" name="voteOui" class="form-control" id="voteOui" value="{{pv.voteOui}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="voteNon" class="col-sm-3 col-form-label">Vote non : </label>
+                        <div class="col-sm-9">
+                            <input type="number" name="voteNon" class="form-control" id="voteNon" value="{{pv.voteNon}}">
+                        </div>
+                    </div>
+                    <input type="hidden" name="idPv" id="idPv" value={{pv.id}}>
+                    <div class="d-flex justify-content-center"> 
+                        <a href="{{path("invaliderPV",{'id':pv.id})}}" id="rejeter" class="btn btn-danger mx-3"> Rejeter </a>
+                        <input type="submit" name="submit" id="valider" value="Valider" class="btn text-white mx-3" style="background-color : #0F3170">
+                    </div> 
+                </form>
             </div>
         </div>
    </div>
 </div>
+<script>
+    function chargerProvince(data) {
+        var $provinceSelect = $('#province');
+        var jsonData = JSON.parse(data);
+        for( let i = 0; i<jsonData.length;i++)
+        {
+            if($('#province').val() != jsonData[i].id){
+                var option = $('<option>', {
+                    value : jsonData[i].id,
+                    text : jsonData[i].libelle
+                });
+                $provinceSelect.append(option);
+            }  
+        }
+    }
+
+    function chargerDepartement(data){
+        $.post("/departements",{id:data, },function(data){
+            var $depSelect = $('#departement');
+            var jsonData = JSON.parse(data);
+            for( let i = 0; i<jsonData.length;i++)
+            {
+                if($('#departement').val() != jsonData[i].id){
+                    var option = $('<option>', {
+                        value : jsonData[i].id,
+                        text : jsonData[i].libelle
+                    });
+                    $depSelect.append(option);
+                }
+            }
+        });
+    }
+
+    function chargerCommune(data){
+        $.post("/communes",{id:data, },function(data){
+            var $comSelect = $('#commune');
+            var jsonData = JSON.parse(data);
+            for( let i = 0; i<jsonData.length;i++)
+            {
+                if($('#commune').val() != jsonData[i].id){
+                    var option = $('<option>', {
+                        value : jsonData[i].id,
+                        text : jsonData[i].libelle
+                    });
+                }
+                $comSelect.append(option);
+            }
+        });
+    }
+    $(document).ready(function(){
+        $.get("/provinces", function(data){ 
+           chargerProvince(data);
+           chargerDepartement($('#province').val());
+           chargerCommune($('#departement').val())
+        });
+        $("#province").change(function(e){
+            $('#departement').empty();
+            $('#commune').empty();
+            chargerDepartement(e.target.value); 
+        });
+        $("#departement").change(function(e){
+            $('#commune').empty();
+            chargerCommune(e.target.value); 
+        });
+       /* $("#rejeter").click(function(e){
+            var $dat=$("#idPv").val();
+            $.post("/rejeter",{id:$dat},function(data){
+               /// console.log(data);idPv
+                // 
+            });
+            //console.log("coucou");
+         });*/
+    });
+</script>
 {% endblock %}

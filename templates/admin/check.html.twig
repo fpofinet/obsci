@@ -1,21 +1,150 @@
-{% form_theme form 'bootstrap_5_layout.html.twig' %}    
-{% extends 'admin.html.twig' %}
+  {% extends 'admin.html.twig' %}
 
 {% block title %}Manager{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
+<div class="container-fluid mb-5">
     <div class="row">
-        <div class="col-md-6 col-12 px-3">
-            <img src="{{asset("/fichier/"~ pv.imagePv)}}" alt="faker" class="img-fluid rounded" style="height:500px; width: 100%">
+        <div class="col-md-6 col-12 px-3 ">
+            <img src="{{asset("/fichier/"~ pv.imagePv)}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%">
         </div>
-        <div class="col-md-6 col-12  px-3">
+        <div class="col-md-6 col-12 px-3">
             <div class="p-3 border rounded shadow-lg">
-                {{form_start(form)}}
-                    {{form_widget(form)}}        
-                {{form_end(form)}}
+                <form action="{{path("saisie")}}" method="POST">
+                    <div class="row my-1">
+                        <label for="province" class="col-sm-3 col-form-label">Province :
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="province" id="province">
+                                <option disabled selected>Choisir une province</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row my-1">
+                        <label for="departement" class="col-sm-3 col-form-label">Departement : </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="departement" id="departement">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="commune" class="col-sm-3 col-form-label">Commune :</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="commune" id="commune">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="codeBureau" class="col-sm-3 col-form-label">Bureau de vote :</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" placeholder="bureau de vote">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="votant" class="col-sm-3 col-form-label">Votant :</label>
+                        <div class="col-sm-9">
+                            <input type="number" name="votant" class="form-control" id="votant" placeholder="nombre de votant">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="suffrageNul" class="col-sm-3 col-form-label">Bulletins nuls :</label>
+                        <div class="col-sm-9">
+                            <input type="number" name="suffrageNul" class="form-control" id="suffrageNul"  placeholder="bulletins nuls">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="suffrageExprime" class="col-sm-3 col-form-label">Suffrage exprimé : </label>
+                        <div class="col-sm-9">
+                            <input type="number" name="suffrageExprime" class="form-control" id="suffrageExprime"  placeholder="suffrage exprimé">
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="voteOui" class="col-sm-3 col-form-label">Vote oui : </label>
+                        <div class="col-sm-9">  
+                            <input type="number" name="voteOui" class="form-control" id="voteOui" placeholder="vote oui">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="voteNon" class="col-sm-3 col-form-label">Vote non : </label>
+                        <div class="col-sm-9">
+                            <input type="number" name="voteNon" class="form-control" id="voteNon" placeholder="vote non">
+                        </div>
+                    </div>
+                    <input type="hidden" name="idPv" value={{pv.id}}>
+                    <div class="d-flex justify-content-center"> 
+                        <input type="submit" name="submit" id="submit" value="Soumettre" class="btn text-white mt-3 mb-4" style="background-color : #0F3170">
+                    </div> 
+                </form>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function chargerProvince(data) {
+        var $provinceSelect = $('#province');
+        var jsonData = JSON.parse(data);
+        for( let i = 0; i<jsonData.length;i++)
+        {
+            var option = $('<option>', {
+                value : jsonData[i].id,
+                text : jsonData[i].libelle
+            });
+
+            $provinceSelect.append(option);
+        }
+    }
+
+    function chargerDepartement(data){
+        $.post("/departements",{id:data, },function(data){
+            var $depSelect = $('#departement');
+            $depSelect.empty();
+            var jsonData = JSON.parse(data);
+            for( let i = 0; i<jsonData.length;i++)
+            {
+                var option = $('<option>', {
+                    value : jsonData[i].id,
+                    text : jsonData[i].libelle
+                });
+
+                $depSelect.append(option);
+            }
+        });
+    }
+
+    function chargerCommune(data){
+        $.post("/communes",{id:data, },function(data){
+            var $comSelect = $('#commune');
+            $comSelect.empty();
+            var jsonData = JSON.parse(data);
+            for( let i = 0; i<jsonData.length;i++)
+            {
+                var option = $('<option>', {
+                    value : jsonData[i].id,
+                    text : jsonData[i].libelle
+                });
+
+                $comSelect.append(option);
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $.get("/provinces", function(data){
+           chargerProvince(data);
+        });
+        $("#province").change(function(e){
+            $('#departement').empty();
+            $('#commune').empty();
+            chargerDepartement(e.target.value); 
+        });
+         $("#departement").change(function(e){
+            $('#commune').empty();
+            chargerCommune(e.target.value); 
+        });
+
+    });
+</script>
 {% endblock %}

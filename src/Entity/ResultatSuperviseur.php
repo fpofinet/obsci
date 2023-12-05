@@ -43,6 +43,18 @@ class ResultatSuperviseur
     #[ORM\ManyToOne(inversedBy: 'resultatSuperviseurs')]
     private ?Commune $commune = null;
 
+    #[ORM\ManyToOne(inversedBy: 'resultatSuperviseurs')]
+    private ?User $autor = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'resultatSuperviseurs')]
+    private ?User $validator = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $ValidedOn = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -164,6 +176,54 @@ class ResultatSuperviseur
     public function setCommune(?Commune $commune): static
     {
         $this->commune = $commune;
+
+        return $this;
+    }
+
+    public function getAutor(): ?User
+    {
+        return $this->autor;
+    }
+
+    public function setAutor(?User $autor): static
+    {
+        $this->autor = $autor;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getValidator(): ?User
+    {
+        return $this->validator;
+    }
+
+    public function setValidator(?User $validator): static
+    {
+        $this->validator = $validator;
+
+        return $this;
+    }
+
+    public function getValidedOn(): ?\DateTimeImmutable
+    {
+        return $this->ValidedOn;
+    }
+
+    public function setValidedOn(\DateTimeImmutable $ValidedOn): static
+    {
+        $this->ValidedOn = $ValidedOn;
 
         return $this;
     }

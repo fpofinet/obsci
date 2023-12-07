@@ -39,8 +39,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $pass=$this->generatePassword();
-            $hash= $encoder->hashPassword($user,$pass);
+            $hash= $encoder->hashPassword($user,"123Ocel");
             $user->setUsername($form['username']->getData());
             $user->setRoles([$form['roles']->getData()]);
             $user->setPassword($hash);
@@ -48,12 +47,9 @@ class UserController extends AbstractController
             $user->setSexe('M');
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
-            return $this->render('user/info.html.twig', [
-                'nom'=> $form['username']->getData(),
-                'mp'=>$pass,
-            ]);;
+            return $this->redirectToRoute("administration");
         }
-        return $this->render('user/form.html.twig', [
+        return $this->render('user/form.html.twig', [ 
             'form'=> $form->createView(),
         ]);
     }
@@ -95,7 +91,7 @@ class UserController extends AbstractController
     {
         $user = $manager->getRepository(User::class)->findOneBy(["id"=>$id]);
         if ($user != null) {
-            $hash= $encoder->hashPassword($user,"123456");
+            $hash= $encoder->hashPassword($user,"123Ocel");
             $user->setPassword($hash);
             $user->setStatus(0);
             $manager->getManager()->persist($user);
@@ -121,15 +117,4 @@ class UserController extends AbstractController
 
         ]);
     }
-
-    private function generatePassword($length = 8, $characters = '0123456789abcdefghijklmnopqrstuvwxyz')
-    {
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-
 }

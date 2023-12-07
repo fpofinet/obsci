@@ -3,25 +3,26 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use App\Entity\Commune;
 use App\Entity\Province;
 use App\Entity\Resultat;
 use App\Entity\Departement;
 use App\Entity\ResultatKobo;
+use App\Form\AllocationType;
 use App\Form\UploadFileType;
 use App\Entity\ResultatOperateur;
 use App\Controller\ExcelConnector;
 use App\Entity\ResultatSuperviseur;
-use App\Form\AllocationType;
-use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AdminController extends AbstractController
 {
@@ -317,7 +318,7 @@ class AdminController extends AbstractController
     }
 
     // index administration
-    #[Route('/admin/index', name:'administration')]
+    #[Route('/admin', name:'administration')]
     public function admin(ManagerRegistry $manager ): Response
     {
         $user=$manager->getRepository(User::class)->findAll();
@@ -485,31 +486,17 @@ class AdminController extends AbstractController
 
     //test boum
     #[Route('/test', name:'test')]
-    public function test(Request $request, ManagerRegistry $manager)
+    public function test(Request $request, ManagerRegistry $manager,UserPasswordHasherInterface $encoder)
     {
-       // dd($request->request->all());
-       /* if($request->isMethod("POST")){
-            $pv=$manager->getRepository(ResultatKobo::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
-            $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
-            $resultat = new ResultatOperateur();
-            $resultat->setCode($pv->getCodeKobo());
-            $resultat->setCodeBureau($request->request->all()['codeBureau']);
-            $resultat->setVotant($request->request->all()['votant']);
-            $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
-            $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
-            $resultat->setVoteOui($request->request->all()['voteOui']);
-            $resultat->setVoteNon($request->request->all()['voteNon']);
-            $resultat->setImagePv($pv->getImagePv());
-            $resultat->setCommune( $commune);
-            $resultat->setEtat(0);
-            $resultat->setCreatedAt(new \DateTimeImmutable);
-            $resultat->setAutor($manager->getRepository(User::class)->findOneBy(["id"=>$this->getUser()->getId()]));
-            $pv->setEtat(1);
-            $manager->getManager()->persist($resultat);
-            $manager->getManager()->persist($pv);
+        $user = new User();
+        $hash= $encoder->hashPassword($user,"123Ocel");
+            $user->setUsername("fika");
+            $user->setRoles(["ROLE_ADMIN"]);
+            $user->setPassword($hash);
+            $user->setStatus(0);
+            $user->setSexe('M');
+            $manager->getManager()->persist($user);
             $manager->getManager()->flush();
-            return $this->redirectToRoute("app_manager");
-        }*/
-        
+            return $this->redirectToRoute("app_login");
     }
 }

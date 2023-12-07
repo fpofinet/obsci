@@ -3,56 +3,55 @@
 {% block title %}Admin{% endblock %}
 
 {% block body %}
-<section class="container mt-5">
-    <div class="table-responsive">
+<section class="mx-2 px-3 mt-5">
+    <div class="">
+        <p class="text-center text-decoration-underline h4">ETAT DE TRAITEMENT DES DONNEES</p>
         <table class="table table-striped" id="myDatTable">
             <thead>
                 <tr>
                     <th>CODE</th>
-                    <th>DATE SOUMISSION</th>
-                    <th>HEURE AFFECTATION</th>
-                    <th>AFFECTER A</th>
+                    <th>NOM</th>
+                    <th>PRENOM</th>
                     <th>TELEPHONE</th>
-                    <th></th>
+                    <th>AFFECTEES</th>
+                    <th>TRAITEES</th>
+                    <th>NON TRAITEES</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>298855221</td>
-                    <td>05-12-2023 15:25:30</td>
-                    <td>05-12-2023 15:29:50</td>
-                    <td>john Doe </td>
-                    <td>23566522555</td>
-                    <td><a href="#" class="btn">Détails</a></td>
-                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>{{user.username}}</td>
+                        <td>{{user.nom}}</td>
+                        <td>{{user.prenom}}</td>
+                        <td>{{"+"}}{{user.username}}</td>
+                        <td>{{user.total}}</td>
+                        <td><a href="{{path("details_traiter",{'id': user.id})}}">{{user.traiter}}</a></td>
+                        <td><a href="{{path("details_nontraiter",{'id': user.id})}}">{{user.total - user.traiter}}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
-    </div>
-    {#<div class="row gy-4">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-3 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">SYNCHRONISER</p>
-                <a href="{{path("synchro")}}" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">REINITIALISER</p>
-                <a href="" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">UTILISATEURS</p>
-                <a href="{{path("app_user")}}" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <div class="card px-2 py-4 bg-secondary" style="height: 125px">
-                <p class="h2 text-center">RESULTAT</p>
-                <a href="" class="stretched-link"></a>
-            </div>
-        </div>
-    </div> {#}
+    </div>   
 </section>
+<script>
+	let table = new DataTable('#myDatTable', {
+    // config options...
+    });
+    // show div
+    const showLabelDiv = document.querySelector(".dataTables_length");
+    var showLabel = showLabelDiv.querySelector("label");
+    var select = showLabelDiv.querySelector("select");
+    select.classList.add("mx-2");
+    select.style.width = '75px';
+    showLabel.classList.add("d-flex");
+    showLabelDiv.parentNode.classList.add("my-4");
+    // filter div
+    const FilterDiv = document.querySelector(".dataTables_filter");
+    var filterLabel = FilterDiv.querySelector("label");
+    var input = FilterDiv.querySelector("input");
+    FilterDiv.classList.add("d-none");
+    filterLabel.classList.add("d-flex");
+    input.classList.add("mx-1");
+</script>
 {% endblock %}

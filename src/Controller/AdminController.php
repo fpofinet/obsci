@@ -12,58 +12,33 @@ use App\Form\UploadFileType;
 use App\Entity\ResultatOperateur;
 use App\Controller\ExcelConnector;
 use App\Entity\ResultatSuperviseur;
+use App\Form\AllocationType;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
-
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
 
 class AdminController extends AbstractController
 {
-    #[Route('/manager', name: 'app_manager')]
+    //index operateur
+    #[Route('/operateur', name: 'app_manager')]
     public function index(ManagerRegistry $manager): Response
     {
-        $datas=$manager->getRepository(ResultatKobo::class)->findBy(["etat"=>0]);
+         
+        /* @SuppressWarnings(P1013)*/
+        $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$this->getUser()->getId(),"etat"=>0]);
         return $this->render('admin/manager.html.twig', [
             'datas'=>$datas,
         ]);
     }
 
-    #[Route('/admin/resultat', name:'resultat_admin')]
-    public function resultatAdmin(ManagerRegistry $manager): Response
-    {
-        return $this->render('resultat/table.html.twig', [
-           'resultat'=>$manager->getRepository(Resultat::class)->findBy(["etat"=>0]),
-        ]);
-    }
-
-    #[Route('/admin/provinces/', name:'resultat_dept')]
-    public function resultatDept(): Response{
-        return $this->render('admin/tableDepartement.html.twig', []);
-    }
-
-    #[Route('/admin/departements/', name:'resultat_commune')]
-    public function resultatCommune(): Response{
-        return $this->render('admin/tableCommune.html.twig', []);
-    }
-
-    #[Route('/admin/communes/', name: 'communeList')]
-    public function communeList(): Response
-    {
-        return $this->render('admin/communeList.html.twig', [
-            
-        ]);
-    }
-
     //verification
-
-   #[Route('/manager/pv/{id}/', name: 'check')]
+   #[Route('/operateur/pv/{id}/', name: 'check')]
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
        $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
@@ -72,6 +47,7 @@ class AdminController extends AbstractController
         ]);
     }
 
+    //saisie de données
     #[Route('/manager/saisie', name:'saisie')]
     public function saisieOperateur(Request $request, ManagerRegistry $manager)
     {
@@ -79,6 +55,7 @@ class AdminController extends AbstractController
             $pv=$manager->getRepository(ResultatKobo::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
             $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
             $resultat = new ResultatOperateur();
+            $resultat->setValidateur($this->getUser()->getValidateur());
             $resultat->setAgentSaisie($request->request->all()['agent']);
             $resultat->setCodeBureau($request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
@@ -88,12 +65,16 @@ class AdminController extends AbstractController
             $resultat->setVoteNon($request->request->all()['voteNon']);
             $resultat->setCode($pv->getCodeKobo());
             $resultat->setImagePv($pv->getImagePv());
-            $resultat->setSubmitter($pv->getSubmitter());
+            if($pv->getSubmitter()== null){
+                $resultat->setSubmitter("anonyme");
+            } else {
+                $resultat->setSubmitter($pv->getSubmitter());
+            }
+            
             $resultat->setSubmittedOn(DateTimeImmutable::createFromMutable($pv->getDateSubmit()));
-            //dd($resultat->getSubmittedOn());
             $resultat->setCommune( $commune);
             $resultat->setEtat(0);
-            $resultat->setCreatedAt(new \DateTimeImmutable);
+            $resultat->setCreatedAt(new DateTimeImmutable);
             $resultat->setAutor($manager->getRepository(User::class)->findOneBy(["id"=>$this->getUser()->getId()]));
             $pv->setEtat(1);
             $manager->getManager()->persist($resultat);
@@ -102,10 +83,8 @@ class AdminController extends AbstractController
             return $this->redirectToRoute("app_manager");
         } 
     }
-   
 
-    //synchro
-
+    //synchronisation kobo
     #[Route('/admin/sync', name:'synchro')]
     public function synchro(ManagerRegistry $manager): Response
     {
@@ -125,22 +104,53 @@ class AdminController extends AbstractController
                 $temp->setCodeKobo($d["_id"]);
                 $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_url"]));
                 $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
+                $temp->setAllowedOn(new DateTimeImmutable);
                 $temp->setEtat(0);
                 $manager->getManager()->persist($temp);
                 $manager->getManager()->flush();
             }
         }
-        return $this->redirectToRoute("app_manager");
+        $this->allocation($manager);
+        return $this->redirectToRoute("administration");
     }
 
-    // app superviseur
+    // allocation
+   // #[Route('/alloc', name:'alloc')]
+    private function allocation(ManagerRegistry $manager)
+    {
+        $data=$manager->getRepository(ResultatKobo::class)->findAll();
+        $user=$manager->getRepository(User::class)->findAll();
+        $operator=array();
+        foreach($user as $r){
+            if(in_array('ROLE_OPERATOR',$r->getRoles())){
+                $operator[]=$r;
+            }
+        }
+        $byUser=count($data)/count($operator);
+        $index=0;
+        
+        for($i=0;$i<count($operator);$i++){
+            $fin=$index+$byUser;
+            for($j=$index;$j<$fin;$j++){
+                $data[$j]->setAllowedTo($operator[$i]->getId());
+                $data[$j]->setAllowedOn(new DateTimeImmutable);
+                $manager->getManager()->persist($data[$j]);
+                $manager->getManager()->flush();
+            }
+            $index = $fin;
+        }
+    }
+
+
+    // index superviseur
     #[Route('/superviseur', name:'app_superviseur')]
     public function index_superviseur(ManagerRegistry $manager): Response{
         return $this->render('admin/superviseur.html.twig', [
-           'bvs'=> $manager->getRepository(ResultatOperateur::class)->findBy(["etat"=>0]),
+           'bvs'=> $manager->getRepository(ResultatOperateur::class)->findBy(["etat"=>0,"validateur"=>$this->getUser()->getId()]),
         ]);
     }
 
+    //verfication saisie
     #[Route('/superviseur/pv/{id}', name:'detailsPV')]
     public function verifier(?int $id,ManagerRegistry $manager):Response{
         return $this->render('admin/detailsPv.html.twig',[
@@ -148,6 +158,7 @@ class AdminController extends AbstractController
         ]);
     }
 
+    //validation saisie
     #[Route('/validation', name:'supValider')]
     public function handleData(Request $request,ManagerRegistry $manager) :Response
     {
@@ -170,7 +181,7 @@ class AdminController extends AbstractController
             $resultat->setAutor($pv->getAutor());
             $resultat->setCreatedAt($pv->getCreatedAt());
             $resultat->setValidator($manager->getRepository(User::class)->findOneBy(["id"=>$this->getUser()->getId()]));
-            $resultat->setValidedOn(new \DateTimeImmutable);
+            $resultat->setValidedOn(new DateTimeImmutable);
             $resultat->setCommune($commune);
             $resultat->setEtat(0);
             $pv->setEtat(1);
@@ -211,6 +222,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute("app_superviseur");
     }
 
+    //rejet de la saisie
     #[Route('/superviseur/pv/{id}/invalider', name:'invaliderPV')]
     public function invalider(?int $id,ManagerRegistry $manager):Response{
         $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$id]);
@@ -224,7 +236,7 @@ class AdminController extends AbstractController
     }
 
 
-
+    //gestion des conflits 
     #[Route('/superviseur/{code}/{com}/consolidation', name:'checkSup')]
     public function consol(?string $code,?int $com,ManagerRegistry $manager):Response
     {
@@ -232,7 +244,6 @@ class AdminController extends AbstractController
         $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$code,"commune"=>$commune]);
         $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>0,"commune"=>$commune]);
         $other=$manager->getRepository(ResultatSuperviseur::class)->findBy(["codeBureau"=>$code,"etat"=>1,"commune"=>$commune]);
-        //dd($other);
         return $this->render('admin/checkSup.html.twig',[
             'actuel'=>$actuel,
             'new'=>$new,
@@ -240,6 +251,7 @@ class AdminController extends AbstractController
          ]);
     }
 
+    //conservation du resultat
     #[Route('/superviseur/{id}/consolider', name:'consolider')]
     public function consolider(?int $id,ManagerRegistry $manager):Response
     {
@@ -253,12 +265,33 @@ class AdminController extends AbstractController
         return $this->redirectToRoute("app_superviseur");
     }
 
+    //remplacement des resultats
     #[Route('/superviseur/{id}/changer', name:'changerResultat')]
     public function changerResultat(?int $id,ManagerRegistry $manager):Response
     {
         $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["id"=>$id]);
         $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$new->getCodeBureau(),"commune"=>$new->getCommune()]);
         if($actuel){
+            $back = new ResultatSuperviseur();
+            $back->setCode($actuel->getCode());
+            $back->setImagePv($actuel->getImagePv());
+            $back->setAgentSaisie($actuel->getAgentSaisie());
+            $back->setAutor($actuel->getAutor());
+            $back->setCreatedAt($actuel->getCreatedAt());
+            $back->setAgentValidation($actuel->getAgentValidation());
+            $back->setValidator($actuel->getValidator());
+            $back->setValidedOn($actuel->getValidedOn());
+            $back->setSubmitter($actuel->getSubmitter());
+            $back->setSubmittedOn($actuel->getSubmittedOn());
+            $back->setCodeBureau($actuel->getCodeBureau());
+            $back->setSuffrageExprime($actuel->getSuffrageExprime());
+            $back->setSuffrageNul($actuel->getSuffrageNul());
+            $back->setVotant($actuel->getVotant());
+            $back->setVoteNon($actuel->getVoteNon());
+            $back->setVoteOui($actuel->getVoteOui());
+            $back->setEtat(1);
+            $back->setCommune($actuel->getCommune());
+
             $actuel->setSuffrageExprime($new->getSuffrageExprime());
             $actuel->setSuffrageNul($new->getSuffrageNul());
             $actuel->setVotant($new->getVotant());
@@ -267,40 +300,103 @@ class AdminController extends AbstractController
             $actuel->setImagePv($new->getImagePv());
             $new->setEtat(2);
             $manager->getManager()->persist($actuel);
+            $manager->getManager()->persist($back);
             $manager->getManager()->flush();
-            //possiblite de faire un save back ici
+           
+            
             return $this->redirectToRoute("app_superviseur");
         }
         return $this->redirectToRoute("app_superviseur");
     }
 
-    //administration
-
-    #[Route('/admin/administration', name:'administration')]
+    // index administration
+    #[Route('/admin/index', name:'administration')]
     public function admin(ManagerRegistry $manager ): Response
     {
-        return $this->render('admin/admin.html.twig',[
+        $user=$manager->getRepository(User::class)->findAll();
+        $output=array();
+
+        foreach($user as $u){
+            if(in_array("ROLE_OPERATOR",$u->getRoles())){
+                $nt=count($manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$u->getId()]));
+                $tt=count($manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$u->getId(),"etat"=>1]));
+                $output[]=["id"=>$u->getId(),"nom"=>$u->getNom(),"prenom"=>$u->getPrenom(),"username"=>$u->getUsername(),"total"=>$nt,"traiter"=>$tt];
+              
+            } else if(in_array("ROLE_SUPERVISOR",$u->getRoles())){
+                $nt=count($manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$u->getId()]));
+                $tt=count($manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$u->getId(),"etat"=>1]));
+                $output[]=["id"=>$u->getId(),"nom"=>$u->getNom(),"prenom"=>$u->getPrenom(),"username"=>$u->getUsername(),"total"=>$nt,"traiter"=>$tt];
+            }
             
-            'user' => count($manager->getRepository(User::class)->findAll()),
-          
+        }
+        return $this->render('admin/admin.html.twig',[
+            "users" =>$output,
         ]);
     }
 
-    #[Route('/admin/resultat-valide', name:'pvValide')]
-    public function pvValider(ManagerRegistry $manager): Response
+    #[Route('/admin/user/{id}/traitees', name:'details_traiter')]
+    public  function detailsTraiter($id,ManagerRegistry $manager): Response
     {
-        return $this->render('admin/pv.html.twig',[
-           // 'pvs'=> $manager->getRepository(Resultat::class)->findAll(),
+        $user=$manager->getRepository(User::class)->findOneBy(["id"=>$id]);
+        $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$user->getId(),"etat"=>1]);
+        return $this->render('admin/detailsTraiter.html.twig',[
+            'datas' =>$datas,
+            'user' =>$user,
         ]);
     }
 
-    #[Route('/admin/resultat-soumis', name:'pvSoumis')]
-    public function pvSoumis(ManagerRegistry $manager): Response
+    #[Route('/admin/user/{id}/non-traitees', name:'details_nontraiter')]
+    public  function detailsNonTraiter($id,ManagerRegistry $manager): Response
     {
-        return $this->render('admin/soumissionView.html.twig',[
-           // 'pvs'=> $manager->getRepository(TempResultat::class)->findAll(),
+        $user=$manager->getRepository(User::class)->findOneBy(["id"=>$id]);
+        $k="";
+        if(in_array("ROLE_OPERATOR",$user->getRoles())){
+            $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$user->getId(),"etat"=>0]);
+            $k="op";
+        } else if(in_array("ROLE_SUPERVISOR",$user->getRoles())){
+            $datas=$manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$user->getId(),"etat"=>0]);
+            $k="val";
+        }
+       
+        return $this->render('admin/detailsNonTraiter.html.twig',[
+            'datas' =>$datas,
+            'user' =>$user,
+            'val' =>$k,
         ]);
     }
+
+    #[Route('/admin/user/{id}/reallocation', name:'realloc')]
+    public  function reallocation($id,ManagerRegistry $manager,Request $request): Response
+    {
+        $user=$manager->getRepository(User::class)->findOneBy(["id"=>$id]);
+        $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$user->getId(),"etat"=>0]);
+        $datas2=$manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$user->getId(),"etat"=>0]);
+        $form=$this->createForm(AllocationType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            if(in_array("ROLE_OPERATOR",$user->getRoles())){
+                foreach($datas as $d){
+                    $d->setAllowedTo($form["user"]->getData()->getId());
+                    $manager->getManager()->persist($d);
+                    $manager->getManager()->flush();
+                }
+            } else if(in_array("ROLE_SUPERVISOR",$user->getRoles())){
+                foreach($datas2 as $d){
+                    $d->setValidateur($form["user"]->getData()->getId());
+                    $manager->getManager()->persist($d);
+                    $manager->getManager()->flush();
+                }
+            }
+            return $this->redirectToRoute("administration");
+        }
+        return $this->render('admin/formAllocation.html.twig',[
+            'form' =>$form->createView(),
+            'user' =>$user,
+        ]);
+    }
+
+    /* liens ajax */
+
 
     //ajax provinces
     #[Route('/provinces', name:'get_province')]
@@ -315,7 +411,6 @@ class AdminController extends AbstractController
 
    
     //ajax departement
-
     #[Route('/departements', name:'get_dept')]
     public function listDepartement(ManagerRegistry $manager,Request $request): Response{
         $data=array();
@@ -345,7 +440,7 @@ class AdminController extends AbstractController
    
 
    
-    // importation de data
+    // importation de données excel
     #[Route('/admin/import', name:'import')]
     public function import(Request $request, ManagerRegistry $manager): Response
     {

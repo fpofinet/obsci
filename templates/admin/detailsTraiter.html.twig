@@ -1,0 +1,36 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+<section class="mx-2 mt-5 px-5">
+    <div class="table-responsive">
+        <p class="text-center h4 text-decoration-underline">DONNEES TRAITES DE {{user.nom}} {{user.prenom}} </p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>CODE</th>
+                    <th>DATE SOUMISSION</th>
+                    <th>DATE AFFECTATION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if datas %}
+                    {% for data in datas %}
+                        <tr>
+                            <td>{{data.codeKobo}}</td>
+                            <td class="">{{data.dateSubmit | date("d-m-Y")}}</td>
+                            <td>{{data.allowedOn | date("d-m-Y")}}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">aucune données disponible</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+</section>
+{% endblock %}

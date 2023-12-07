@@ -45,6 +45,7 @@ class UserController extends AbstractController
             $user->setRoles([$form['roles']->getData()]);
             $user->setPassword($hash);
             $user->setStatus(0);
+            $user->setSexe('M');
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
             return $this->render('user/info.html.twig', [

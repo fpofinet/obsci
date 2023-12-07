@@ -58,6 +58,9 @@ class ResultatOperateur
     #[ORM\Column]
     private ?\DateTimeImmutable $submittedOn = null;
 
+    #[ORM\Column]
+    private ?int $validateur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -239,6 +242,18 @@ class ResultatOperateur
     public function setSubmittedOn(\DateTimeImmutable $submittedOn): static
     {
         $this->submittedOn = $submittedOn;
+
+        return $this;
+    }
+
+    public function getValidateur(): ?int
+    {
+        return $this->validateur;
+    }
+
+    public function setValidateur(int $validateur): static
+    {
+        $this->validateur = $validateur;
 
         return $this;
     }

@@ -1,0 +1,54 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+<section class="mx-2 mt-5 px-5">
+    <div class="table-responsive">
+        {% if datas %}
+            <a href="{{path("realloc",{'id': user.id})}}" class="btn text-white" style="background-color : #0F3170">Reaffecter</a>
+        {% else %}
+            <a href="{{path("realloc",{'id': user.id})}}" class="btn text-white disabled" style="background-color : #0F3170">Reaffecter</a>
+        {% endif %}
+        <p class="text-center h4 text-decoration-underline">DONNEES  NON TRAITES DE {{user.nom}} {{user.prenom}} </p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>CODE</th>
+                    <th>DATE SOUMISSION</th>
+                    {% if val == "op" %}
+                        <th>DATE AFFECTATION</th>
+                    {% else %}
+                        <th>DATE SAISIE</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% if datas %}
+                    {% for data in datas %}
+                        {% if val == "op" %}
+                            <tr>
+                                <td>{{data.codeKobo}}</td>
+                                <td class="">{{data.dateSubmit | date("d-m-Y")}}</td>
+                                <td>{{data.allowedOn | date("d-m-Y")}}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td>{{data.code}}</td>
+                                <td class="">{{data.submittedOn | date("d-m-Y")}}</td>
+                                <td>{{data.createdAt | date("d-m-Y")}}</td>
+                            </tr>
+                        {% endif %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">aucune données disponible</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+</section>
+{% endblock %}

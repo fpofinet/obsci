@@ -99,7 +99,7 @@ class ResultatController extends AbstractController
             $vn = 0;
             $sn = 0;
             foreach ($c->getResultats() as $r) {
-                if ($r->getEtat() == 5) {
+                if ($r->getEtat() == 0) {
                     $votant = $votant + $r->getVotant();
                     $sf = $sf + $r->getSuffrageExprime();
                     $sn = $sn + $r->getSuffrageNul();

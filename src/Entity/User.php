@@ -41,9 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $superviseur = null;
-
     #[ORM\OneToMany(mappedBy: 'autor', targetEntity: ResultatOperateur::class)]
     private Collection $resultatOperateurs;
 
@@ -55,6 +52,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'autor', targetEntity: Resultat::class)]
     private Collection $resultats;
+
+    #[ORM\Column(length: 255)]
+    private ?string $sexe = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $telephone = null;
 
     public function __construct()
     {
@@ -181,17 +184,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSuperviseur(): ?int
-    {
-        return $this->superviseur;
-    }
-
-    public function setSuperviseur(?int $superviseur): static
-    {
-        $this->superviseur = $superviseur;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, ResultatOperateur>
@@ -291,6 +283,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $resultat->setAutor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(string $sexe): static
+    {
+        $this->sexe = $sexe;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): static
+    {
+        $this->telephone = $telephone;
 
         return $this;
     }

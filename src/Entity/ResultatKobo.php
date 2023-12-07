@@ -29,6 +29,12 @@ class ResultatKobo
     #[ORM\Column(nullable: true)]
     private ?int $etat = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $allowedTo = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $allowedOn = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +96,30 @@ class ResultatKobo
     public function setEtat(?int $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getAllowedTo(): ?int
+    {
+        return $this->allowedTo;
+    }
+
+    public function setAllowedTo(?int $allowedTo): static
+    {
+        $this->allowedTo = $allowedTo;
+
+        return $this;
+    }
+
+    public function getAllowedOn(): ?\DateTimeImmutable
+    {
+        return $this->allowedOn;
+    }
+
+    public function setAllowedOn(\DateTimeImmutable $allowedOn): static
+    {
+        $this->allowedOn = $allowedOn;
 
         return $this;
     }

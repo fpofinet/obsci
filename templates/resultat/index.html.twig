@@ -13,8 +13,8 @@
                 <div class="border border-2 rounded rounded-2 mb-2 p-2">
                     <div class="progress" style="height : 40px">
                         {% if national.suffrageExprime != 0  %}
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ (national.voteOui / national.suffrageExprime )  * 100 }}%" aria-valuenow="{{ ( national.voteOui /national.suffrageExprime ) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">oui={{( ( national.voteOui / national.suffrageExprime  )  * 100 ) | number_format }}%</span></div>
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ( national.voteNon / national.suffrageExprime )  * 100 }}%" aria-valuenow="{{ ( national.voteNon / national.suffrageExprime ) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">non={{( ( national.voteNon / national.suffrageExprime )  * 100 ) | number_format }}%</span></div>
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ (national.voteOui / national.suffrageExprime )  * 100 }}%" aria-valuenow="{{ ( national.voteOui /national.suffrageExprime ) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">oui={{( ( national.voteOui / national.suffrageExprime  )  * 100 ) | number_format(2, ',', '.') }}%</span></div>
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ( national.voteNon / national.suffrageExprime )  * 100 }}%" aria-valuenow="{{ ( national.voteNon / national.suffrageExprime ) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">non={{( ( national.voteNon / national.suffrageExprime )  * 100 ) | number_format(2, ',', '.') }}%</span></div>
                         {% else %}
                             <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">oui=0%</div>
                             <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">non=0%</div>
@@ -25,29 +25,29 @@
                     <div class="container border-end">
                         <p class="my-0">
                             <span class="">Nombre de votant : </span>
-                            <span class="mx-2">{{national.votant}}</span>
+                            <span class="mx-2">{{national.votant | number_format(0, ',', '.')}}</span>
                         </p>
                         <hr>
                         <p class="my-0">
                             <span class="">Suffrage exprimé : </span>
-                            <span class="mx-2">{{national.suffrageExprime}}</span>
+                            <span class="mx-2">{{national.suffrageExprime | number_format(0, ',', '.')}}</span>
                         </p>
                         <hr>
                         <p class="my-0">
                             <span class="">Bulletin nul : </span>
-                            <span class="mx-2">{{national.suffrageNul}}</span>
+                            <span class="mx-2">{{national.suffrageNul | number_format(0, ',', '.')}}</span>
                         </p>
                         <hr>
                     </div>
                     <div class="container border-start">
                         <p class="my-0">
                             <span class="">Vote oui : </span>
-                            <span class="mx-2">{{national.voteOui}}</span>
+                            <span class="mx-2">{{national.voteOui | number_format(0, ',', '.')}}</span>
                         </p>
                         <hr>
                         <p class="my-0">
                             <span class="">Vote non : </span>
-                            <span class="mx-2">{{national.voteNon}}</span>
+                            <span class="mx-2">{{national.voteNon | number_format(0, ',', '.')}}</span>
                         </p>
                         <hr>
                     </div>
@@ -76,8 +76,8 @@
                             <div class="border border-2 rounded rounded-2 m-3 p-2">
                                 <div class="progress" style="height : 40px">
                                     {% if item.suffrageExprime != 0 %}
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ( item.voteOui / item.suffrageExprime)  * 100 }}%" aria-valuenow="{{ ( item.voteOui / item.suffrageExprime) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">oui={{ ( ( item.voteOui / item.suffrageExprime)  * 100 ) | number_format}}%</span></div>
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ( item.voteNon / item.suffrageExprime)  * 100 }}%" aria-valuenow="{{ ( item.voteNon / item.suffrageExprime) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">non={{ ( ( item.voteNon / item.suffrageExprime)  * 100 ) | number_format }}%</span></div>
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ( item.voteOui / item.suffrageExprime)  * 100 }}%" aria-valuenow="{{ ( item.voteOui / item.suffrageExprime) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">oui={{ ( ( item.voteOui / item.suffrageExprime)  * 100 ) | number_format(2, ',', '.') }}%</span></div>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ( item.voteNon / item.suffrageExprime)  * 100 }}%" aria-valuenow="{{ ( item.voteNon / item.suffrageExprime) * 100 }}" aria-valuemin="0" aria-valuemax="100"><span class="fw-bold h4">non={{ ( ( item.voteNon / item.suffrageExprime)  * 100 ) | number_format(2, ',', '.') }}%</span></div>
                                     {% else %}
                                         <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">oui=0%</div>
                                         <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">non=0%</div>
@@ -89,29 +89,29 @@
                                     <div class="container border-end ">
                                         <p class="my-0">
                                             <span class="">Nombre de votant : </span>
-                                            <span class="mx-2">{{item.votant}}</span>
+                                            <span class="mx-2">{{item.votant | number_format(0, ',', '.')}}</span>
                                         </p>
                                         <hr>
                                         <p class="my-0">
                                             <span class="">Suffrage exprimé : </span>
-                                            <span class="mx-2">{{item.suffrageExprime}}</span>
+                                            <span class="mx-2">{{item.suffrageExprime | number_format(0, ',', '.')}}</span>
                                         </p>
                                         <hr>
                                         <p class="my-0">
                                             <span class="">Bulletin nul : </span>
-                                            <span class="mx-2">{{item.suffrageNul}}</span>
+                                            <span class="mx-2">{{item.suffrageNul | number_format(0, ',', '.')}}</span>
                                         </p>
                                         <hr>
                                     </div>
                                     <div class="container border-start">
                                         <p class="my-0">
                                             <span class="">Vote oui : </span>
-                                            <span class="mx-2">{{item.voteOui}}</span>
+                                            <span class="mx-2">{{item.voteOui | number_format(0, ',', '.')}}</span>
                                         </p>
                                         <hr>
                                         <p class="my-0">
                                             <span class="">Vote non : </span>
-                                            <span class="mx-2">{{item.voteNon}}</span>
+                                            <span class="mx-2">{{item.voteNon | number_format(0, ',', '.')}}</span>
                                         </p>
                                         <hr>
                                     </div>

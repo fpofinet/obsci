@@ -72,7 +72,7 @@ class UserController extends AbstractController
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
            // dd("done");
-            if (in_array('ROLE_MANAGER',$user->getRoles())) {
+            if (in_array('ROLE_OPERATOR',$user->getRoles())) {
                 return $this->redirectToRoute('app_manager');
             } else if (in_array('ROLE_SUPERVISOR', $user->getRoles())) {
                 return $this->redirectToRoute('app_superviseur');

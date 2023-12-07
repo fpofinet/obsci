@@ -41,7 +41,12 @@ class AdminController extends AbstractController
    #[Route('/operateur/pv/{id}/', name: 'check')]
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
-       $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
+        $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
+        $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
+        $img=$kobo->downloadImg($pv->getImagePv());
+        $pv->setImagePv($img);
+        $manager->getManager()->persist($pv);
+        $manager->getManager()->flush();
         return $this->render('admin/check.html.twig', [
            'pv'=> $pv,
         ]);
@@ -57,7 +62,7 @@ class AdminController extends AbstractController
             $resultat = new ResultatOperateur();
             $resultat->setValidateur($this->getUser()->getValidateur());
             $resultat->setAgentSaisie($request->request->all()['agent']);
-            $resultat->setCodeBureau($request->request->all()['codeBureau']);
+            $resultat->setCodeBureau($commune->getCode()."_".$request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -102,7 +107,7 @@ class AdminController extends AbstractController
             if($k==1){
                 $temp = new ResultatKobo();
                 $temp->setCodeKobo($d["_id"]);
-                $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_url"]));
+                $temp->setImagePv($d["_attachments"][0]["download_small_url"]);
                 $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
                 $temp->setAllowedOn(new DateTimeImmutable);
                 $temp->setEtat(0);
@@ -118,7 +123,7 @@ class AdminController extends AbstractController
    // #[Route('/alloc', name:'alloc')]
     private function allocation(ManagerRegistry $manager)
     {
-        $data=$manager->getRepository(ResultatKobo::class)->findAll();
+        $data=$manager->getRepository(ResultatKobo::class)->findBy(["etat"=>0]);
         $user=$manager->getRepository(User::class)->findAll();
         $operator=array();
         foreach($user as $r){
@@ -165,6 +170,7 @@ class AdminController extends AbstractController
         if($request->isMethod("POST")){
             $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
             $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
+          //  dd($commune);
             $resultat = new ResultatSuperviseur();
             $resultat->setCodeBureau($request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
@@ -189,7 +195,7 @@ class AdminController extends AbstractController
             $manager->getManager()->persist($pv);
             $manager->getManager()->flush();
 
-            $existant=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$pv->getCodeBureau()]);
+            $existant=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$pv->getCodeBureau(),"commune"=>$commune]);
             if($existant != null){
                 return $this->redirectToRoute("checkSup",["code"=>$existant->getCodeBureau(),"com"=>$existant->getCommune()->getId()]);
             } else{
@@ -242,6 +248,7 @@ class AdminController extends AbstractController
     {
         $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$com]);
         $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$code,"commune"=>$commune]);
+        //dd($commune);
         $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>0,"commune"=>$commune]);
         $other=$manager->getRepository(ResultatSuperviseur::class)->findBy(["codeBureau"=>$code,"etat"=>1,"commune"=>$commune]);
         return $this->render('admin/checkSup.html.twig',[

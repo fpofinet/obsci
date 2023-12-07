@@ -53,7 +53,7 @@ class AdminController extends AbstractController
     }
 
     //saisie de données
-    #[Route('/manager/saisie', name:'saisie')]
+    #[Route('/operateur/saisie', name:'saisie')]
     public function saisieOperateur(Request $request, ManagerRegistry $manager)
     {
         if($request->isMethod("POST")){
@@ -164,7 +164,7 @@ class AdminController extends AbstractController
     }
 
     //validation saisie
-    #[Route('/validation', name:'supValider')]
+    #[Route('/superviseur/validation', name:'supValider')]
     public function handleData(Request $request,ManagerRegistry $manager) :Response
     {
         if($request->isMethod("POST")){
@@ -327,12 +327,12 @@ class AdminController extends AbstractController
             if(in_array("ROLE_OPERATOR",$u->getRoles())){
                 $nt=count($manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$u->getId()]));
                 $tt=count($manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$u->getId(),"etat"=>1]));
-                $output[]=["id"=>$u->getId(),"nom"=>$u->getNom(),"prenom"=>$u->getPrenom(),"username"=>$u->getUsername(),"total"=>$nt,"traiter"=>$tt];
+                $output[]=["id"=>$u->getId(),"nom"=>$u->getNom(),"prenom"=>$u->getPrenom(),"username"=>$u->getUsername(),"role"=>$u->getRoles()[0],"tel"=>$u->getTelephone(),"total"=>$nt,"traiter"=>$tt];
               
             } else if(in_array("ROLE_SUPERVISOR",$u->getRoles())){
                 $nt=count($manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$u->getId()]));
                 $tt=count($manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$u->getId(),"etat"=>1]));
-                $output[]=["id"=>$u->getId(),"nom"=>$u->getNom(),"prenom"=>$u->getPrenom(),"username"=>$u->getUsername(),"total"=>$nt,"traiter"=>$tt];
+                $output[]=["id"=>$u->getId(),"nom"=>$u->getNom(),"prenom"=>$u->getPrenom(),"username"=>$u->getUsername(),"role"=>$u->getRoles()[0],"tel"=>$u->getTelephone(),"total"=>$nt,"traiter"=>$tt];
             }
             
         }

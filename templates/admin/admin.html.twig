@@ -12,6 +12,7 @@
                     <th>CODE</th>
                     <th>NOM</th>
                     <th>PRENOM</th>
+                    <th>ROLE</th>
                     <th>TELEPHONE</th>
                     <th>AFFECTEES</th>
                     <th>TRAITEES</th>
@@ -24,7 +25,20 @@
                         <td>{{user.username}}</td>
                         <td>{{user.nom}}</td>
                         <td>{{user.prenom}}</td>
-                        <td>{{"+"}}{{user.username}}</td>
+                        <td>
+                            {% if user.role == "ROLE_OPERATOR" %}
+                                {{"Operateur"}}
+                            {% else %}
+                                {{"Superviseur"}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.tel == null %}
+                                {{"-"}}
+                            {% else %}
+                                {{"+"}}{{user.tel}}</td>
+                            {% endif %}
+                        
                         <td>{{user.total}}</td>
                         <td><a href="{{path("details_traiter",{'id': user.id})}}">{{user.traiter}}</a></td>
                         <td><a href="{{path("details_nontraiter",{'id': user.id})}}">{{user.total - user.traiter}}</td>

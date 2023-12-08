@@ -39,13 +39,16 @@ class AdminController extends AbstractController
     }
 
     //verification
-   #[Route('/operateur/pv/{id}/', name: 'check')]
+   #[Route('/operateur/pv/{id}', name: 'check')]
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
-        $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
+       // $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
         $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
-        $img=$kobo->downloadImg($pv->getImagePv());
-        $pv->setImagePv($img);
+       // $img=$kobo->downloadImg($pv->getImagePv());
+        //if($img !=null){
+           // $pv->setImagePv($img);
+        //}
+        
         $manager->getManager()->persist($pv);
         $manager->getManager()->flush();
         return $this->render('admin/check.html.twig', [
@@ -108,7 +111,7 @@ class AdminController extends AbstractController
             if($k==1){
                 $temp = new ResultatKobo();
                 $temp->setCodeKobo($d["_id"]);
-                $temp->setImagePv($d["_attachments"][0]["download_small_url"]);
+                $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_small_url"]));
                 $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
                 $temp->setAllowedOn(new DateTimeImmutable);
                 $temp->setEtat(0);

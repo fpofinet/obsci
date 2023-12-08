@@ -54,7 +54,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('admin/user/{id}/password/update', name:'create_password')]
+    #[Route('/user/{id}/password/update', name:'create_password')]
     public function updateUserPassword(?int $id,ManagerRegistry $manager,UserPasswordHasherInterface $encoder, Request $request): Response
     {
         $user = $manager->getRepository(User::class)->findOneBy(["id"=>$id]);

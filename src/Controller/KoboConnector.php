@@ -17,7 +17,7 @@ class KoboConnector {
                 "Content-Type: application/json",
             ],
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYPEER => true,
         ];
 
         $curl = curl_init();
@@ -43,7 +43,7 @@ class KoboConnector {
                 "Authorization: Token {$this->token}",
             ],
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYPEER => true,
         ];
         curl_setopt_array($ch, $options);
         $imageContent = curl_exec($ch);

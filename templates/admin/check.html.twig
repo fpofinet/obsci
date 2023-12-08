@@ -6,7 +6,7 @@
 <div class="container-fluid my-3">
     <div class="row">
         <div class="col-md-6 col-12 px-3 ">
-            <img src="{{asset("/fichier/"~ pv.imagePv)}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%">
+            <img src="./fichier/{{pv.imagePv}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv">
         </div>
         <div class="col-md-6 col-12 px-3">
             <div class="px-3 pt-4 pb-1 border rounded shadow-lg text-white" style="background-color : #0F3170;">
@@ -158,6 +158,7 @@
             $('#commune').empty();
             chargerCommune(e.target.value); 
         });
+        console.log( $("#monpv"));
         $("#agent").val(navigator.userAgent);
     });
 </script>

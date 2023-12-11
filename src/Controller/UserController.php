@@ -39,15 +39,23 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //dd($form["validator"]->getData()->getId());
             $hash= $encoder->hashPassword($user,"123Ocel");
             $user->setUsername($form['username']->getData());
+            $user->setNom($form['nom']->getData());
+            $user->setPrenom($form['prenom']->getData());
+            $user->setTelephone($form['telephone']->getData());
+            $user->setEmail($form['telephone']->getData());
             $user->setRoles([$form['roles']->getData()]);
             $user->setPassword($hash);
             $user->setStatus(0);
-            $user->setSexe('M');
+            $user->setSexe($form['sexe']->getData());
+            if($form["validator"]->getData()){
+                $user->setValidateur($form["validator"]->getData()->getId());
+            }
             $manager->getManager()->persist($user);
             $manager->getManager()->flush();
-            return $this->redirectToRoute("administration");
+            return $this->redirectToRoute("app_user");
         }
         return $this->render('user/form.html.twig', [ 
             'form'=> $form->createView(),

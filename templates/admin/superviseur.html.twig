@@ -4,6 +4,8 @@
 
 {% block body %}
 <section class="px-3 mx-2 rounded shadow my-3">
+    <div class="table-responsive">
+   
         <p class="text-center h3 text-decoration-underline mb-3">VALIDATION DES DONNEES</p>
         <table class="table table-striped" id="myConso">
             <thead>
@@ -33,25 +35,6 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
 </section>
-    <script>
-        let table = new DataTable('#myConso', {
-        // config options...
-        }); 
-        // show div
-        const showLabelDiv = document.querySelector(".dataTables_length");
-        var showLabel = showLabelDiv.querySelector("label");
-        var select = showLabelDiv.querySelector("select");
-        select.classList.add("mx-2");
-        select.style.width = '75px';
-        showLabel.classList.add("d-flex");
-        showLabelDiv.parentNode.classList.add("my-4");
-        // filter div
-        const FilterDiv = document.querySelector(".dataTables_filter");
-        FilterDiv.classList.add("d-none");
-        var filterLabel = FilterDiv.querySelector("label");
-        var input = FilterDiv.querySelector("input");
-        filterLabel.classList.add("d-flex");
-        input.classList.add("mx-1");
-    </script>
 {% endblock %}

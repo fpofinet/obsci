@@ -5,39 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OCEL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .blink {
+            animation: blinker 1.5s linear infinite;
+        }
+
+        @keyframes blinker {
+            75% {
+            opacity: 0;
+            }
+        }
+        .bar{
+            background-color : #0F3170;
+            height: 50px
+        }
+        .center{
+            text-align: center;
+        }
+        @media only screen and (max-width: 350px) {
+            .bar {
+                background-color : #0F3170;
+                height: 70px
+            }
+            .center{
+                margin : 5px;
+                padding : 0px;
+                text-align: left;
+            }
+            
+        }
+    </style>
 </head>
 <body>
     <header class="d-flex justify-content-center bg-white position-top">
-        <img src="{{asset("/images/logo.png")}}" alt="logo" class="img-fluid" style="width:800px;height:150px">
+        <img src="/images/logo.png" alt="logo" class="img-fluid" style="width:800px;height:150px">
     </header>
-    <div class="w-100 " style="background-color : #0F3170;height: 40px"></div>
-    <div class="row mx-0"  style="background-image :url({{asset("/images/bg1.png")}}) ;background-repeat: no-repeat; background-size: cover;min-height: 575px; width: 100%;">
-        <div class="col-lg-6 col-md-6"></div>
-        <div class="col-lg-6 col-md-6 col-12 px-5 float-end py-5 mt-5" style="">
-            <div class="px-5 mx-5 mt-5 border rounded rounded-3 shadow-lg py-3 opacity-100" style="background-color: #0F3170;">
+    <div class="w-100 bar" style="">
+        <p class="pt-2 center fw-bold " style="">
+            <a href="/fichier/GUIDE-INSTALLATION-KOBOCOLLECT.pdf" class="">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="text-danger blink bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                </svg>
+            <span class="text-white small">Télecharger le guide d'installation de KoboCollect</span> 
+            </a>
+        </p>
+    </div>
+    <div class="row mx-0"  style="background-image :url(./images/bg1.png) ;background-repeat: no-repeat; background-size: cover;min-height:525px; min-width: 100%;">
+        <div class="col-lg-4 col-md-6 col-12  mx-auto mt-5" style="">
+            <div class="px-5  mt-5 border rounded rounded-3 shadow-lg py-3 opacity-100" style="background-color: #0F3170;">
                 <form method="post" class="">
+                    <p class="h3 mb-3 font-weight-normal text-center text-white">Connexion</p>
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
                     {% if app.user %}
                         <div class="mb-3">
-                            Connecter en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                            Vous êtes connecter en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
                         </div>
                     {% endif %}
-                    <p class="h3 mb-3 font-weight-normal text-center text-white">Connexion</p>
                     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" placeholder="nom d'utilisateur" class="form-control my-3" autocomplete="username" required autofocus>
                     <input type="password" name="password" id="inputPassword" placeholder="mot de passe" class="form-control my-3" autocomplete="current-password" required>
                     <input type="hidden" name="_csrf_token"
                         value="{{ csrf_token('authenticate') }}"
                     >
-                    <hr>
-                    <button class="btn text-white" style="background-color : #FF6002" type="submit">
-                        Connexion
-                    </button>
+                    <hr class="text-white border-5">
+                    <div class="m-0 w-100 d-flex">
+                        <button class="btn text-white w-50 p-1 me-1" style="background-color : #FF6002" type="submit">Connexion</button>
+                        <a href="https://ee.kobotoolbox.org/x/4fwc01uF" class="btn text-white w-50 ms-1 p-1" style="background-color : #FF6002">Inscription</a>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
 </body>
 </html>

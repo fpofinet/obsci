@@ -3,9 +3,10 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-<section class="container mt-5 px-lg-5">
+<section class="mx-5 mt-5 ">
     <div class="table-responsive"> 
         <a href="{{path("add_user")}}" class="btn btn-primary">AJOUTER</a>
+        <a href="{{path("import")}}" class="btn btn-success text-white">Importer via Excel</a>
         <p class="text-center text-decoration-underline h3">
             LISTE DES UTILISATEURS
         </p>
@@ -13,7 +14,12 @@
             <thead>
                 <tr>
                     <th>N°</th>
-                    <th>Nom d'utilisateur</th>
+                    <th>LOGIN</th>
+                    <th>NOM</th>
+                    <th>PRENOM</th>
+                    <th>TELEPHONE</th>
+                    <th>EMAIL</th>
+                    <th>SEXE</th>
                     <th>Role</th>
                     <th></th>
                     <th></th>
@@ -25,10 +31,27 @@
                     <tr>
                         <td>{{i}}</td>
                         <td>{{user.username}}</td>
-                        <td>    
-                            {{user.roles[0]}}
+                        <td>{{user.nom}}</td>
+                        <td>{{user.prenom}}</td>
+                        <td>{{user.telephone}}</td>
+                        <td>{{user.email}}</td>
+                        <td>
+                            {% if user.sexe == "F" %}
+                                {{"Féminin"}}
+                            {% else %}
+                                {{"masculin"}}
+                            {% endif %}
                         </td>
-                        <td><a href="{{path("reset_password",{'id':user.id})}}" class="btn btn-warning float-end">Reset mot de passe</a></td>
+                        <td>  
+                            {% if user.roles[0] == "ROLE_OPERATOR" %}
+                                {{"operateur"}}
+                            {% elseif user.roles[0] == "ROLE_SUPERVISOR" %}
+                                {{"superviseur"}}
+                            {% else %}
+                               {{"administrateur"}} 
+                            {% endif %}     
+                        </td>
+                        <td><a href="{{path("reset_password",{'id':user.id})}}" class="btn btn-warning p-0 py-1 float-end" style="width:160px;">Reset mot de passe</a></td>
                         <td><a href="{{path("bloquer_user",{'id':user.id})}}" class="btn btn-danger float-end">Bloquer</a></td>
                     </tr>
                     {% set i = i + 1 %}

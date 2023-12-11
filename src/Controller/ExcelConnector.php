@@ -55,16 +55,43 @@ class ExcelConnector{
 
     public static function ImportUser($file,$manager,UserPasswordHasherInterface $encoder){
         $rows = SimpleExcelReader::create($file)->getRows();
+        $rows2 =SimpleExcelReader::create($file)->getRows();
         foreach ($rows as $r){
-            $user= new User();
-            $user->setUsername($r["login"]);
-            $user->setRoles(["ROLE_MANAGER"]);
-            $user->getPassword();
-            $user->setStatus(0);
-            $hash= $encoder->hashPassword($user,"123ocel");
-            $user->setPassword($hash);
-            $manager->getManager()->persist($user);
-            $manager->getManager()->flush();
+            if($r["role"]=="ROLE_SUPERVISOR"){
+                $user= new User();
+                $user->setUsername($r["login"]);
+                $user->setNom($r["nom"]);
+                $user->setPrenom($r["prenom"]);
+                $user->setEmail($r["email"]);
+                $user->setRoles([$r["role"]]);
+                $user->setTelephone($r["telephone"]);
+                $user->setSexe($r["sexe"]);
+                $user->setStatus(0);
+                $hash= $encoder->hashPassword($user,"123ocel");
+                $user->setPassword($hash);
+                $manager->getManager()->persist($user);
+                $manager->getManager()->flush();
+            }
+        }
+        foreach ($rows2 as $r){
+            if($r["role"]!="ROLE_SUPERVISOR"){
+                $user = new User();
+                $user->setUsername($r["login"]);
+                $user->setNom($r["nom"]);
+                $user->setPrenom($r["prenom"]);
+                $user->setEmail($r["email"]);
+                $user->setRoles([$r["role"]]);
+                $user->setTelephone($r["telephone"]);
+                $user->setSexe($r["sexe"]);
+                $user->setStatus(0);
+                if ($r["role"] == "ROLE_MANAGER") {
+                    $user->setValidateur($manager->getRepository(User::class)->findOneBy(["username" => $r["validateur"]])->getId());
+                }
+                $hash = $encoder->hashPassword($user, "123ocel");
+                $user->setPassword($hash);
+                $manager->getManager()->persist($user);
+                $manager->getManager()->flush();
+            }
         }
     }
 

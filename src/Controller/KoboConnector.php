@@ -17,7 +17,7 @@ class KoboConnector {
                 "Content-Type: application/json",
             ],
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
         ];
 
         $curl = curl_init();

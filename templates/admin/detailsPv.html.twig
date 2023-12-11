@@ -5,79 +5,79 @@
 {% block body %}
 <div class="container-fluid mt-3">
    <div class="row" style="">
-        <div class="col-md-6 col-12 px-4" style="">
-            <img src="{{asset("/fichier/" ~ pv.imagePv )}}" alt="faker" class="img-fluid rounded-3 shadow-lg" style="height:500px; width: 100%">
+        <div class="col-lg-6 col-12 px-3" style="">
+            <img src="/fichier/{{pv.imagePv}}" alt="image pv" class="img-fluid rounded shadow-lg my-2" style="height:500px; width: 100%">
         </div>
-        <div class="col-md-6 col-12" style="">
+        <div class="col-lg-6  col-12" style="">
             <div class="pt-4 border rounded shadow-lg p-3  text-white"  style="height:500px;background-color : #0F3170;">
                 <form action="{{path("supValider")}}" method="POST" id="monForm">
                     <div class="row my-1">
-                        <label for="province" class="col-sm-3 col-form-label">Province :
+                        <label for="province" class="col-sm-4 col-6 col-form-label">Province :
                         </label>
-                        <div class="col-sm-9">
-                            <select class="form-select" name="province" id="province">
+                        <div class="col-sm-8 col-6">
+                            <select class="form-select" name="province" id="province" required>
                                 <option value="{{pv.commune.departement.province.id}}" selected> {{pv.commune.departement.province.libelle}}</option>
                             </select>
                         </div>
 
                     </div>
                     <div class="row my-1">
-                        <label for="departement" class="col-sm-3 col-form-label">Departement : </label>
-                        <div class="col-sm-9">
-                            <select class="form-select" name="departement" id="departement">
+                        <label for="departement" class="col-sm-4 col-6 col-form-label">Departement : </label>
+                        <div class="col-sm-8 col-6">
+                            <select class="form-select" name="departement" id="departement" required>
                                 <option value="{{pv.commune.departement.id}}" selected> {{pv.commune.departement.libelle}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="commune" class="col-sm-3 col-form-label">Commune :</label>
-                        <div class="col-sm-9">
-                            <select class="form-select" name="commune" id="commune">
+                        <label for="commune" class="col-sm-4 col-6 col-form-label">Commune :</label>
+                        <div class="col-sm-8 col-6">
+                            <select class="form-select" name="commune" id="commune" required>
                                 <option value="{{pv.commune.id}}" selected> {{pv.commune.libelle}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="codeBureau" class="col-sm-3 col-form-label">Bureau de vote :</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" value="{{pv.codeBureau}}">
+                        <label for="codeBureau" class="col-sm-4 col-6 col-form-label">Bureau de vote :</label>
+                        <div class="col-sm-8 col-6">
+                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" value="{{pv.codeBureau}}" required>
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="votant" class="col-sm-3 col-form-label">Votant :</label>
-                        <div class="col-sm-9">
-                            <input type="number" name="votant" class="form-control" id="votant" value="{{pv.votant}}">
+                        <label for="votant" class="col-sm-4 col-6 col-form-label">Votant :</label>
+                        <div class="col-sm-8 col-6">
+                            <input type="number" name="votant" class="form-control" id="votant" value="{{pv.votant}}" required>
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="suffrageNul" class="col-sm-3 col-form-label">Bulletins nuls :</label>
-                        <div class="col-sm-9">
-                            <input type="number" name="suffrageNul" class="form-control" id="suffrageNul"  value="{{pv.suffrageNul}}">
+                        <label for="suffrageNul" class="col-sm-4 col-6 col-form-label">Bulletins nuls :</label>
+                        <div class="col-sm-8 col-6">
+                            <input type="number" name="suffrageNul" class="form-control" id="suffrageNul"  value="{{pv.suffrageNul}}" required>
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="suffrageExprime" class="col-sm-3 col-form-label">Suffrage exprimé : </label>
-                        <div class="col-sm-9">
-                            <input type="number" name="suffrageExprime" class="form-control" id="suffrageExprime" value="{{pv.suffrageExprime}}">
+                        <label for="suffrageExprime" class="col-sm-4 col-6 col-form-label">Suffrage exprimé : </label>
+                        <div class="col-sm-8 col-6">
+                            <input type="number" name="suffrageExprime" class="form-control" id="suffrageExprime" value="{{pv.suffrageExprime}}" required>
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="voteOui" class="col-sm-3 col-form-label">Vote oui : </label>
-                        <div class="col-sm-9">  
-                            <input type="number" name="voteOui" class="form-control" id="voteOui" value="{{pv.voteOui}}">
+                        <label for="voteOui" class="col-sm-4 col-6 col-form-label">Vote oui : </label>
+                        <div class="col-sm-8 col-6">  
+                            <input type="number" name="voteOui" class="form-control" id="voteOui" value="{{pv.voteOui}}" required>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="voteNon" class="col-sm-3 col-form-label">Vote non : </label>
-                        <div class="col-sm-9">
-                            <input type="number" name="voteNon" class="form-control" id="voteNon" value="{{pv.voteNon}}">
+                        <label for="voteNon" class="col-sm-4 col-6 col-form-label">Vote non : </label>
+                        <div class="col-sm-8 col-6">
+                            <input type="number" name="voteNon" class="form-control" id="voteNon" value="{{pv.voteNon}}" required>
                         </div>
                     </div>
                     <input type="hidden" name="idPv" id="idPv" value={{pv.id}}>
                     <input type="hidden" name="agent" id="agent">
-                    <div class="d-flex ">
-                        <label for="submit" class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9 d-flex"> 
+                    <div class="d-flex">
+                        <label for="submit" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-8 col-12 d-flex px-1 mb-3"> 
                             <a href="{{path("invaliderPV",{'id':pv.id})}}" id="rejeter" class="flex-fill btn btn-danger me-1">Rejet (PV Invalide)</a>
                             <input type="submit" name="submit" id="valider" value="Valider" class="flex-fill btn btn-success text-white ms-1" style="">
                         </div>
@@ -87,7 +87,7 @@
         </div>
    </div>
 </div>
-<script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
     function chargerProvince(data) {
         var $provinceSelect = $('#province');
         var jsonData = JSON.parse(data);
@@ -104,7 +104,7 @@
     }
 
     function chargerDepartement(data){
-        $.post("/departements",{id:data, },function(data){
+        $.post("{{path("get_dept")}}",{id:data, },function(data){
             var $depSelect = $('#departement');
             var jsonData = JSON.parse(data);
             for( let i = 0; i<jsonData.length;i++)
@@ -121,7 +121,7 @@
     }
 
     function chargerCommune(data){
-        $.post("/communes",{id:data, },function(data){
+        $.post("{{path("get_com")}}",{id:data, },function(data){
             var $comSelect = $('#commune');
             var jsonData = JSON.parse(data);
             for( let i = 0; i<jsonData.length;i++)
@@ -137,7 +137,8 @@
         });
     }
     $(document).ready(function(){
-        $.get("/provinces", function(data){ 
+        $.support.cors = true; 
+        $.get("https://ocel-tchad.org/provinces", function(data){ 
            chargerProvince(data);
            chargerDepartement($('#province').val());
            chargerCommune($('#departement').val())
@@ -152,14 +153,6 @@
             chargerCommune(e.target.value); 
         });
         $("#agent").val(navigator.userAgent);
-       /* $("#rejeter").click(function(e){
-            var $dat=$("#idPv").val();
-            $.post("/rejeter",{id:$dat},function(data){
-               /// console.log(data);idPv
-                // 
-            });
-            //console.log("coucou");
-         });*/
     });
 </script>
 {% endblock %}

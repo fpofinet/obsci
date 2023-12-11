@@ -113,6 +113,7 @@ class ResultatController extends AbstractController
         return $this->render('resultat/detailsDepartement.html.twig', [
             'com'=>$comm,
             'label'=> $comms->getLibelle(),
+            'province' => $comms->getProvince()->getLibelle(),
         ]);
     }
 
@@ -120,56 +121,12 @@ class ResultatController extends AbstractController
     public function detailsCommune(?int $id,ManagerRegistry $manager): Response
     {
         $bvs = $manager->getRepository(Commune::class)->findOneBy(['id' => $id]);
-       /* $bureauV=array();
-
-        $dep = array();
-        $votant = 0;
-        $sf = 0;
-        $vo = 0;
-        $vn = 0;
-        $sn = 0;
-        foreach ($bvs->getResultats() as $r) {
-            if ($r->getEtat() == 5) {
-                $votant = $votant + $r->getVotant();
-                $sf = $sf + $r->getSuffrageExprime();
-                $sn = $sn + $r->getSuffrageNul();
-                $vo = $vo + $r->getVoteOui();
-                $vn = $vn + $r->getVoteNon();
-                $dep = ["id" => $bvs->getId(), "libelle" => $r->getCodeBureau(), "votant" => $votant, "suffrageExprime" => $sf, "suffrageNul" => $sn, "voteOui" => $vo, "voteNon" => $vn ,"bv" =>count($bvs->getBureauVote())];
-            }
-            $bureauV[] = $dep;
-        }*/
-            
-            
-        
         return $this->render('resultat/detailsCommune.html.twig', [
             'datas' => $bvs->getResultats(),
             'label'=> $bvs->getLibelle(),
+            'province' => $bvs->getDepartement()->getProvince()->getLibelle(),
+            'dep'=> $bvs->getDepartement()->getLibelle(),
         ]);
     }
 
-    #[Route('/conso', name:'conso')]
-    public function consolider(ManagerRegistry $manager){
-     //   $t= $manager->getRepository(Resultat::class)->findBy(['bureauVote'=> $manager->getRepository(BureauVote::class)->findOneBy(['code'=> 'PAL001'])]);
-       // $tab=$this->conso($t);
-
-       /// $tableauUnique = array_unique($tab,SORT_REGULAR);
-      //  dd($tableauUnique);
-    }
-
-    private function conso($t)
-    {
-        $output=array();
-        for($i= 0; $i<count($t)-1; $i++ ){
-           $eg=array();
-            for( $j= 0; $j<count($t); $j++ ){
-                if(Utils::comparerResultat($t[$i],$t[$j])){
-                    $eg[]=$t[$j];
-                } else{
-                }
-            }
-            $output[]=$eg;
-        }
-        return $output;
-    }
 }

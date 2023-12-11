@@ -6,61 +6,41 @@
 
 <section class="mx-2 shadow-lg rounded px-3 mt-3">
     <p class="text-center text-decoration-underline h3 fw-bold">SAISIE DES DONNEES</p>
-    <table class="table table-sm table-striped mx-auto" id="tableRaw">
-        <thead>
-            <tr>
-                <th>CODE</th>
-                <th>DATE SOUMISSION</th>
-                <th>SOUMIS PAR</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for data in datas %}
+    <div class="table-responsive">
+        <table class="table table-striped mx-auto" id="tableRaw">
+            <thead>
                 <tr>
-                    <td>
-                        {% if data.codeKobo == null %}
-                            {{"null"}}
-                        {% else  %}
-                            {{data.codeKobo}}
-                        {% endif %}
-                    </td>
-                    <td>{{data.dateSubmit | date("d-m-Y")}}</td>
-                    <td>
-                        {% if data.submitter == null %}
-                            {{"anonyme"}}
-                        {% else  %}
-                            {{data.submitter}}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{path("check",{'id':data.id})}}" class=" text-decoration-none d-block rounded px-1 text-white float-end" style="background-color : #0F3170">Détails</a>
-                    </td>
+                    <th class="text-center">CODE</th>
+                    <th class="text-center">DATE SOUMISSION</th>
+                    <th class="text-center">SOUMIS PAR</th>
+                    <th class="text-center"></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for data in datas %}
+                    <tr>
+                        <td class="p-sm-0 p-1 m-0 text-center">
+                            {% if data.codeKobo == null %}
+                                {{"null"}}
+                            {% else  %}
+                                {{data.codeKobo}}
+                            {% endif %}
+                        </td>
+                        <td class="p-sm-0 p-1 m-0 text-center">{{data.dateSubmit | date("d-m-Y")}}</td>
+                        <td class="p-sm-0 p-1 m-0 text-center">
+                            {% if data.submitter == null %}
+                                {{"anonyme"}}
+                            {% else  %}
+                                {{data.submitter}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{path("check",{'id':data.id})}}" class=" text-decoration-none d-block rounded px-1 text-white float-end" style="background-color : #0F3170">Détails</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </section>
-<script>
-	let table = new DataTable('#tableRaw', {
-    // config options...
-    });
-    // show div
-    const showLabelDiv = document.querySelector(".dataTables_length");
-    var showLabel = showLabelDiv.querySelector("label");
-    var select = showLabelDiv.querySelector("select");
-    select.classList.add("mx-2");
-    select.style.width = '75px';
-    showLabel.classList.add("d-flex");
-    showLabelDiv.parentNode.classList.add("my-2");
-    // filter div
-    const FilterDiv = document.querySelector(".dataTables_filter");
-    FilterDiv.classList.add("d-none");
-    var filterLabel = FilterDiv.querySelector("label");
-    var input = FilterDiv.querySelector("input");
-    filterLabel.classList.add("d-flex");
-    input.classList.add("mx-1");
-</script>
-
-
 {% endblock %}

@@ -42,17 +42,13 @@ class AdminController extends AbstractController
    #[Route('/operateur/pv/{id}', name: 'check')]
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
-       // $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
         $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
-       // $img=$kobo->downloadImg($pv->getImagePv());
-        //if($img !=null){
-           // $pv->setImagePv($img);
-        //}
-        
-        $manager->getManager()->persist($pv);
-        $manager->getManager()->flush();
+        $commune=$manager->getRepository(Commune::class)->findAll();
+       // $manager->getManager()->persist($pv);
+        //$manager->getManager()->flush();
         return $this->render('admin/check.html.twig', [
            'pv'=> $pv,
+           'commune' =>$commune,
         ]);
     }
 
@@ -66,7 +62,7 @@ class AdminController extends AbstractController
             $resultat = new ResultatOperateur();
             $resultat->setValidateur($this->getUser()->getValidateur());
             $resultat->setAgentSaisie($request->request->all()['agent']);
-            $resultat->setCodeBureau($commune->getCode()."_".$request->request->all()['codeBureau']);
+            $resultat->setCodeBureau($request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -98,6 +94,9 @@ class AdminController extends AbstractController
     public function synchro(ManagerRegistry $manager): Response
     {
         $inDBdata=$manager->getRepository(ResultatKobo::class)->findAll();
+        //
+        //6a9bd6d7e3717ce2430dd9f633270929c87e8397
+        //https://kf.kobotoolbox.org/api/v2/assets/aPgTfsxkoEQiDK8BaYNSWa/data.json
         $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
         $myData= $kobo->findAll('https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json');
         
@@ -111,7 +110,10 @@ class AdminController extends AbstractController
             if($k==1){
                 $temp = new ResultatKobo();
                 $temp->setCodeKobo($d["_id"]);
-                $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_small_url"]));
+                if($kobo->downloadImg($d["_attachments"][0]["download_small_url"])){
+                    $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_small_url"]));
+                }
+                $temp->setImagePv("null");
                 $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
                 $temp->setAllowedOn(new DateTimeImmutable);
                 $temp->setEtat(0);
@@ -453,7 +455,7 @@ class AdminController extends AbstractController
    
     // importation de données excel
     #[Route('/admin/import', name:'import')]
-    public function import(Request $request, ManagerRegistry $manager): Response
+    public function import(Request $request, ManagerRegistry $manager,UserPasswordHasherInterface $encoder): Response
     {
         $form = $this->createForm(UploadFileType::class);
         $form->handleRequest($request);
@@ -473,9 +475,11 @@ class AdminController extends AbstractController
             $mfile = new File($this->getParameter('fichier_directory') . '/' . $newFilename);
             if($form->get('choice')->getData() == "localite"){
                 ExcelConnector::ImportGeoData($mfile, $manager);
+                return $this->redirectToRoute("administration");
             }
             if ($form->get('choice')->getData() == "user") {
-                //  ExcelConnector::ImportResultat($mfile, $manager);
+                ExcelConnector::ImportUser($mfile, $manager,$encoder);
+                return $this->redirectToRoute("app_user");
               }
             if ($form->get('choice')->getData() == "resultat") {
               //  ExcelConnector::ImportResultat($mfile, $manager);

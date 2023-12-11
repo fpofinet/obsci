@@ -13,7 +13,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
 
-
+        
         if ($this->getUser()) {
             if($this->getUser()->getStatus() == 0){
                 return $this->redirectToRoute('app_logout');
@@ -37,6 +37,8 @@ class SecurityController extends AbstractController
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
+       // $error="nom d'utilisateur ou mot de passe incorrect.
+//Veuillez contacter l'administrateur";
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 

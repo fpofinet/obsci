@@ -67,6 +67,9 @@ class Resultat
     #[ORM\Column]
     private ?\DateTimeImmutable $submittedOn = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $libelleBureauVote = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -284,6 +287,18 @@ class Resultat
     public function setSubmittedOn(\DateTimeImmutable $submittedOn): static
     {
         $this->submittedOn = $submittedOn;
+
+        return $this;
+    }
+
+    public function getLibelleBureauVote(): ?string
+    {
+        return $this->libelleBureauVote;
+    }
+
+    public function setLibelleBureauVote(?string $libelleBureauVote): static
+    {
+        $this->libelleBureauVote = $libelleBureauVote;
 
         return $this;
     }

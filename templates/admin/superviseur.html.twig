@@ -10,7 +10,8 @@
         <table class="table table-striped" id="myConso">
             <thead>
                 <tr>
-                    <th>CODE BUREAU VOTE</th>
+                    <th>NUMERO PV</th>
+                    <th>BUREAU VOTE</th>
                     <th>COMMUNE</th>
                     <th>VOTANT</th>
                     <th>SUFFRAGE EXPRIME</th>
@@ -24,6 +25,7 @@
                 {% for bv in bvs %}
                     <tr>
                         <td>{{bv.codeBureau}}</td>
+                        <td>{{bv.libelleBureauVote}}</td>
                         <td>{{bv.commune.libelle}}</td>
                         <td>{{bv.votant}}</td>
                         <td>{{bv.suffrageExprime}}</td>

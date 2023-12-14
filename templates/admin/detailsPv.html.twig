@@ -40,7 +40,13 @@
                     <div class="row my-1">
                         <label for="codeBureau" class="col-sm-4 col-6 col-form-label">Bureau de vote :</label>
                         <div class="col-sm-8 col-6">
-                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" value="{{pv.codeBureau}}" required>
+                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" value="{{pv.libelleBureauVote}}" required>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="numeroPv" class="col-sm-4 col-6 col-form-label">Numero PV :</label>
+                        <div class="col-sm-8 col-6">
+                            <input type="text" name="numeroPv" class="form-control" id="numeroPv" value="{{pv.codeBureau}}" required>
                         </div>
                     </div>
                     <div class="row my-1">
@@ -87,7 +93,8 @@
         </div>
    </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
     function chargerProvince(data) {
         var $provinceSelect = $('#province');
         var jsonData = JSON.parse(data);

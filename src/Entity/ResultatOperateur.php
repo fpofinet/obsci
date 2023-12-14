@@ -61,6 +61,9 @@ class ResultatOperateur
     #[ORM\Column]
     private ?int $validateur = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $libelleBureauVote = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -254,6 +257,18 @@ class ResultatOperateur
     public function setValidateur(int $validateur): static
     {
         $this->validateur = $validateur;
+
+        return $this;
+    }
+
+    public function getLibelleBureauVote(): ?string
+    {
+        return $this->libelleBureauVote;
+    }
+
+    public function setLibelleBureauVote(?string $libelleBureauVote): static
+    {
+        $this->libelleBureauVote = $libelleBureauVote;
 
         return $this;
     }

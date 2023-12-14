@@ -3,8 +3,24 @@
 {% block title %}Resultat{% endblock %}
 
 {% block body %}
+<style>
+.b{
+    width:80px;
+}
+@media only screen and (max-width: 768px) {
+    .b{
+        width:0px;
+    }
+    .cc{
+        width:100%;
+        margin-left:0px;
+        margin-right:0px;
+    }
+    
+}
+</style>
 <div class="row mx-2">
-<section class="my-2 col-md-6 com-sm-12 col-12">
+<section class="mx-2 mx-md-0 my-2 col-md-6 com-sm-12 col-12">
     <div class="border border-2 rounded rounded-2 shadow" style="height:510px;">
       <div class="card border-0">
             <div class="card-header h3 text-center">
@@ -63,7 +79,7 @@
         </div> 
     </div>
 </section>
-<section class="my-2 col-md-6 sm-12 col-12">
+<section class="mx-2 mx-md-0 my-2 col-md-6 sm-12 col-12">
     <div class="border border-2 rounded rounded-2 shadow" style="height:500px;">
         <div id="carouselResultat" class="carousel carousel-dark slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -96,7 +112,7 @@
                                     
                                 </div>
                             </div> 
-                            <div class="card-body mx-5 px-5">
+                            <div class="card-body mx-lg-5 px-lg-5 mx-md-4 px-md-4">
                                 <div class="row my-0">
                                     <div class="col-6">Nombre de votant : </div>
                                     <div class="col-6">{{item.votant | number_format(0, ',', '.')}}</div>
@@ -129,11 +145,11 @@
                     </div>
                 {% endfor %}
             </div>
-            <button class="carousel-control-prev" style="width:80px" type="button" data-bs-target="#carouselResultat" data-bs-slide="prev">
+            <button class="carousel-control-prev b" style="" type="button" data-bs-target="#carouselResultat" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" style="width:80px" type="button" data-bs-target="#carouselResultat" data-bs-slide="next">
+            <button class="carousel-control-next b" style="" type="button" data-bs-target="#carouselResultat" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>

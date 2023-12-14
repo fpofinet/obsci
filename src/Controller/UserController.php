@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\UserPasswordType;
+use App\Form\ValidatorType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //dd($form["validator"]->getData()->getId());
             $hash= $encoder->hashPassword($user,"123Ocel");
             $user->setUsername($form['username']->getData());
             $user->setNom($form['nom']->getData());
@@ -58,6 +58,22 @@ class UserController extends AbstractController
             return $this->redirectToRoute("app_user");
         }
         return $this->render('user/form.html.twig', [ 
+            'form'=> $form->createView(),
+        ]);
+    }
+    #[Route('/admin/{id}/add/validateur', name:'set_validator')]
+    public function setValidator(?int $id,ManagerRegistry $manager, Request $request) : Response
+    {
+        $user = $manager->getRepository(User::class)->findOneBy(["id"=>$id]);
+        $form = $this->createForm(ValidatorType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setValidateur($form['user']->getData()->getId());
+            $manager->getManager()->persist($user);
+            $manager->getManager()->flush();
+            return $this->redirectToRoute("app_user");
+        }
+        return $this->render('user/validateur.html.twig', [
             'form'=> $form->createView(),
         ]);
     }

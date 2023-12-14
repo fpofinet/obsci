@@ -14,6 +14,7 @@ use App\Form\UploadFileType;
 use App\Entity\ResultatOperateur;
 use App\Controller\ExcelConnector;
 use App\Entity\ResultatSuperviseur;
+use App\Form\AllocValType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,8 +31,6 @@ class AdminController extends AbstractController
     #[Route('/operateur', name: 'app_manager')]
     public function index(ManagerRegistry $manager): Response
     {
-         
-        /* @SuppressWarnings(P1013)*/
         $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$this->getUser()->getId(),"etat"=>0]);
         return $this->render('admin/manager.html.twig', [
             'datas'=>$datas,
@@ -43,12 +42,13 @@ class AdminController extends AbstractController
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
         $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
-        $commune=$manager->getRepository(Commune::class)->findAll();
+       // $kobo = new KoboConnector("6a9bd6d7e3717ce2430dd9f633270929c87e8397");
+       // $img= $kobo->downloadImg($pv->getImagePv());
+       // $pv->setImagePv($img);
        // $manager->getManager()->persist($pv);
-        //$manager->getManager()->flush();
+       // $manager->getManager()->flush();
         return $this->render('admin/check.html.twig', [
            'pv'=> $pv,
-           'commune' =>$commune,
         ]);
     }
 
@@ -62,7 +62,8 @@ class AdminController extends AbstractController
             $resultat = new ResultatOperateur();
             $resultat->setValidateur($this->getUser()->getValidateur());
             $resultat->setAgentSaisie($request->request->all()['agent']);
-            $resultat->setCodeBureau($request->request->all()['codeBureau']);
+            $resultat->setCodeBureau($request->request->all()['numeroPv']);
+            $resultat->setLibelleBureauVote($request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -94,12 +95,12 @@ class AdminController extends AbstractController
     public function synchro(ManagerRegistry $manager): Response
     {
         $inDBdata=$manager->getRepository(ResultatKobo::class)->findAll();
+        //004998ce52dc528dd4d1c5045ea702816aa9bb68
         //
-        //6a9bd6d7e3717ce2430dd9f633270929c87e8397
-        //https://kf.kobotoolbox.org/api/v2/assets/aPgTfsxkoEQiDK8BaYNSWa/data.json
-        $kobo = new KoboConnector("004998ce52dc528dd4d1c5045ea702816aa9bb68");
-        $myData= $kobo->findAll('https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json');
-        
+        //https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json
+        $kobo = new KoboConnector("6a9bd6d7e3717ce2430dd9f633270929c87e8397");
+        $myData= $kobo->findAll('https://kf.kobotoolbox.org/api/v2/assets/aPgTfsxkoEQiDK8BaYNSWa/data.json');
+        //dd($myData);
         foreach($myData["results"] as $d){
             $k=1;
             foreach($inDBdata as $dbdata){
@@ -110,10 +111,11 @@ class AdminController extends AbstractController
             if($k==1){
                 $temp = new ResultatKobo();
                 $temp->setCodeKobo($d["_id"]);
-                if($kobo->downloadImg($d["_attachments"][0]["download_small_url"])){
+                if($d["_attachments"][0]){
                     $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_small_url"]));
+                } else{
+                   $temp->setImagePv("null");
                 }
-                $temp->setImagePv("null");
                 $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
                 $temp->setAllowedOn(new DateTimeImmutable);
                 $temp->setEtat(0);
@@ -176,9 +178,9 @@ class AdminController extends AbstractController
         if($request->isMethod("POST")){
             $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
             $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
-          //  dd($commune);
             $resultat = new ResultatSuperviseur();
-            $resultat->setCodeBureau($request->request->all()['codeBureau']);
+            $resultat->setCodeBureau($request->request->all()['numeroPv']);
+            $resultat->setLibelleBureauVote($request->request->all()['codeBureau']);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -207,7 +209,8 @@ class AdminController extends AbstractController
             } else{
                 $resdef = new Resultat();
                 $resdef->setCode($pv->getCode());
-                $resdef->setCodeBureau($request->request->all()['codeBureau']);
+                $resdef->setLibelleBureauVote($request->request->all()['codeBureau']);
+                $resdef->setCodeBureau($request->request->all()['numeroPv']);
                 $resdef->setVotant($request->request->all()['votant']);
                 $resdef->setSuffrageExprime($request->request->all()['suffrageExprime']);
                 $resdef->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -378,27 +381,46 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/user/{id}/reallocation', name:'realloc')]
+    #[Route('/admin/user/op/{id}/reallocation', name:'realloc_op')]
     public  function reallocation($id,ManagerRegistry $manager,Request $request): Response
     {
         $user=$manager->getRepository(User::class)->findOneBy(["id"=>$id]);
         $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$user->getId(),"etat"=>0]);
-        $datas2=$manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$user->getId(),"etat"=>0]);
         $form=$this->createForm(AllocationType::class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            if(in_array("ROLE_OPERATOR",$user->getRoles())){
-                foreach($datas as $d){
-                    $d->setAllowedTo($form["user"]->getData()->getId());
-                    $manager->getManager()->persist($d);
-                    $manager->getManager()->flush();
-                }
-            } else if(in_array("ROLE_SUPERVISOR",$user->getRoles())){
+            foreach ($datas as $d) {
+                $d->setAllowedTo($form["user"]->getData()->getId());
+                $manager->getManager()->persist($d);
+                $manager->getManager()->flush();  
+            }/* else if(in_array("ROLE_SUPERVISOR",$user->getRoles())){
                 foreach($datas2 as $d){
                     $d->setValidateur($form["user"]->getData()->getId());
                     $manager->getManager()->persist($d);
                     $manager->getManager()->flush();
                 }
+            }*/
+            return $this->redirectToRoute("administration");
+        }
+        return $this->render('admin/formAllocation.html.twig',[
+            'form' =>$form->createView(),
+            'user' =>$user,
+        ]);
+    }
+
+    #[Route('/admin/user/val/{id}/reallocation', name:'realloc_val')]
+    public  function reallocation2($id,ManagerRegistry $manager,Request $request): Response
+    {
+        $user=$manager->getRepository(User::class)->findOneBy(["id"=>$id]);
+       // $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$user->getId(),"etat"=>0]);
+        $datas2=$manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$user->getId(),"etat"=>0]);
+        $form=$this->createForm(AllocValType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            foreach ($datas2 as $d) {
+                $d->setValidateur($form["user"]->getData()->getId());
+                $manager->getManager()->persist($d);
+                $manager->getManager()->flush();
             }
             return $this->redirectToRoute("administration");
         }

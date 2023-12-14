@@ -67,6 +67,9 @@ class ResultatSuperviseur
     #[ORM\Column(length: 255)]
     private ?string $agentSaisie = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $libelleBureauVote = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -284,6 +287,18 @@ class ResultatSuperviseur
     public function setAgentSaisie(string $agentSaisie): static
     {
         $this->agentSaisie = $agentSaisie;
+
+        return $this;
+    }
+
+    public function getLibelleBureauVote(): ?string
+    {
+        return $this->libelleBureauVote;
+    }
+
+    public function setLibelleBureauVote(?string $libelleBureauVote): static
+    {
+        $this->libelleBureauVote = $libelleBureauVote;
 
         return $this;
     }

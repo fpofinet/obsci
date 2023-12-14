@@ -6,9 +6,13 @@
 <section class="mx-2 mt-5 px-5">
     <div class="table-responsive">
         {% if datas %}
-            <a href="{{path("realloc",{'id': user.id})}}" class="btn text-white" style="background-color : #0F3170">Reaffecter</a>
+            {% if val == "op" %}
+                <a href="{{path("realloc_op",{'id': user.id})}}" class="btn text-white" style="background-color : #0F3170">Reaffecter</a>
+            {% elseif val == "val" %}
+                <a href="{{path("realloc_val",{'id': user.id})}}" class="btn text-white" style="background-color : #0F3170">Reaffecter</a>
+            {% endif %}
         {% else %}
-            <a href="{{path("realloc",{'id': user.id})}}" class="btn text-white disabled" style="background-color : #0F3170">Reaffecter</a>
+            <a href="#" class="btn text-white disabled" style="background-color : #0F3170">Reaffecter</a>
         {% endif %}
         <p class="text-center h4 text-decoration-underline">DONNEES  NON TRAITES DE {{user.nom}} {{user.prenom}} </p>
         <table class="table table-striped">

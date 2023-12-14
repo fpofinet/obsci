@@ -16,7 +16,7 @@ class AllocationType extends AbstractType
     {
         $builder
             ->add('user',EntityType::class, [
-                'label'=>'Province',
+                'label'=>'operateur',
                 'class' => User::class,
                 'choice_label' => function ($user) {
                     return $user->getNom() . ' ' . $user->getPrenom();

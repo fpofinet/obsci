@@ -1,10 +1,10 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}ADMIN{% endblock %}
 
 {% block body %}
-<section class="mx-5 mt-5 ">
-    <div class="table-responsive"> 
+<section class="mx-1 mt-5 ">
+     <div class="table-responsive">
         <a href="{{path("add_user")}}" class="btn btn-primary">AJOUTER</a>
         <a href="{{path("import")}}" class="btn btn-success text-white">Importer via Excel</a>
         <p class="text-center text-decoration-underline h3">
@@ -13,7 +13,6 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>N°</th>
                     <th>LOGIN</th>
                     <th>NOM</th>
                     <th>PRENOM</th>
@@ -23,24 +22,19 @@
                     <th>Role</th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% set i = 1 %}
                 {% for user in users %}
                     <tr>
-                        <td>{{i}}</td>
                         <td>{{user.username}}</td>
                         <td>{{user.nom}}</td>
                         <td>{{user.prenom}}</td>
-                        <td>{{user.telephone}}</td>
+                        <td>{{"+"}}{{user.telephone}}</td>
                         <td>{{user.email}}</td>
                         <td>
-                            {% if user.sexe == "F" %}
-                                {{"Féminin"}}
-                            {% else %}
-                                {{"masculin"}}
-                            {% endif %}
+                            {{user.sexe}}
                         </td>
                         <td>  
                             {% if user.roles[0] == "ROLE_OPERATOR" %}
@@ -51,10 +45,18 @@
                                {{"administrateur"}} 
                             {% endif %}     
                         </td>
+                        {% if user.roles[0] == "ROLE_OPERATOR" %}
+                            {% if user.validateur ==  null %}
+                                <td><a href="{{path("set_validator",{'id':user.id})}}" class="btn btn-success">Validateur</a></td>
+                            {% else %}
+                                <td><a href="{{path("set_validator",{'id':user.id})}}" class="btn btn-secondary">Validateur</a></td>
+                            {% endif %}
+                        {% else %}
+                            <td><a href="#" class="btn"></a></td>
+                        {% endif %}
                         <td><a href="{{path("reset_password",{'id':user.id})}}" class="btn btn-warning p-0 py-1 float-end" style="width:160px;">Reset mot de passe</a></td>
                         <td><a href="{{path("bloquer_user",{'id':user.id})}}" class="btn btn-danger float-end">Bloquer</a></td>
                     </tr>
-                    {% set i = i + 1 %}
                 {% endfor %}
             </tbody>
         </table>

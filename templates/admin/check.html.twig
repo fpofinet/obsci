@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container-fluid my-3">
     <div class="row">
-        <div class="col-lg-6 col-12 px-3 ">
+        <div class="col-lg-6 col-12 px-3">
             <img src="/fichier/{{pv.imagePv}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv">
         </div>
         <div class="col-lg-6 col-12 px-3">
@@ -41,6 +41,12 @@
                         <label for="codeBureau" class="col-sm-4 col-6 col-form-label">Bureau de vote :</label>
                         <div class="col-sm-8 col-6">
                             <input type="text" name="codeBureau" class="form-control" id="codeBureau" placeholder="bureau de vote" required>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="numeroPv" class="col-sm-4 col-6 col-form-label">Numero PV:</label>
+                        <div class="col-sm-8 col-6">
+                            <input type="text" name="numeroPv" class="form-control" id="numeroPv" placeholder="numero du PV" required>
                         </div>
                     </div>
                     <div class="row my-1">
@@ -148,6 +154,7 @@
 
     $(document).ready(function(){
         $.support.cors = true; 
+        //https://ocel-tchad.org/provinces
         $.get("https://ocel-tchad.org/provinces",function(data){
             chargerProvince(data);
         });

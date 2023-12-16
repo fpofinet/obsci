@@ -1,0 +1,50 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+<div class="mx-3 mt-5">
+    <div class="">
+        <div class="float-end m-0">
+            <a href="{{path("alloc")}}" class="btn text-white fw-bold " style="background-color : #0F3170;">Allouées</a>
+            <a href="{{path("synchro")}}" class="btn text-white fw-bold " style="background-color : #0F3170;">Synchronisé</a>
+        </div>
+        <p class="text-center fw-bold h3"><span class="text-decoration-underline">DONNEES NON ALLOUES </span><span>({{kobos | length}})</span></p>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">CODE</th>
+                    <th class="text-center">DATE SOUMISSION</th>
+                    <th class="text-center">SOUMIS PAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if kobos != null %}
+                    {% for item in kobos %}
+                        <tr>
+                            <td>
+                                {{item.codeKobo}}
+                            </td>
+                            <td class="p-sm-0 p-1 m-0 text-center">{{item.dateSubmit | date("d-m-Y")}}</td>
+                            <td class="p-sm-0 p-1 m-0 text-center">
+                                {% if item.submitter == null %}
+                                    {{"Observ"}}
+                                {% else  %}
+                                    {{item.submitter}}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">Aucune données</td>
+                    </tr>
+                {% endif %}
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

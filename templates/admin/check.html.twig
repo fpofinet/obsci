@@ -1,173 +1,209 @@
-  {% extends 'admin.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}OCEL{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        function chargerProvince(data) {
+            var $provinceSelect = $('#province');
+            var jsonData = JSON.parse(data);
+            for( let i = 0; i<jsonData.length;i++)
+            {
+                var option = $('<option>', {
+                    value : jsonData[i].id,
+                    text : jsonData[i].libelle
+                });
 
-{% block title %}OPERATEUR{% endblock %}
-
-{% block body %}
-<div class="container-fluid my-3">
-    <div class="row">
-        <div class="col-lg-6 col-12 px-3">
-            <img src="/fichier/{{pv.imagePv}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv">
-        </div>
-        <div class="col-lg-6 col-12 px-3">
-            <div class="px-3 pt-4 pb-1 border rounded shadow-lg text-white" style="background-color : #0F3170;">
-                <form action="{{path("saisie")}}" method="POST">
-                    <div class="row my-1">
-                        <label for="province" class="col-sm-4 col-6 col-form-label">Province :
-                        </label>
-                        <div class="col-sm-8 col-6">
-                            <select class="form-select" name="province" id="province" required>
-                                <option disabled selected>Choisir une province</option>
-                            </select>
-                        </div>
-
-                    </div>
-                    <div class="row my-1">
-                        <label for="departement" class="col-sm-4 col-6 col-form-label">Departement : </label>
-                        <div class="col-sm-8 col-6">
-                            <select class="form-select" name="departement" id="departement" required>
-                                
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row my-1">
-                        <label for="commune" class="col-sm-4 col-6 col-form-label" required>Commune :</label>
-                        <div class="col-sm-8 col-6">
-                            <select class="form-select" name="commune" id="commune" required>
-                                
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row my-1">
-                        <label for="codeBureau" class="col-sm-4 col-6 col-form-label">Bureau de vote :</label>
-                        <div class="col-sm-8 col-6">
-                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" placeholder="bureau de vote" required>
-                        </div>
-                    </div>
-                    <div class="row my-1">
-                        <label for="numeroPv" class="col-sm-4 col-6 col-form-label">Numero PV:</label>
-                        <div class="col-sm-8 col-6">
-                            <input type="text" name="numeroPv" class="form-control" id="numeroPv" placeholder="numero du PV" required>
-                        </div>
-                    </div>
-                    <div class="row my-1">
-                        <label for="votant" class="col-sm-4 col-6 col-form-label">Votant :</label>
-                        <div class="col-sm-8 col-6">
-                            <input type="number" name="votant" class="form-control" id="votant" placeholder="nombre de votant" required>
-                        </div>
-                    </div>
-                    <div class="row my-1">
-                        <label for="suffrageNul" class="col-sm-4 col-6 col-form-label">Bulletins nuls :</label>
-                        <div class="col-sm-8 col-6">
-                            <input type="number" name="suffrageNul" class="form-control" id="suffrageNul"  placeholder="bulletins nuls" required>
-                        </div>
-                    </div>
-                    <div class="row my-1">
-                        <label for="suffrageExprime" class="col-sm-4 col-6 col-form-label">Suffrage exprimé : </label>
-                        <div class="col-sm-8 col-6">
-                            <input type="number" name="suffrageExprime" class="form-control" id="suffrageExprime"  placeholder="suffrage exprimé" required>
-                        </div>
-                    </div>
-                    <div class="row my-1">
-                        <label for="voteOui" class="col-sm-4 col-6 col-form-label">Vote oui : </label>
-                        <div class="col-sm-8 col-6">  
-                            <input type="number" name="voteOui" class="form-control" id="voteOui" placeholder="vote oui" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="voteNon" class="col-sm-4 col-6 col-form-label">Vote non : </label>
-                        <div class="col-sm-8 col-6">
-                            <input type="number" name="voteNon" class="form-control" id="voteNon" placeholder="vote non" required>
-                        </div>
-                    </div>
-                    <input type="hidden" name="idPv" value={{pv.id}}>
-                    <input type="hidden" name="agent" id="agent">
-                    <div class="row mb-3"> 
-                        <label for="submit" class="col-sm-4 col-6 col-form-label"></label>
-                        <div class="col-sm-8 col-6">
-                            <input type="submit" name="submit" id="submit" value="Soumettre" class="btn w-100 text-white mt-3 mb-4" style="background-color : #FF6002">
-                        </div>
-                    </div> 
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script>
-    function chargerProvince(data) {
-        var $provinceSelect = $('#province');
-        var jsonData = JSON.parse(data);
-        for( let i = 0; i<jsonData.length;i++)
-        {
-            var option = $('<option>', {
-                value : jsonData[i].id,
-                text : jsonData[i].libelle
-            });
-
-            $provinceSelect.append(option);
+                $provinceSelect.append(option);
+            }
         }
-    }
+        function chargerDepartement(data){
+            $.post("https://ocel-tchad.org/departements",{id:data, }, function(data){
+                    var $depSelect = $('#departement');
+                    $depSelect.empty();
+                    var jsonData = JSON.parse(data);
+                    var option1 = $('<option>', {
+                        value :"",
+                        text : null
+                });
+                $depSelect.append(option1);
+                for( let i = 0; i<jsonData.length;i++)
+                {
+                    var option = $('<option>', {
+                        value : jsonData[i].id,
+                        text : jsonData[i].libelle
+                    });
 
-    function chargerDepartement(data){
-        $.post("{{path("get_dept")}}",{id:data, }, function(data){
-                var $depSelect = $('#departement');
-                $depSelect.empty();
+                    $depSelect.append(option);
+                }
+            });
+        }
+
+        function chargerCommune(data){
+            $.post("https://ocel-tchad.org/communes",{id:data, },function(data){
+                var $comSelect = $('#commune');
+                $comSelect.empty();
                 var jsonData = JSON.parse(data);
                 var option1 = $('<option>', {
                     value :"",
                     text : null
-            });
-            $depSelect.append(option1);
-            for( let i = 0; i<jsonData.length;i++)
-            {
-                var option = $('<option>', {
-                    value : jsonData[i].id,
-                    text : jsonData[i].libelle
                 });
+                $comSelect.append(option1);
+                for( let i = 0; i<jsonData.length;i++)
+                {
+                    var option = $('<option>', {
+                        value : jsonData[i].id,
+                        text : jsonData[i].libelle
+                    });
 
-                $depSelect.append(option);
-            }
-        });
-    }
-
-    function chargerCommune(data){
-        $.post("{{path("get_com")}}",{id:data, },function(data){
-            var $comSelect = $('#commune');
-            $comSelect.empty();
-            var jsonData = JSON.parse(data);
-            var option1 = $('<option>', {
-                value :"",
-                text : null
+                    $comSelect.append(option);
+                }
             });
-            $comSelect.append(option1);
-            for( let i = 0; i<jsonData.length;i++)
-            {
-                var option = $('<option>', {
-                    value : jsonData[i].id,
-                    text : jsonData[i].libelle
+        }
+        $(document).ready(function(){
+            $.support.cors = true; 
+            $.get("https://ocel-tchad.org/provinces",function(data){
+                chargerProvince(data);
+                $('img').each(function() {
+                    var originalSrc = $(this).data('original-src');
+                    if (originalSrc) {
+                        $(this).attr('src', originalSrc);
+                    }
                 });
+            });
+            $("#province").change(function(e){
+                $('#departement').empty();
+                $('#commune').empty();
+                chargerDepartement(e.target.value); 
+            });
+            $("#departement").change(function(e){
+                $('#commune').empty();
+                chargerCommune(e.target.value); 
+            });
+            $("#agent").val(navigator.userAgent);
+        });
+    </script>
+</head>
+<body>
+    <header class="d-flex justify-content-center bg-white" style="">
+        <img src="/images/logo.png" alt="logo" class="img-fluid" style="width:650px;height:125px">
+    </header>
+    <div class="w-100 d-flex justify-content-between py-1" style="background-color : #0F3170;height:50px">
+        {% if is_granted("ROLE_OPERATOR") %}
+            <a class="ms-5 text-white" href="{{path("app_manager")}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-square-fill" viewbox="0 0 16 16">
+                    <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                </svg>
+            </a>
+        {% endif %}
+        {% if app.user %}
+            <div class="m-0 d-flex py-2">
+                <a href="{{path("app_logout")}}" class="mx-3 me-5 text-decoration-none text-white fw-bold mx-1 d-block px-1" style="">DECONNEXION</a>
+            </div>
+        {% endif %}
+    </div>
 
-                $comSelect.append(option);
-            }
-        });
-    }
+    <div class="container-fluid my-3">
+        <div class="row">
+            <div class="col-lg-6 col-12 px-3">
+                <img data-original-src="/fichier/{{pv.imagePv}}" alt="image du pv" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv">
+               {#} <img src="/fichier/{{pv.imagePv}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv">{#}
+            </div>
+            <div class="col-lg-6 col-12 px-3">
+                <div class="px-3 pt-4 pb-1 border rounded shadow-lg text-white" style="background-color : #0F3170;">
+                    <form action="{{path("saisie")}}" method="POST">
+                        <div class="row my-1">
+                            <label for="province" class="col-sm-4 col-6 col-form-label">Province :
+                            </label>
+                            <div class="col-sm-8 col-6">
+                                <select class="form-select" name="province" id="province" required>
+                                    <option disabled selected>Choisir une province</option>
+                                </select>
+                            </div>
 
-    $(document).ready(function(){
-        $.support.cors = true; 
-        //https://ocel-tchad.org/provinces
-        $.get("https://ocel-tchad.org/provinces",function(data){
-            chargerProvince(data);
-        });
-        $("#province").change(function(e){
-            $('#departement').empty();
-            $('#commune').empty();
-            chargerDepartement(e.target.value); 
-        });
-         $("#departement").change(function(e){
-            $('#commune').empty();
-            chargerCommune(e.target.value); 
-        });
-        $("#agent").val(navigator.userAgent);
-    });
-</script>
+                        </div>
+                        <div class="row my-1">
+                            <label for="departement" class="col-sm-4 col-6 col-form-label">Departement : </label>
+                            <div class="col-sm-8 col-6">
+                                <select class="form-select" name="departement" id="departement" required>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="commune" class="col-sm-4 col-6 col-form-label" required>Commune :</label>
+                            <div class="col-sm-8 col-6">
+                                <select class="form-select" name="commune" id="commune" required>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="codeBureau" class="col-sm-4 col-6 col-form-label">Bureau de vote :</label>
+                            <div class="col-sm-8 col-6">
+                                <input type="text" name="codeBureau" class="form-control" id="codeBureau" placeholder="bureau de vote" required>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="numeroPv" class="col-sm-4 col-6 col-form-label">Numero PV:</label>
+                            <div class="col-sm-8 col-6">
+                                <input type="text" name="numeroPv" class="form-control" id="numeroPv" placeholder="numero du PV" required>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="votant" class="col-sm-4 col-6 col-form-label">Votant :</label>
+                            <div class="col-sm-8 col-6">
+                                <input type="number" name="votant" class="form-control" id="votant" placeholder="nombre de votant" required>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="suffrageNul" class="col-sm-4 col-6 col-form-label">Bulletins nuls :</label>
+                            <div class="col-sm-8 col-6">
+                                <input type="number" name="suffrageNul" class="form-control" id="suffrageNul"  placeholder="bulletins nuls" required>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="suffrageExprime" class="col-sm-4 col-6 col-form-label">Suffrage exprimé : </label>
+                            <div class="col-sm-8 col-6">
+                                <input type="number" name="suffrageExprime" class="form-control" id="suffrageExprime"  placeholder="suffrage exprimé" required>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="voteOui" class="col-sm-4 col-6 col-form-label">Vote oui : </label>
+                            <div class="col-sm-8 col-6">  
+                                <input type="number" name="voteOui" class="form-control" id="voteOui" placeholder="vote oui" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="voteNon" class="col-sm-4 col-6 col-form-label">Vote non : </label>
+                            <div class="col-sm-8 col-6">
+                                <input type="number" name="voteNon" class="form-control" id="voteNon" placeholder="vote non" required>
+                            </div>
+                        </div>
+                        <input type="hidden" name="idPv" value={{pv.id}}>
+                        <input type="hidden" name="agent" id="agent">
+                        <div class="row mb-3"> 
+                            <label for="submit" class="col-sm-4 col-6 col-form-label"></label>
+                            <div class="col-sm-8 col-6">
+                                <input type="submit" name="submit" id="submit" value="Soumettre" class="btn w-100 text-white mt-3 mb-4" style="background-color : #FF6002">
+                            </div>
+                        </div> 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{#{% extends 'admin.html.twig' %}
+
+{% block title %}OPERATEUR{% endblock %}
+{% block body %}
+
+
 {% endblock %}
+{#}

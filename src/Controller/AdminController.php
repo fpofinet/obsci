@@ -13,8 +13,10 @@ use App\Form\AllocationType;
 use App\Form\UploadFileType;
 use App\Entity\ResultatOperateur;
 use App\Controller\ExcelConnector;
+use App\Entity\Config;
 use App\Entity\ResultatSuperviseur;
 use App\Form\AllocValType;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,70 +90,6 @@ class AdminController extends AbstractController
             $manager->getManager()->flush();
             return $this->redirectToRoute("app_manager");
         } 
-    }
-
-    //synchronisation kobo
-    #[Route('/admin/sync', name:'synchro')]
-    public function synchro(ManagerRegistry $manager): Response
-    {
-        $inDBdata=$manager->getRepository(ResultatKobo::class)->findAll();
-        //004998ce52dc528dd4d1c5045ea702816aa9bb68
-        //
-        //https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json
-        $kobo = new KoboConnector("6a9bd6d7e3717ce2430dd9f633270929c87e8397");
-        $myData= $kobo->findAll('https://kf.kobotoolbox.org/api/v2/assets/aPgTfsxkoEQiDK8BaYNSWa/data.json');
-        //dd($myData);
-        foreach($myData["results"] as $d){
-            $k=1;
-            foreach($inDBdata as $dbdata){
-                if($dbdata->getCodeKobo() == $d["_id"]){
-                    $k=0;
-                }
-            }
-            if($k==1){
-                $temp = new ResultatKobo();
-                $temp->setCodeKobo($d["_id"]);
-                if($d["_attachments"][0]){
-                    $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_small_url"]));
-                } else{
-                   $temp->setImagePv("null");
-                }
-                $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
-                $temp->setAllowedOn(new DateTimeImmutable);
-                $temp->setEtat(0);
-                $manager->getManager()->persist($temp);
-                $manager->getManager()->flush();
-            }
-        }
-        $this->allocation($manager);
-        return $this->redirectToRoute("administration");
-    }
-
-    // allocation
-   // #[Route('/alloc', name:'alloc')]
-    private function allocation(ManagerRegistry $manager)
-    {
-        $data=$manager->getRepository(ResultatKobo::class)->findBy(["etat"=>0]);
-        $user=$manager->getRepository(User::class)->findAll();
-        $operator=array();
-        foreach($user as $r){
-            if(in_array('ROLE_OPERATOR',$r->getRoles())){
-                $operator[]=$r;
-            }
-        }
-        $byUser=count($data)/count($operator);
-        $index=0;
-        
-        for($i=0;$i<count($operator);$i++){
-            $fin=$index+$byUser;
-            for($j=$index;$j<$fin;$j++){
-                $data[$j]->setAllowedTo($operator[$i]->getId());
-                $data[$j]->setAllowedOn(new DateTimeImmutable);
-                $manager->getManager()->persist($data[$j]);
-                $manager->getManager()->flush();
-            }
-            $index = $fin;
-        }
     }
 
 
@@ -329,9 +267,54 @@ class AdminController extends AbstractController
     #[Route('/admin', name:'administration')]
     public function admin(ManagerRegistry $manager ): Response
     {
+        return $this->render("admin/admin.html.twig",[]);
+    }
+
+    // index administration
+    #[Route('/admin/donnees', name:'sync')]
+    public function renderSync(ManagerRegistry $manager ): Response
+    {
+        return $this->render("admin/synchro.html.twig",[
+            'kobos'=>$manager->getRepository(ResultatKobo::class)->findBy(["etat"=>0,"allowedTo"=>null]),
+        ]);
+    }
+    
+    //synchronisation kobo
+    #[Route('/admin/sync', name:'synchro')]
+    public function synchro(ManagerRegistry $manager): Response
+    {
+        $iterrator=$manager->getRepository(Config::class)->findOneBy(["id"=>1]);
+        $start=$iterrator->getIterration();
+        $limit=65;
+        //004998ce52dc528dd4d1c5045ea702816aa9bb68
+        //
+        //https://kf.kobotoolbox.org/api/v2/assets/aAdvkva68zop3jWUBZXpux/data.json
+        $kobo = new KoboConnector("6a9bd6d7e3717ce2430dd9f633270929c87e8397");
+        $myData= $kobo->findAll('https://kf.kobotoolbox.org/api/v2/assets/aPgTfsxkoEQiDK8BaYNSWa/data.json?start='.$start.'&limit='.$limit);
+        $iter=0;
+        foreach($myData["results"] as $d){
+            $iter=$iter+1;
+            $temp = new ResultatKobo();
+            $temp->setCodeKobo($d["_id"]);
+            $temp->setImagePv($kobo->downloadImg($d["_attachments"][0]["download_small_url"]));
+            $temp->setDateSubmit(new \DateTime($d["_submission_time"]));
+            $temp->setAllowedOn(new DateTimeImmutable);
+            $temp->setEtat(0);
+            $temp->setSubmitter("ocelobserv");
+            $manager->getManager()->persist($temp);
+            $manager->getManager()->flush();
+        }
+        $iterrator->setIterration($start+$iter);
+        $manager->getManager()->persist($iterrator);
+        $manager->getManager()->flush();
+        return $this->redirectToRoute("sync");
+    }
+
+    #[Route('/admin/etat-traitement', name:'etat')]
+    public function renderSynchro(ManagerRegistry $manager):Response
+    {
         $user=$manager->getRepository(User::class)->findAll();
         $output=array();
-
         foreach($user as $u){
             if(in_array("ROLE_OPERATOR",$u->getRoles())){
                 $nt=count($manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$u->getId()]));
@@ -343,11 +326,31 @@ class AdminController extends AbstractController
                 $tt=count($manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$u->getId(),"etat"=>1]));
                 $output[]=["id"=>$u->getId(),"nom"=>$u->getNom(),"prenom"=>$u->getPrenom(),"username"=>$u->getUsername(),"role"=>$u->getRoles()[0],"tel"=>$u->getTelephone(),"total"=>$nt,"traiter"=>$tt];
             }
-            
         }
-        return $this->render('admin/admin.html.twig',[
+        return $this->render('admin/etatTraitement.html.twig',[
             "users" =>$output,
         ]);
+    }
+    // allocation
+   #[Route('/admin/allocation', name:'alloc')]
+    public function allocation(ManagerRegistry $manager): Response
+    {
+        $repo= new UserRepository($manager);
+        $data=$manager->getRepository(ResultatKobo::class)->findBy(["etat"=>0,"allowedTo"=>null]);
+        $user=$repo->findByRole("ROLE_OPERATOR");
+        $byUser=count($data)/count($user);
+        $index=0;
+        for($i=0;$i<count($user);$i++){
+            $fin=$index+$byUser;
+            for($j=$index;$j<$fin;$j++){
+                $data[$j]->setAllowedTo($user[$i]->getId());
+                $data[$j]->setAllowedOn(new DateTimeImmutable);
+                $manager->getManager()->persist($data[$j]);
+                $manager->getManager()->flush();
+            }
+            $index = $fin;
+        }
+        return $this->redirectToRoute("administration");
     }
 
     #[Route('/admin/user/{id}/traitees', name:'details_traiter')]
@@ -393,13 +396,7 @@ class AdminController extends AbstractController
                 $d->setAllowedTo($form["user"]->getData()->getId());
                 $manager->getManager()->persist($d);
                 $manager->getManager()->flush();  
-            }/* else if(in_array("ROLE_SUPERVISOR",$user->getRoles())){
-                foreach($datas2 as $d){
-                    $d->setValidateur($form["user"]->getData()->getId());
-                    $manager->getManager()->persist($d);
-                    $manager->getManager()->flush();
-                }
-            }*/
+            }
             return $this->redirectToRoute("administration");
         }
         return $this->render('admin/formAllocation.html.twig',[
@@ -412,7 +409,6 @@ class AdminController extends AbstractController
     public  function reallocation2($id,ManagerRegistry $manager,Request $request): Response
     {
         $user=$manager->getRepository(User::class)->findOneBy(["id"=>$id]);
-       // $datas=$manager->getRepository(ResultatKobo::class)->findBy(["allowedTo"=>$user->getId(),"etat"=>0]);
         $datas2=$manager->getRepository(ResultatOperateur::class)->findBy(["validateur"=>$user->getId(),"etat"=>0]);
         $form=$this->createForm(AllocValType::class);
         $form->handleRequest($request);

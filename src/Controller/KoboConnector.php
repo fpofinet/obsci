@@ -36,7 +36,7 @@ class KoboConnector {
 
     public function downloadImg(string $file):?string
     {
-        $localFileName = uniqid().'.jpg';
+        $localFileName = uniqid().time().'.jpg';
         $ch = curl_init($file);
         $options = [
             CURLOPT_HTTPHEADER => [

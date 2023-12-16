@@ -3,69 +3,7 @@
 {% block title %}Admin{% endblock %}
 
 {% block body %}
-<section class="mx-2 px-3 mt-5">
-    <div class="">
-        <p class="text-center text-decoration-underline h4">ETAT DE TRAITEMENT DES DONNEES</p>
-        <table class="table table-striped" id="myDatTable">
-            <thead>
-                <tr>
-                    <th>CODE</th>
-                    <th>NOM</th>
-                    <th>PRENOM</th>
-                    <th>ROLE</th>
-                    <th>TELEPHONE</th>
-                    <th>AFFECTEES</th>
-                    <th>TRAITEES</th>
-                    <th>NON TRAITEES</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{user.username}}</td>
-                        <td>{{user.nom}}</td>
-                        <td>{{user.prenom}}</td>
-                        <td>
-                            {% if user.role == "ROLE_OPERATOR" %}
-                                {{"Operateur"}}
-                            {% else %}
-                                {{"Superviseur"}}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if user.tel == null %}
-                                {{"-"}}
-                            {% else %}
-                                {{"+"}}{{user.tel}}</td>
-                            {% endif %}
-                        
-                        <td>{{user.total}}</td>
-                        <td><a href="{{path("details_traiter",{'id': user.id})}}">{{user.traiter}}</a></td>
-                        <td><a href="{{path("details_nontraiter",{'id': user.id})}}">{{user.total - user.traiter}}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>   
-</section>
-<script>
-	let table = new DataTable('#myDatTable', {
-    // config options...
-    });
-    // show div
-    const showLabelDiv = document.querySelector(".dataTables_length");
-    var showLabel = showLabelDiv.querySelector("label");
-    var select = showLabelDiv.querySelector("select");
-    select.classList.add("mx-2");
-    select.style.width = '75px';
-    showLabel.classList.add("d-flex");
-    showLabelDiv.parentNode.classList.add("my-4");
-    // filter div
-    const FilterDiv = document.querySelector(".dataTables_filter");
-    var filterLabel = FilterDiv.querySelector("label");
-    var input = FilterDiv.querySelector("input");
-    FilterDiv.classList.add("d-none");
-    filterLabel.classList.add("d-flex");
-    input.classList.add("mx-1");
-</script>
+<div class="mx-3 mt-5">
+   
+</div>
 {% endblock %}

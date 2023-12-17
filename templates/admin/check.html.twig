@@ -22,7 +22,7 @@
             }
         }
         function chargerDepartement(data){
-            $.post("https://ocel-tchad.org/departements",{id:data, }, function(data){
+            $.post("/departements",{id:data, }, function(data){
                     var $depSelect = $('#departement');
                     $depSelect.empty();
                     var jsonData = JSON.parse(data);
@@ -44,7 +44,7 @@
         }
 
         function chargerCommune(data){
-            $.post("https://ocel-tchad.org/communes",{id:data, },function(data){
+            $.post("/communes",{id:data, },function(data){
                 var $comSelect = $('#commune');
                 $comSelect.empty();
                 var jsonData = JSON.parse(data);
@@ -66,7 +66,7 @@
         }
         $(document).ready(function(){
             $.support.cors = true; 
-            $.get("https://ocel-tchad.org/provinces",function(data){
+            $.get("/provinces",function(data){
                 chargerProvince(data);
                 $('img').each(function() {
                     var originalSrc = $(this).data('original-src');
@@ -110,7 +110,7 @@
     <div class="container-fluid my-3">
         <div class="row">
             <div class="col-lg-6 col-12 px-3">
-                <img data-original-src="/fichier/{{pv.imagePv}}" alt="image du pv" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv">
+                <img data-original-src="/fichier/{{pv.imagePv}}" alt="image du pv" class="img-fluid shadow-lg rounded-3" style="height:550px; width: 100%" id="monpv">
                {#} <img src="/fichier/{{pv.imagePv}}" alt="faker" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv">{#}
             </div>
             <div class="col-lg-6 col-12 px-3">
@@ -143,15 +143,27 @@
                             </div>
                         </div>
                         <div class="row my-1">
-                            <label for="codeBureau" class="col-sm-4 col-6 col-form-label">Bureau de vote :</label>
+                            <label for="quartier" class="col-sm-4 col-6 col-form-label">Quartier :</label>
                             <div class="col-sm-8 col-6">
-                                <input type="text" name="codeBureau" class="form-control" id="codeBureau" placeholder="bureau de vote" required>
+                                <input type="text" name="quartier" class="form-control" id="quartier" placeholder="quartier" required>
                             </div>
                         </div>
                         <div class="row my-1">
-                            <label for="numeroPv" class="col-sm-4 col-6 col-form-label">Numero PV:</label>
+                            <label for="numeroBv" class="col-sm-4 col-6 col-form-label">Numero Bureau:</label>
                             <div class="col-sm-8 col-6">
-                                <input type="text" name="numeroPv" class="form-control" id="numeroPv" placeholder="numero du PV" required>
+                                <input type="text" name="numeroBv" class="form-control" id="numeroBv" placeholder="numero bureau vote" required>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="nomBv" class="col-sm-4 col-6 col-form-label">Nom Bureau:</label>
+                            <div class="col-sm-8 col-6">
+                                <input type="text" name="nomBv" class="form-control" id="nomBv" placeholder="nom bureau vote" required>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <label for="inscrit" class="col-sm-4 col-6 col-form-label">Inscrit :</label>
+                            <div class="col-sm-8 col-6">
+                                <input type="number" name="inscrit" class="form-control" id="inscrit" placeholder="inscrit" required>
                             </div>
                         </div>
                         <div class="row my-1">
@@ -189,7 +201,7 @@
                         <div class="row mb-3"> 
                             <label for="submit" class="col-sm-4 col-6 col-form-label"></label>
                             <div class="col-sm-8 col-6">
-                                <input type="submit" name="submit" id="submit" value="Soumettre" class="btn w-100 text-white mt-3 mb-4" style="background-color : #FF6002">
+                                <input type="submit" name="submit" id="submit" value="Soumettre" class="btn w-100 text-white mt-3" style="background-color : #FF6002">
                             </div>
                         </div> 
                     </form>
@@ -199,11 +211,3 @@
     </div>
 </body>
 </html>
-{#{% extends 'admin.html.twig' %}
-
-{% block title %}OPERATEUR{% endblock %}
-{% block body %}
-
-
-{% endblock %}
-{#}

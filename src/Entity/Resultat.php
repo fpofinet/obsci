@@ -70,6 +70,15 @@ class Resultat
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelleBureauVote = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $quartier = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $numeroBureauVote = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $inscrit = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -299,6 +308,42 @@ class Resultat
     public function setLibelleBureauVote(?string $libelleBureauVote): static
     {
         $this->libelleBureauVote = $libelleBureauVote;
+
+        return $this;
+    }
+
+    public function getQuartier(): ?string
+    {
+        return $this->quartier;
+    }
+
+    public function setQuartier(?string $quartier): static
+    {
+        $this->quartier = $quartier;
+
+        return $this;
+    }
+
+    public function getNumeroBureauVote(): ?int
+    {
+        return $this->numeroBureauVote;
+    }
+
+    public function setNumeroBureauVote(?int $numeroBureauVote): static
+    {
+        $this->numeroBureauVote = $numeroBureauVote;
+
+        return $this;
+    }
+
+    public function getInscrit(): ?int
+    {
+        return $this->inscrit;
+    }
+
+    public function setInscrit(?int $inscrit): static
+    {
+        $this->inscrit = $inscrit;
 
         return $this;
     }

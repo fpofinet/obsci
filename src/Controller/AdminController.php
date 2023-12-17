@@ -44,11 +44,6 @@ class AdminController extends AbstractController
     public function verification(?int $id,ManagerRegistry $manager,Request $request): Response
     {
         $pv= $manager->getRepository(ResultatKobo::class)->findOneBy(["id"=> $id]);
-       // $kobo = new KoboConnector("6a9bd6d7e3717ce2430dd9f633270929c87e8397");
-       // $img= $kobo->downloadImg($pv->getImagePv());
-       // $pv->setImagePv($img);
-       // $manager->getManager()->persist($pv);
-       // $manager->getManager()->flush();
         return $this->render('admin/check.html.twig', [
            'pv'=> $pv,
         ]);
@@ -59,13 +54,19 @@ class AdminController extends AbstractController
     public function saisieOperateur(Request $request, ManagerRegistry $manager)
     {
         if($request->isMethod("POST")){
+           // dd($request->request->all());
             $pv=$manager->getRepository(ResultatKobo::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
             $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
+            $codeBv=$commune->getDepartement()->getProvince()->getCode().$commune->getDepartement()->getCode().$commune->getCode().str_replace(' ', '', $request->request->all()["quartier"]).str_replace(' ', '', $request->request->all()["nomBv"]).$request->request->all()["numeroBv"];
+           // dd($codeBv);
             $resultat = new ResultatOperateur();
             $resultat->setValidateur($this->getUser()->getValidateur());
             $resultat->setAgentSaisie($request->request->all()['agent']);
-            $resultat->setCodeBureau($request->request->all()['numeroPv']);
-            $resultat->setLibelleBureauVote($request->request->all()['codeBureau']);
+            $resultat->setQuartier($request->request->all()["quartier"]);
+            $resultat->setInscrit($request->request->all()["inscrit"]);
+            $resultat->setCodeBureau(strtoupper($codeBv));
+            $resultat->setLibelleBureauVote($request->request->all()['nomBv']);
+            $resultat->setNumeroBureauVote($request->request->all()["numeroBv"]);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -116,9 +117,13 @@ class AdminController extends AbstractController
         if($request->isMethod("POST")){
             $pv=$manager->getRepository(ResultatOperateur::class)->findOneBy(["id"=>$request->request->all()['idPv']]);
             $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$request->request->all()['commune']]);
+            $codeBv=$commune->getDepartement()->getProvince()->getCode().$commune->getDepartement()->getCode().$commune->getCode().str_replace(' ', '', $request->request->all()["quartier"]).str_replace(' ', '', $request->request->all()["nomBv"]).$request->request->all()["numeroBv"];
             $resultat = new ResultatSuperviseur();
-            $resultat->setCodeBureau($request->request->all()['numeroPv']);
-            $resultat->setLibelleBureauVote($request->request->all()['codeBureau']);
+            $resultat->setQuartier($request->request->all()["quartier"]);
+            $resultat->setInscrit($request->request->all()["inscrit"]);
+            $resultat->setCodeBureau(strtoupper($codeBv));
+            $resultat->setLibelleBureauVote($request->request->all()['nomBv']);
+            $resultat->setNumeroBureauVote($request->request->all()["numeroBv"]);
             $resultat->setVotant($request->request->all()['votant']);
             $resultat->setSuffrageExprime($request->request->all()['suffrageExprime']);
             $resultat->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -147,8 +152,11 @@ class AdminController extends AbstractController
             } else{
                 $resdef = new Resultat();
                 $resdef->setCode($pv->getCode());
-                $resdef->setLibelleBureauVote($request->request->all()['codeBureau']);
-                $resdef->setCodeBureau($request->request->all()['numeroPv']);
+                $resdef->setQuartier($request->request->all()["quartier"]);
+                $resdef->setInscrit($request->request->all()["inscrit"]);
+                $resdef->setCodeBureau(strtoupper($codeBv));
+                $resdef->setLibelleBureauVote($request->request->all()['nomBv']);
+                $resdef->setNumeroBureauVote($request->request->all()["numeroBv"]);
                 $resdef->setVotant($request->request->all()['votant']);
                 $resdef->setSuffrageExprime($request->request->all()['suffrageExprime']);
                 $resdef->setSuffrageNul($request->request->all()['suffrageNul']);
@@ -195,9 +203,10 @@ class AdminController extends AbstractController
     {
         $commune=$manager->getRepository(Commune::class)->findOneBy(["id"=>$com]);
         $actuel=$manager->getRepository(Resultat::class)->findOneBy(["codeBureau"=>$code,"commune"=>$commune]);
-        //dd($commune);
+       
         $new=$manager->getRepository(ResultatSuperviseur::class)->findOneBy(["codeBureau"=>$code,"etat"=>0,"commune"=>$commune]);
         $other=$manager->getRepository(ResultatSuperviseur::class)->findBy(["codeBureau"=>$code,"etat"=>1,"commune"=>$commune]);
+        //dd(new);
         return $this->render('admin/checkSup.html.twig',[
             'actuel'=>$actuel,
             'new'=>$new,
@@ -243,9 +252,14 @@ class AdminController extends AbstractController
             $back->setVotant($actuel->getVotant());
             $back->setVoteNon($actuel->getVoteNon());
             $back->setVoteOui($actuel->getVoteOui());
+            $back->setInscrit($actuel->getInscrit());
+            $back->setQuartier($actuel->getQuartier());
+            $back->setNumeroBureauVote($actuel->getNumeroBureauVote());
+            $back->setLibelleBureauVote($actuel->getLibelleBureauVote());
+
             $back->setEtat(1);
             $back->setCommune($actuel->getCommune());
-
+            $actuel->setInscrit($new->getInscrit());
             $actuel->setSuffrageExprime($new->getSuffrageExprime());
             $actuel->setSuffrageNul($new->getSuffrageNul());
             $actuel->setVotant($new->getVotant());

@@ -7,10 +7,10 @@
         <p class="text-center m-0 text-danger fw-bold h4">Ce bureau de vote a deja été traité. Voulez-vous replacer les données existantes ou les conserver ?</p>
         <div class="col-md-6 col-12 p-3">
             <div class="card overflow-scroll border-5 border-danger p-1" style="height:420px;">
-                <div class="text-center fw-bold h5 text-white" style="height:20px;">
+                <div class="text-center fw-bold h5" style="height:20px;">
                     <span>Nouvelles données</span>
                 </div>
-                <img src="{{asset("/fichier/" ~ new.imagePv )}}" alt="faker" class="w-100 card-image-top" style="height:390px;">
+                <img src="/fichier/"{{new.imagePv }} alt="faker" class="w-100 card-image-top" style="height:390px;">
                 <div class="card-body">
                     <div class="row my-0">
                         <div class="col-6">Province :
@@ -28,6 +28,30 @@
                         <div class="col-6">Commune :
                         </div>
                         <div class="col-6">{{new.commune.libelle}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Quartier :
+                        </div>
+                        <div class="col-6">{{new.quartier}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Nom bureau vote :
+                        </div>
+                        <div class="col-6">{{new.libelleBureauVote}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Numero bureau vote :
+                        </div>
+                        <div class="col-6">{{new.numeroBureauVote}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Inscrit :
+                        </div>
+                        <div class="col-6">{{new.inscrit}}</div>
                     </div>
                     <hr>
                     <div class="row my-0">
@@ -65,10 +89,10 @@
         </div>
         <div class="col-md-6 col-12 p-3">
             <div class="card overflow-scroll border-5 border-success p-1 " style="height:425px;">
-                <div class="text-center fw-bold h5 text-white" style="height:20px;">
+                <div class="text-center fw-bold h5" style="height:20px;">
                     <span>Données  existantes</span>
                 </div>
-                <img src="{{asset("/fichier/" ~ new.imagePv )}}" alt="faker" class="card-image-top" style="height:390px;">
+                <img src="/fichier/"{{actuel.imagePv }} alt="faker" class="card-image-top" style="height:390px;">
                 <div class="card-body">
                     <div class="row my-0">
                         <div class="col-6">Province :
@@ -86,6 +110,30 @@
                         <div class="col-6">Commune :
                         </div>
                         <div class="col-6">{{actuel.commune.libelle}}</div>
+                    </div>
+                     <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Quartier :
+                        </div>
+                        <div class="col-6">{{actuel.quartier}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Nom bureau vote :
+                        </div>
+                        <div class="col-6">{{actuel.libelleBureauVote}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Numero bureau vote :
+                        </div>
+                        <div class="col-6">{{actuel.numeroBureauVote}}</div>
+                    </div>
+                    <hr>
+                    <div class="row my-0">
+                        <div class="col-6">Inscrit :
+                        </div>
+                        <div class="col-6">{{actuel.inscrit}}</div>
                     </div>
                     <hr>
                     <div class="row my-0">

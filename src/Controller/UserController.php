@@ -81,10 +81,15 @@ class UserController extends AbstractController
     #[Route('/user/{id}/password/update', name:'create_password')]
     public function updateUserPassword(?int $id,ManagerRegistry $manager,UserPasswordHasherInterface $encoder, Request $request): Response
     {
+        $error="";
         $user = $manager->getRepository(User::class)->findOneBy(["id"=>$id]);
         $form = $this->createForm(UserPasswordType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            if($form["newPass"]->getData() != $form["confPass"]->getData()){
+                $error="les mots de passe ne correspondent pas";
+                return $this->redirectToRoute("create_password",["id"=>$user->getId()]);
+            }
             $pass=$form["newPass"]->getData();
             $hash= $encoder->hashPassword($user,$pass);
             $user->setPassword($hash);
@@ -107,6 +112,7 @@ class UserController extends AbstractController
         }
         return $this->render('user/passwordForm.html.twig', [
             'form'=> $form->createView(),
+            'error' =>$error,
         ]);
     }
 

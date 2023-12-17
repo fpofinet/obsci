@@ -10,9 +10,11 @@
         <table class="table table-striped" id="myConso">
             <thead>
                 <tr>
-                    <th>NUMERO PV</th>
-                    <th>BUREAU VOTE</th>
+                    <th>NOM BUREAU</th>
+                    <th>NUMERO BUREAU</th>
+                    <th>QUARTIER</th>
                     <th>COMMUNE</th>
+                    <th>INSCRIT</th>
                     <th>VOTANT</th>
                     <th>SUFFRAGE EXPRIME</th>
                     <th>BULLETIN NUL</th>
@@ -24,9 +26,11 @@
             <tbody>
                 {% for bv in bvs %}
                     <tr>
-                        <td>{{bv.codeBureau}}</td>
                         <td>{{bv.libelleBureauVote}}</td>
+                        <td>{{bv.numeroBureauVote}}</td>
+                        <td>{{bv.quartier}}</td>
                         <td>{{bv.commune.libelle}}</td>
+                        <td>{{bv.inscrit}}</td>
                         <td>{{bv.votant}}</td>
                         <td>{{bv.suffrageExprime}}</td>
                         <td>{{bv.suffrageNul}}</td>

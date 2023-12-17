@@ -33,6 +33,9 @@ class Commune
     #[ORM\OneToMany(mappedBy: 'commune', targetEntity: Resultat::class)]
     private Collection $resultats;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $nombreBureau = null;
+
 
     public function __construct()
     {
@@ -168,6 +171,18 @@ class Commune
                 $resultat->setCommune(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNombreBureau(): ?int
+    {
+        return $this->nombreBureau;
+    }
+
+    public function setNombreBureau(?int $nombreBureau): static
+    {
+        $this->nombreBureau = $nombreBureau;
 
         return $this;
     }

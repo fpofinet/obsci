@@ -22,7 +22,7 @@
             }
         }
         function chargerDepartement(data){
-            $.post("https://ocel-tchad.org/departements",{id:data, }, function(data){
+            $.post("/departements",{id:data, }, function(data){
                     var $depSelect = $('#departement');
                     $depSelect.empty();
                     var jsonData = JSON.parse(data);
@@ -44,7 +44,7 @@
         }
 
         function chargerCommune(data){
-            $.post("https://ocel-tchad.org/communes",{id:data, },function(data){
+            $.post("/communes",{id:data, },function(data){
                 var $comSelect = $('#commune');
                 $comSelect.empty();
                 var jsonData = JSON.parse(data);
@@ -66,7 +66,7 @@
         }
         $(document).ready(function(){
             $.support.cors = true; 
-            $.get("https://ocel-tchad.org/provinces",function(data){
+            $.get("/provinces",function(data){
                 chargerProvince(data);
                 $('img').each(function() {
                     var originalSrc = $(this).data('original-src');
@@ -109,11 +109,11 @@
 <div class="container-fluid mt-3">
    <div class="row" style="">
         <div class="col-lg-6 col-12 px-3" style="">
-            <img data-original-src="/fichier/{{pv.imagePv}}" alt="image du pv" class="img-fluid shadow-lg rounded-3" style="height:500px; width: 100%" id="monpv"> 
+            <img data-original-src="/fichier/{{pv.imagePv}}" alt="image du pv" class="img-fluid shadow-lg rounded-3" style="height:550px; width: 100%" id="monpv"> 
             {#<img src="/fichier/{{pv.imagePv}}" alt="image pv" class="img-fluid rounded shadow-lg my-2" style="height:500px; width: 100%">  {#}
         </div>
         <div class="col-lg-6  col-12" style="">
-            <div class="pt-4 border rounded shadow-lg p-3  text-white"  style="height:500px;background-color : #0F3170;">
+            <div class="pt-4 border rounded shadow-lg p-3  text-white"  style="background-color : #0F3170;">
                 <form action="{{path("supValider")}}" method="POST" id="monForm">
                     <div class="row my-1">
                         <label for="province" class="col-sm-4 col-6 col-form-label">Province :
@@ -142,15 +142,27 @@
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="codeBureau" class="col-sm-4 col-6 col-form-label">Bureau de vote :</label>
+                        <label for="quartier" class="col-sm-4 col-6 col-form-label">Quartier :</label>
                         <div class="col-sm-8 col-6">
-                            <input type="text" name="codeBureau" class="form-control" id="codeBureau" value="{{pv.libelleBureauVote}}" required>
+                            <input type="text" name="quartier" class="form-control" id="quartier" value="{{pv.quartier}}" required>
                         </div>
                     </div>
                     <div class="row my-1">
-                        <label for="numeroPv" class="col-sm-4 col-6 col-form-label">Numero PV :</label>
+                        <label for="numeroBv" class="col-sm-4 col-6 col-form-label">Numero Bureau:</label>
                         <div class="col-sm-8 col-6">
-                            <input type="text" name="numeroPv" class="form-control" id="numeroPv" value="{{pv.codeBureau}}" required>
+                            <input type="text" name="numeroBv" class="form-control" id="numeroBv" value="{{pv.numeroBureauVote}}" required>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="nomBv" class="col-sm-4 col-6 col-form-label">Nom Bureau:</label>
+                        <div class="col-sm-8 col-6">
+                            <input type="text" name="nomBv" class="form-control" id="nomBv" value="{{pv.libelleBureauVote}}" required>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label for="inscrit" class="col-sm-4 col-6 col-form-label">Inscrit :</label>
+                        <div class="col-sm-8 col-6">
+                            <input type="number" name="inscrit" class="form-control" id="inscrit" value="{{pv.inscrit}}" required>
                         </div>
                     </div>
                     <div class="row my-1">
@@ -185,9 +197,9 @@
                     </div>
                     <input type="hidden" name="idPv" id="idPv" value={{pv.id}}>
                     <input type="hidden" name="agent" id="agent">
-                    <div class="d-flex mb-3">
+                    <div class="d-flex mb-2">
                         <label for="submit" class="col-sm-4 col-form-label"></label>
-                        <div class="col-sm-8 col-12 d-flex px-1 mb-3"> 
+                        <div class="col-sm-8 col-12 d-flex px-1"> 
                             <a href="{{path("invaliderPV",{'id':pv.id})}}" id="rejeter" class="flex-fill btn btn-danger me-1">Rejet (PV Invalide)</a>
                             <input type="submit" name="submit" id="valider" value="Valider" class="flex-fill btn btn-success text-white ms-1" style="">
                         </div>

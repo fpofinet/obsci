@@ -40,10 +40,12 @@
                         <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                     {% endif %}
                 </div>
-                <div class="mt-2 d-flex"> 
-                    <div class="m-0 d-flex mx-2"><div class="bg-primary text-primary me-1" style="width:20px;height:20px;"></div><span> : OUI</span></div>
-                    <div class="m-0 d-flex mx-2"><div class="bg-danger text-danger me-1" style="width:20px;height:20px;"></div> <span> : NON</span>   </div>
-                    
+                <div class="mt-2 d-flex justify-content-between"> 
+                    <div class="d-flex">
+                        <div class="m-0 d-flex mx-2"><div class="bg-primary text-primary me-1" style="width:20px;height:20px;"></div><span> : OUI</span></div>
+                        <div class="m-0 d-flex mx-2"><div class="bg-danger text-danger me-1" style="width:20px;height:20px;"></div> <span> : NON</span> </div>
+                    </div>
+                    <div class="me-3 fw-bold h5">DEPOUILLEMENT : {{national.depouillement | number_format(2, ',', '.') }}{{"%"}}</div>
                 </div>
             </div>
             <div class="card-body px-3">
@@ -92,7 +94,7 @@
                     {% endif %}
                         {% set i = i + 1 %}
                    
-                        <div class="card border-0">
+                        <div class="card ">
                             <div class="card-header h3 text-center">
                                 <p class="text-center fw-bold">PROVINCE : {{item.libelle}}</p>
                             </div>
@@ -106,10 +108,12 @@
                                         <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                                     {% endif %}
                                 </div>
-                                <div class="mt-2 d-flex"> 
-                                    <div class="m-0 d-flex mx-2"><div class="bg-primary text-primary me-1" style="width:20px;height:20px;"></div><span> : OUI</span></div>
-                                    <div class="m-0 d-flex mx-2"><div class="bg-danger text-danger me-1" style="width:20px;height:20px;"></div> <span> : NON</span>   </div>
-                                    
+                                <div class="mt-2 d-flex  justify-content-between"> 
+                                    <div class="d-flex">
+                                        <div class="m-0 d-flex mx-2"><div class="bg-primary text-primary me-1" style="width:20px;height:20px;"></div><span> : OUI</span></div>
+                                        <div class="m-0 d-flex mx-2"><div class="bg-danger text-danger me-1" style="width:20px;height:20px;"></div> <span> : NON</span> </div>
+                                    </div>
+                                    <div class="me-3 fw-bold h5">DEPOUILLEMENT : {{item.depouillement | number_format(2, ',', '.') }}{{"%"}}</div>
                                 </div>
                             </div> 
                             <div class="card-body mx-lg-5 px-lg-5 mx-md-4 px-md-4">

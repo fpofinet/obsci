@@ -14,7 +14,10 @@
                     <th>PROVINCE</th>
                     <th>DEPARTEMENT</th>
                     <th>COMMUNE</th>
+                    <th>QUARTIER</th>
                     <th>BUREAU VOTE</th>
+                    <th>NUMERO BUREAU</th>
+                    <th>INSCRIT</th>
                     <th>VOTANT</th>
                     <th>BULLETINS NULS</th>
                     <th>SUFFRAGE EXPRIME</th>
@@ -28,7 +31,10 @@
                         <td>{{c.commune.departement.province.libelle}}</td>
                         <td>{{c.commune.departement.libelle}}</td>
                         <td>{{c.commune.libelle}}</td>
-                        <td>{{c.codeBureau}}</td>
+                        <td>{{c.quartier}}</td>
+                        <td>{{c.libelleBureauVote}}</td>
+                        <td>{{c.numeroBureauVote}}</td>
+                        <td>{{c.inscrit}}</td>
                         <td>{{c.votant | number_format(0, ',', '.')}}</td>
                         <td>{{c.suffrageNul | number_format(0, ',', '.')}}</td>
                         <td>{{c.suffrageExprime | number_format(0, ',', '.')}}</td>
